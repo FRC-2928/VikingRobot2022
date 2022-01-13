@@ -1,40 +1,106 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.OIConstants;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
+import frc.robot.oi.DriverOI;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Pigeon;
+import frc.robot.subsystems.Transmission;
+
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  // The robot's subsystems
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
+  private final Transmission m_transmission = new Transmission();
+  private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
+  
+  
+  
+  private final Pigeon m_pigeon = new Pigeon();
+  
+  private final DriverOI m_driverOI;
+  
+  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+
+  
+
+  private final SendableChooser<AutoType> m_autoChooser;
+
+  public enum AutoType{
+    DO_NOTHING, DRIVE, SHOOT_THEN_DRIVE, TRENCH_AUTO;
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private void configureButtonBindings() {}
+  public RobotContainer() {
+    m_autoChooser = new SendableChooser<>();
+    m_autoChooser.setDefaultOption("Do Nothing", AutoType.DO_NOTHING);
+    m_autoChooser.addOption("Drive", AutoType.DRIVE);
+    m_autoChooser.addOption("Shoot", AutoType.SHOOT_THEN_DRIVE);
+    m_autoChooser.addOption("Trench", AutoType.TRENCH_AUTO);
+    SmartDashboard.putData(m_autoChooser);
+
+    m_driverOI = new DriverOI(m_driverController);
+    
+
+
+    // Configure the button bindings
+    configureButtonBindings();
+
+    // Configure default commands
+    // Set the default drive command to split-stick arcade drive
+    m_drivetrain.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
+            m_drivetrain));
+  }
+
+  public void onAutoInit(){
+    new InstantCommand(m_pigeon::resetGyro);
+    // new TrackTargetCommand(m_turret, m_drivetrain, m_turretLimelight).schedule();
+  }
+
+  public void onTeleopInit() {
+
+  }
+
+  /**
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+
+    configureDrivetrainButtons();
+
+  }
+
+  public void configureDrivetrainButtons() {
+    m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
+
+    m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
+  }
+
+  
+
+  
+
+  
+
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -42,7 +108,51 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+
+    
+    // switch(m_autoChooser.getSelected()){
+    //   case DO_NOTHING:
+    //     return new WaitCommand(15);
+
+    //   case DRIVE:
+    //     return new Drive(m_drivetrain, 0.4, 0).withTimeout(2);
+
+    //   case SHOOT_THEN_DRIVE:
+    //     return new ShootThreeThenDrive(m_drivetrain, m_flywheel, m_hood, m_turret, m_feeder, m_turretLimelight, m_shooterManager, m_distanceMap);
+
+    //   case TRENCH_AUTO:
+    //     return new ShootThreeThenTrench(m_drivetrain, m_intake, m_flywheel, m_hood, m_turret, m_feeder, m_turretLimelight, m_shooterManager, m_distanceMap);
+
+     //  default:
+       return new WaitCommand(15); 
+        
+      
+    }
+
+    
+    // // Create a voltage constraint to ensure we don't accelerate too fast
+    // var autoVoltageConstraint =
+    //     new DifferentialDriveVoltageConstraint(
+    //         new SimpleMotorFeedforward(DrivetrainConstants.ksVolts,
+    //                                    DrivetrainConstants.kvVoltSecondsPerMeter,
+    //                                    DrivetrainConstants.kaVoltSecondsSquaredPerMeter),
+    //         DrivetrainConstants.kDriveKinematics,
+    //         10);
+
+    // //Create config for trajectory
+    // TrajectoryConfig config =
+    //   new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
+    //                         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+    //       // Add kinematics to ensure max speed is actually obeyed
+    //       .setKinematics(DrivetrainConstants.kDriveKinematics)
+    //       // Apply the voltage constraint
+    //       .addConstraint(autoVoltageConstraint);
+
+    // // Get a trajectory
+    // Test1Trajectory trajectory1 = new Test1Trajectory(config);
+
+    // RamseteTrajectoryCommand trajectoryCommand = new RamseteTrajectoryCommand(m_drivetrain, trajectory1.getTrajectory());
+
+    // // Run path following command, then stop at the end.
+    // return trajectoryCommand.andThen(() -> m_drivetrain.stopDrivetrain());
   }
-}
