@@ -71,9 +71,9 @@ public final class Constants {
 
     public static final class DrivetrainConstants{
 
-        public static final double ksVolts = 0.22;
-        public static final double kvVoltSecondsPerMeter = 1.98;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        public static final double ksVolts = 0.6024;
+        public static final double kvVoltSecondsPerMeter = 0.21907;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
         // Feedforward contraints
            
        public static final SimpleMotorFeedforward kFeedForward = 
