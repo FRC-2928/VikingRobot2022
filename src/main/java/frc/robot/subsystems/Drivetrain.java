@@ -75,7 +75,7 @@ public class Drivetrain extends SubsystemBase {
         m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
         m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
 
-        //Motors
+        // Motors
         configmotors();
         
         m_differentialDrive = new DifferentialDrive(m_leftLeader, m_rightLeader);   
