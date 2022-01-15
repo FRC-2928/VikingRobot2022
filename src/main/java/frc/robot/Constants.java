@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /**
@@ -71,6 +72,10 @@ public final class Constants {
         public static final double ksVolts = 0.22;
         public static final double kvVoltSecondsPerMeter = 1.98;
         public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        // Feedforward contraints
+           
+       private static final SimpleMotorFeedforward m_feedForward = 
+       new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
 
         public static final double kTrackWidthMeters = 0.7; //Placeholder
         public static final DifferentialDriveKinematics kDriveKinematics =

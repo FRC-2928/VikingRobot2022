@@ -32,8 +32,8 @@ import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.Pigeon;
 
 public class Drivetrain extends SubsystemBase {
-    private WPI_TalonFX m_leftMaster, m_rightMaster;
-    private WPI_TalonFX m_leftSlave, m_rightSlave;
+    private WPI_TalonFX m_leftLeader, m_rightLeader;
+    private WPI_TalonFX m_leftFollower, m_rightFollower;
 
     private Pigeon m_pigeon;
 
@@ -42,7 +42,6 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDrive m_differentialDrive;
 
     //Drivetrain kinematics, feed it width between wheels
-    private DifferentialDriveKinematics m_kinematics;
     private SimpleMotorFeedforward m_feedForward;
 
     //Drivetrain odometry to keep track of our position on the field
@@ -71,21 +70,45 @@ public class Drivetrain extends SubsystemBase {
         m_pigeon = new Pigeon();
         m_pigeon.resetGyro();
 
-        m_leftMaster = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
-        m_rightMaster = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
-        m_leftSlave = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
-        m_rightSlave = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
+        m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
+        m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
+        m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
+        m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
 
-        //Setting followers, followers don't automatically follow master's inverts so you must set the invert type to FollowMaster
-        m_leftSlave.follow(m_leftMaster, FollowerType.PercentOutput);
-        m_leftSlave.setInverted(InvertType.FollowMaster);
-        m_rightSlave.follow(m_rightMaster, FollowerType.PercentOutput);
-        m_rightSlave.setInverted(InvertType.FollowMaster);
+        //Config the motors
+        configmotors();
+        
+        m_differentialDrive = new DifferentialDrive(m_leftLeader, m_rightLeader);   
+        
+        // Save previous wheel speeds. Start at zero.
+        m_prevSpeeds = new DifferentialDriveWheelSpeeds(0,0);
 
-        m_rightMaster.setInverted(InvertType.InvertMotorOutput);
+        // Setup odometry to start at position 0,0 (top left of field)
+        m_yaw = m_pigeon.getYaw();
+        SmartDashboard.putNumber("Initial robot yaw", m_yaw);
+        Rotation2d initialHeading = new Rotation2d(m_yaw);
+        m_odometry = new DifferentialDriveOdometry(initialHeading);
+
+        // We could start it elsewhere...
+        // m_pose = new Pose2d(0,0,initialHeading);
+        // m_odometry = new DifferentialDriveOdometry(initialHeading, m_pose);
+
+        // Zero the encoders
+        resetEncoders();
+    }        
+
+        public void configmotors() {
+
+               //Setting followers, followers don't automatically followtLeader's inverts so you must set the invert type to FollotLeader
+        m_leftFollower.follow(m_leftLeader, FollowerType.PercentOutput);
+        m_leftFollower.setInverted(InvertType.FollowMaster);
+        m_rightFollower.follow(m_rightLeader, FollowerType.PercentOutput);
+        m_rightFollower.setInverted(InvertType.FollowMaster);
+
+        m_rightLeader.setInverted(InvertType.InvertMotorOutput);
 
         // Configure the motors
-        for(TalonFX fx : new TalonFX[] {m_leftMaster, m_leftSlave, m_rightMaster, m_rightSlave}){
+        for(TalonFX fx : new TalonFX[] {m_leftLeader, m_leftFollower, m_rightLeader, m_rightFollower}){
             //Reset settings for safety
             fx.configFactoryDefault();
 
@@ -116,47 +139,18 @@ public class Drivetrain extends SubsystemBase {
             fx.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
 
             //Either using the integrated Falcon sensor or an external one, will change if needed
-            fx.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+            fx.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
         }
+    }
 
-        // Setup speed controller groups, or not.
-        // m_leftMotors = new SpeedControllerGroup(m_leftMaster, m_leftSlave);
-        // m_rightMotors = new SpeedControllerGroup(m_rightMaster, m_rightSlave);
-        m_differentialDrive = new DifferentialDrive(m_leftMaster, m_rightMaster);
-
-        // Setup kinematics
-        m_kinematics = DrivetrainConstants.kDriveKinematics;
-
-        // Feedforward contraints
-        m_feedForward = new SimpleMotorFeedforward(DrivetrainConstants.ksVolts,
-                                                DrivetrainConstants.kvVoltSecondsPerMeter,
-                                                DrivetrainConstants.kaVoltSecondsSquaredPerMeter);
-        
-        // Save previous wheel speeds. Start at zero.
-        m_prevSpeeds = new DifferentialDriveWheelSpeeds(0,0);
-
-        // Setup odometry to start at position 0,0 (top left of field)
-        m_yaw = m_pigeon.getYaw();
-        SmartDashboard.putNumber("Initial robot yaw", m_yaw);
-        Rotation2d initialHeading = new Rotation2d(m_yaw);
-        m_odometry = new DifferentialDriveOdometry(initialHeading);
-
-        // We could start it elsewhere...
-        // m_pose = new Pose2d(0,0,initialHeading);
-        // m_odometry = new DifferentialDriveOdometry(initialHeading, m_pose);
-
-        // Zero the encoders
-        resetEncoders();
-    }        
-  
     // -----------------------------------------------------------
     // Process Logic
     // -----------------------------------------------------------
     @Override
     public void periodic() {
     
-        double leftEncoderCount = m_leftMaster.getSelectedSensorPosition();
-        double rightEncoderCount = m_rightMaster.getSelectedSensorPosition();
+        double leftEncoderCount = m_leftLeader.getSelectedSensorPosition();
+        double rightEncoderCount = m_rightLeader.getSelectedSensorPosition();
         double deltaLeftCount = leftEncoderCount - m_prevLeftEncoder;
         double deltaRightCount = rightEncoderCount - m_prevRightEncoder;
 
@@ -164,8 +158,8 @@ public class Drivetrain extends SubsystemBase {
         m_leftPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaLeftCount, gearState))/1.4;
         m_rightPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaRightCount, gearState))/1.4;
 
-        double leftEncoderVelocity = m_leftMaster.getSelectedSensorVelocity();
-        double rightEncoderVelocity = m_rightMaster.getSelectedSensorVelocity();
+        double leftEncoderVelocity = m_leftLeader.getSelectedSensorVelocity();
+        double rightEncoderVelocity = m_rightLeader.getSelectedSensorVelocity();
         m_leftVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(leftEncoderVelocity, gearState)) * 10)/1.4;
         m_rightVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(rightEncoderVelocity, gearState)) * 10)/1.4;
 
@@ -224,8 +218,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setDriveTrainVoltage(double leftVolts, double rightVolts) {
-        m_leftMaster.set(ControlMode.PercentOutput, leftVolts/12);
-        m_rightMaster.set(ControlMode.PercentOutput, rightVolts/12);
+        m_leftLeader.set(ControlMode.PercentOutput, leftVolts/12);
+        m_rightLeader.set(ControlMode.PercentOutput, rightVolts/12);
         m_differentialDrive.feed();
     }
 
@@ -249,8 +243,8 @@ public class Drivetrain extends SubsystemBase {
         double leftVelocityTicksPerSec = wheelRotationsToMotorRotations(metersToWheelRotations(leftMetersPerSecond), gearState);
         double rightVelocityTicksPerSec = wheelRotationsToMotorRotations(metersToWheelRotations(leftMetersPerSecond), gearState);
 
-        m_leftMaster.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward/12.0);
-        m_rightMaster.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward/12.0);
+        m_leftLeader.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward/12.0);
+        m_rightLeader.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward/12.0);
 
         // Save previous speeds
         m_prevSpeeds.leftMetersPerSecond = leftMetersPerSecond;
@@ -287,16 +281,16 @@ public class Drivetrain extends SubsystemBase {
     }
   
     public void resetEncoders(){
-        m_leftMaster.setSelectedSensorPosition(0);
-        m_rightMaster.setSelectedSensorPosition(0);
+        m_leftLeader.setSelectedSensorPosition(0);
+        m_rightLeader.setSelectedSensorPosition(0);
     }
 
     public double getLeftVoltage(){
-        return m_leftMaster.getMotorOutputVoltage();
+        return m_leftLeader.getMotorOutputVoltage();
     }
 
     public double getRightVoltage(){
-        return m_rightMaster.getMotorOutputVoltage();
+        return m_rightLeader.getMotorOutputVoltage();
     }
 
     // Gyro readings
