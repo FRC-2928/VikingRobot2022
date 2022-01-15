@@ -1,8 +1,11 @@
 {
   "SysId": {
-    "Analysis Type": "General Mechanism",
+    "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Robotics\\VikingRobot2022\\.SysId\\sysid_data20220115-152035.json",
     "NetworkTables Settings": {
       "serverTeam": "2928"
-    }
+    },
+    "mode": "Client",
+    "serverTeam": "2928"
   }
 }
