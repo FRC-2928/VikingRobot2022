@@ -48,11 +48,13 @@ public final class Constants {
         public static final int kIntakeSparkMax = 5; //placeholder
 
         //Solenoids
-        public static final int kDrivetrainShiftSolenoid = 6; 
+        // public static final int kDrivetrainShiftSolenoid = 6; 
+        public static final int kDrivetrainShiftSolenoidHigh = 1;
+        public static final int kDrivetrainShiftSolenoidLow = 0;
         public static final int kIntakeArmSolenoid = 4;
         public static final int kIntakeBaseSolenoid = 5;
         public static final int kRatchetSolenoid = 1;
-
+        
         //Sensors
         public static final int kPigeonIMU = 3;
 		
