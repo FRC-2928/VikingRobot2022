@@ -75,10 +75,13 @@ public class Drivetrain extends SubsystemBase {
         m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
         m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
 
-        //Config the motors
+        //Motors
         configmotors();
         
         m_differentialDrive = new DifferentialDrive(m_leftLeader, m_rightLeader);   
+
+        // Feedforward contraints
+        m_feedForward = DrivetrainConstants.kFeedForward;
         
         // Save previous wheel speeds. Start at zero.
         m_prevSpeeds = new DifferentialDriveWheelSpeeds(0,0);

@@ -74,7 +74,7 @@ public final class Constants {
         public static final double kaVoltSecondsSquaredPerMeter = 0.2;
         // Feedforward contraints
            
-       private static final SimpleMotorFeedforward m_feedForward = 
+       public static final SimpleMotorFeedforward kFeedForward = 
        new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
 
         public static final double kTrackWidthMeters = 0.7; //Placeholder
