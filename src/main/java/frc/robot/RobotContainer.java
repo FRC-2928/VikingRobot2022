@@ -1,5 +1,12 @@
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -9,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
@@ -44,7 +52,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
-    m_autoChooser.setDefaultOption("Do Nothing", RunRamseteTrajectory());
+    // m_autoChooser.setDefaultOption("Do Nothing", RunRamseteTrajectory(calibrateTrajectory()));
     
     SmartDashboard.putData(m_autoChooser);
 
@@ -71,6 +79,21 @@ public class RobotContainer {
 
   public void onTeleopInit() {
 
+  }
+
+  public Trajectory calibrateTrajectory() {
+    
+    // Note that all coordinates are in meters, and follow NWU conventions.
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(
+            new Translation2d(1.0, 0.0) 
+        ),
+        new Pose2d(2.0, 0.0, new Rotation2d(0)), // left
+        AutoConstants.kTrajectoryConfig);
+
+    return trajectory;
   }
 
   /**

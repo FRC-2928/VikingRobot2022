@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -83,6 +85,12 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(kTrackWidthMeters);
 
+        public static final DifferentialDriveVoltageConstraint kAutoVoltageConstraint =
+            new DifferentialDriveVoltageConstraint(
+                kFeedForward,
+                kDriveKinematics,
+                10);    
+
         public static final boolean kGyroReversed = true;
 
         public static final int kEncoderCPR = 2048;
@@ -99,8 +107,14 @@ public final class Constants {
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxAccelMetersPerSecondSquared = 3;
 
+        // Setup trajectory constraints
+    public static final TrajectoryConfig kTrajectoryConfig =
+    new TrajectoryConfig(kMaxSpeedMetersPerSecond, 
+                        kMaxAccelMetersPerSecondSquared)
+        .setKinematics(DrivetrainConstants.kDriveKinematics)
+        .addConstraint(DrivetrainConstants.kAutoVoltageConstraint);
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
