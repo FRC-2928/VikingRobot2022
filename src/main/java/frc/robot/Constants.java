@@ -94,14 +94,14 @@ public final class Constants {
         public static final boolean kGyroReversed = true;
 
         public static final int kEncoderCPR = 2048;
-        public static final double kWheelDiameterMeters = 0.15;
+        public static final double kWheelDiameterMeters = 0.1015;
         public static final double kEncoderDistancePerPulse =
             // Assumes the encoders are directly mounted on the wheel shafts
             (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
         public static final double kUnitsPerRevolution = 1.0;
         //TODO change to correct values
-        public static final double kHighGearRatio = 5;
-        public static final double kLowGearRatio = 10.71;
+        public static final double kHighGearRatio = 2.91;
+        public static final double kLowGearRatio = 9.08;
         
     }
 

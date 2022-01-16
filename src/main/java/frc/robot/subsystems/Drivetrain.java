@@ -156,15 +156,18 @@ public class Drivetrain extends SubsystemBase {
         double rightEncoderCount = m_rightLeader.getSelectedSensorPosition();
         double deltaLeftCount = leftEncoderCount - m_prevLeftEncoder;
         double deltaRightCount = rightEncoderCount - m_prevRightEncoder;
+        double m_leftWheelRotations, m_rightWheelRotations;
 
         var gearState = m_gearStateSupplier.get();
-        m_leftPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaLeftCount, gearState))/1.4;
-        m_rightPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaRightCount, gearState))/1.4;
+        m_leftWheelRotations = motorRotationsToWheelRotations(deltaLeftCount, gearState);
+        m_rightWheelRotations = motorRotationsToWheelRotations(deltaRightCount, gearState);
+        m_leftPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaLeftCount, gearState));
+        m_rightPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaRightCount, gearState));
 
         double leftEncoderVelocity = m_leftLeader.getSelectedSensorVelocity();
         double rightEncoderVelocity = m_rightLeader.getSelectedSensorVelocity();
-        m_leftVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(leftEncoderVelocity, gearState)) * 10)/1.4;
-        m_rightVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(rightEncoderVelocity, gearState)) * 10)/1.4;
+        m_leftVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(leftEncoderVelocity, gearState)) * 10);
+        m_rightVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(rightEncoderVelocity, gearState)) * 10);
 
         // Update the odometry in the periodic block
         m_yaw = m_pigeon.getYaw();
@@ -175,6 +178,9 @@ public class Drivetrain extends SubsystemBase {
         m_prevRightEncoder = rightEncoderCount;
 
         SmartDashboard.putNumber("Left Wheel Position", m_leftPosition);
+        SmartDashboard.putNumber("Right Wheel Position", m_rightPosition);
+        SmartDashboard.putNumber("Rotations Left Wheel", m_leftWheelRotations);
+        SmartDashboard.putNumber("Rotations Right Wheel", m_rightWheelRotations);
         SmartDashboard.putNumber("Right Wheel Position", m_rightPosition);
         SmartDashboard.putNumber("Left Wheel Speed", m_leftVelocity);
         SmartDashboard.putNumber("Right Wheel Speed", m_rightVelocity);

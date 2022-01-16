@@ -1,7 +1,7 @@
 {
   "SysId": {
     "Analysis Type": "Drivetrain",
-    "AnalyzerJSONLocation": "C:\\Robotics\\VikingRobot2022\\.SysId\\sysid_data20220115-154006.json",
+    "AnalyzerJSONLocation": "C:\\Users\\Viking Robotics\\Documents\\VikingRobot2022\\.SysId\\sysid_data20220115-154006.json",
     "NetworkTables Settings": {
       "serverTeam": "2928"
     },
