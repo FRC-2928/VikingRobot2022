@@ -15,6 +15,7 @@ import frc.robot.oi.DriverOI;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
+import frc.robot.commands.RunRamseteTrajectory;
 
 public class RobotContainer {
 
@@ -34,21 +35,17 @@ public class RobotContainer {
 
   
 
-  private final SendableChooser<AutoType> m_autoChooser;
+  private final SendableChooser<Command> m_autoChooser;
 
-  public enum AutoType{
-    DO_NOTHING, DRIVE, SHOOT_THEN_DRIVE, TRENCH_AUTO;
-  }
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
-    m_autoChooser.setDefaultOption("Do Nothing", AutoType.DO_NOTHING);
-    m_autoChooser.addOption("Drive", AutoType.DRIVE);
-    m_autoChooser.addOption("Shoot", AutoType.SHOOT_THEN_DRIVE);
-    m_autoChooser.addOption("Trench", AutoType.TRENCH_AUTO);
+    m_autoChooser.setDefaultOption("Do Nothing", RunRamseteTrajectory());
+    
     SmartDashboard.putData(m_autoChooser);
 
     m_driverOI = new DriverOI(m_driverController);
@@ -110,19 +107,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     
-    // switch(m_autoChooser.getSelected()){
-    //   case DO_NOTHING:
-    //     return new WaitCommand(15);
-
-    //   case DRIVE:
-    //     return new Drive(m_drivetrain, 0.4, 0).withTimeout(2);
-
-    //   case SHOOT_THEN_DRIVE:
-    //     return new ShootThreeThenDrive(m_drivetrain, m_flywheel, m_hood, m_turret, m_feeder, m_turretLimelight, m_shooterManager, m_distanceMap);
-
-    //   case TRENCH_AUTO:
-    //     return new ShootThreeThenTrench(m_drivetrain, m_intake, m_flywheel, m_hood, m_turret, m_feeder, m_turretLimelight, m_shooterManager, m_distanceMap);
-
      //  default:
        return new WaitCommand(15); 
         
