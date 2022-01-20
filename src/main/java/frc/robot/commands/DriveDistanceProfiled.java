@@ -15,6 +15,8 @@ import frc.robot.subsystems.Drivetrain;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DriveDistanceProfiled extends ProfiledPIDCommand {
+
+  Drivetrain m_drivetrain;
   /** Creates a new RunProfilePID. */
   public DriveDistanceProfiled(double targetDistance, Drivetrain drivetrain) {
     super(
@@ -37,6 +39,13 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
+
+        m_drivetrain = drivetrain;
+  }
+
+  public void initialize(){
+    super.initialize();
+    m_drivetrain.resetEncoders();
   }
 
   // Returns true when the command should end.
