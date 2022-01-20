@@ -115,11 +115,11 @@ public class RobotContainer {
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
   }
 
+  //added 1/19/21 STILL NOT TESTED, should reset the encoders in theory
   public void configureResetEncoders() {
     m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
 
     m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
-
   }
 
 
