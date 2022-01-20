@@ -110,6 +110,9 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kTrapezoidProfileConstraints =
             new TrapezoidProfile.Constraints(kMaxSpeedMetersPerSecond, kMaxAccelMetersPerSecondSquared);
         
+        // PID Constants
+        //                                                  kp,  ki, kd,  kf, iz,  peak output
+        public static final Gains kGainsProfiled = new Gains(0,  0,   0,   0,   0,  1.00);    
     }
 
     public static final class AutoConstants {
