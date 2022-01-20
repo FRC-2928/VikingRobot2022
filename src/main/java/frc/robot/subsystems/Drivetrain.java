@@ -188,7 +188,6 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Drivetrain Left encoder", leftEncoderCount);
         SmartDashboard.putNumber("Drivetrain Right encoder", rightEncoderCount);
     }
-
     public double metersToWheelRotations(double metersPerSecond) {
         return metersPerSecond / (DrivetrainConstants.kWheelDiameterMeters * Math.PI);
     }

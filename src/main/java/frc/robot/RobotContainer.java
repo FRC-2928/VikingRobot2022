@@ -31,6 +31,7 @@ public class RobotContainer {
 
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
+
   
   
   
@@ -114,7 +115,14 @@ public class RobotContainer {
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
   }
 
-  
+  public void configureResetEncoders() {
+    m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders));
+
+    m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders));
+
+  }
+
+
 
   
 
