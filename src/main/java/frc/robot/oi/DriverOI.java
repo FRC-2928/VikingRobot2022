@@ -67,6 +67,9 @@ public class DriverOI {
 
     // ---------------- Drivetrain ----------------------------
 
+    public Button getResetEncodersButton() {
+        return new JoystickButton(m_controller, XboxController.Button.kB.value);
+    }
 
     public Button getShiftLowButton() {
         return new JoystickButton(m_controller, XboxController.Button.kX.value);
