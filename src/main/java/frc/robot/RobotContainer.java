@@ -52,7 +52,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
-    // m_autoChooser.setDefaultOption("Do Nothing", RunRamseteTrajectory(calibrateTrajectory()));
+    m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
     
     SmartDashboard.putData(m_autoChooser);
 
@@ -131,7 +131,7 @@ public class RobotContainer {
 
     
      //  default:
-       return new WaitCommand(15); 
+       return m_autoChooser.getSelected(); 
         
       
     }
