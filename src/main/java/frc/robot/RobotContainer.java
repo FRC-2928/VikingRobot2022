@@ -24,6 +24,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
 import frc.robot.commands.RunRamseteTrajectory;
+import frc.robot.commands.DriveDistanceProfiled;
 
 public class RobotContainer {
 
@@ -53,7 +54,9 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
-    m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
+   // m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
+    m_autoChooser.setDefaultOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
+    
     
     SmartDashboard.putData(m_autoChooser);
 

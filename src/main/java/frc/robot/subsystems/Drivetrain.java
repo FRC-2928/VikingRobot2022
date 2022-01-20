@@ -192,7 +192,7 @@ public class Drivetrain extends SubsystemBase {
         return metersPerSecond / (DrivetrainConstants.kWheelDiameterMeters * Math.PI);
     }
 
-    public double wheelRotationsToMotorRotations(double wheelRotations, Transmission.GearState gearState) {
+    public double wheelRotationsToEncoderTicks(double wheelRotations, Transmission.GearState gearState) {
         if (gearState == Transmission.GearState.HIGH) {
             return wheelRotations * DrivetrainConstants.kEncoderCPR * DrivetrainConstants.kHighGearRatio;
         }
@@ -232,31 +232,19 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setOutputMetersPerSecond(double leftMetersPerSecond, double rightMetersPerSecond) {
-        double currentTime = Timer.getFPGATimestamp();
-        double deltaTime = currentTime - m_prevSetOutputTime;
-        double leftAcceleration = 0;
-        double rightAcceleration = 0;
         
-        if (deltaTime > 0 && deltaTime < 0.1) {
-            leftAcceleration = (leftMetersPerSecond - m_prevSpeeds.leftMetersPerSecond)/deltaTime;
-            rightAcceleration = (rightMetersPerSecond - m_prevSpeeds.rightMetersPerSecond)/deltaTime;
-        }
 
         // Calculate feedforward for the left and right wheels.
-        double leftFeedForward = m_feedForward.calculate(leftMetersPerSecond, leftAcceleration);
-        double rightFeedForward = m_feedForward.calculate(rightMetersPerSecond, rightAcceleration);
+        double leftFeedForward = m_feedForward.calculate(leftMetersPerSecond);
+        double rightFeedForward = m_feedForward.calculate(rightMetersPerSecond);
         
         // Convert meters per second to rotations per second
         var gearState = m_gearStateSupplier.get();
-        double leftVelocityTicksPerSec = wheelRotationsToMotorRotations(metersToWheelRotations(leftMetersPerSecond), gearState);
-        double rightVelocityTicksPerSec = wheelRotationsToMotorRotations(metersToWheelRotations(leftMetersPerSecond), gearState);
+        double leftVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(leftMetersPerSecond), gearState);
+        double rightVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(leftMetersPerSecond), gearState);
 
         m_leftLeader.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward/12.0);
         m_rightLeader.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward/12.0);
-
-        // Save previous speeds
-        m_prevSpeeds.leftMetersPerSecond = leftMetersPerSecond;
-        m_prevSpeeds.rightMetersPerSecond = rightMetersPerSecond;
 
         m_differentialDrive.feed();
     }
@@ -306,12 +294,16 @@ public class Drivetrain extends SubsystemBase {
         return m_pigeon.getYaw();
     }
 
-    public double getLeftPosition() {
+    public double getLeftDistanceMeters() {
         return m_leftPosition;
     }
 
-    public double getRightPosition() {
+    public double getRightDistanceMeters() {
         return m_rightPosition;
+    }
+
+    public double getAvgDistanceMeters(){
+        return (getLeftDistanceMeters() + getRightDistanceMeters()) /2;
     }
 
     public void resetOdometry(Pose2d pose) {
@@ -320,7 +312,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Required methods for SmartSubsystem
-    public double getPosition(){
+    public double getDistance(){
         return 0;
     }
     public double getVelocity(){

@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 /**
@@ -102,6 +103,12 @@ public final class Constants {
         //TODO change to correct values
         public static final double kHighGearRatio = 2.91;
         public static final double kLowGearRatio = 9.08;
+
+        public static final double kMaxSpeedMetersPerSecond = 3.0;
+        public static final double kMaxAccelMetersPerSecondSquared = 3.0;
+
+        public static final TrapezoidProfile.Constraints kTrapezoidProfileConstraints =
+            new TrapezoidProfile.Constraints(kMaxSpeedMetersPerSecond, kMaxAccelMetersPerSecondSquared);
         
     }
 
