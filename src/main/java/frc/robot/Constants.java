@@ -113,6 +113,9 @@ public final class Constants {
         // PID Constants
         //                                                  kp,  ki, kd,  kf, iz,  peak output
         public static final Gains kGainsProfiled = new Gains(0,  0,   0,   0,   0,  1.00);    
+
+        //public static final double kDistanceToleranceMeters = 0.1;
+        //public static final double kVelocityToleranceMeters = 0.1;
     }
 
     public static final class AutoConstants {

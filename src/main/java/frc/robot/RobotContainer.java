@@ -56,6 +56,8 @@ public class RobotContainer {
     m_autoChooser = new SendableChooser<>();
    // m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
     m_autoChooser.setDefaultOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
+    m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
+    
     
     
     SmartDashboard.putData(m_autoChooser);
@@ -121,7 +123,7 @@ public class RobotContainer {
   //added 1/19/21 STILL NOT TESTED, should reset the encoders in theory
   public void configureResetEncoders() {
     m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
-    
+
   }
 
   /**

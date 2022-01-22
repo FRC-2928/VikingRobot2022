@@ -116,7 +116,7 @@ public class Drivetrain extends SubsystemBase {
             fx.configFactoryDefault();
 
             //Sets voltage compensation to 12, used for percent output
-            fx.configVoltageCompSaturation(8);
+            fx.configVoltageCompSaturation(10);
             fx.enableVoltageCompensation(true);
 
             //Setting just in case

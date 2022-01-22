@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -23,7 +26,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            5,
+            10,
             0,
             0,
             // The motion profile constraints
@@ -40,14 +43,27 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
     // Configure additional PID options by calling `getController` here.
-
+    /*getController().setTolerance(DrivetrainConstants.kDistanceToleranceMeters,
+                                DrivetrainConstants.kVelocityToleranceMeters);
+      */
         m_drivetrain = drivetrain;
   }
 
   public void initialize(){
     super.initialize();
+    m_drivetrain.stopDrivetrain();
     m_drivetrain.resetEncoders();
+    SmartDashboard.putBoolean("atGoal", false);
   }
+
+  @Override
+  public void end(boolean interrupted) {
+    m_drivetrain.stopDrivetrain();
+    SmartDashboard.putBoolean("atGoal", true);
+    //CommandScheduler.getInstance().cancel(this);
+  }
+
+ 
 
   // Returns true when the command should end.
   @Override
