@@ -38,6 +38,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
           drivetrain.setOutputMetersPerSecond(output, output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain);
     // Configure additional PID options by calling `getController` here.
 
         m_drivetrain = drivetrain;
