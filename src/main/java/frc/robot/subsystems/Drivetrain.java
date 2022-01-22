@@ -100,7 +100,7 @@ public class Drivetrain extends SubsystemBase {
         resetEncoders();
     }        
 
-        public void configmotors() {
+    public void configmotors() {
 
                //Setting followers, followers don't automatically followtLeader's inverts so you must set the invert type to FollotLeader
         m_leftFollower.follow(m_leftLeader, FollowerType.PercentOutput);
@@ -271,6 +271,21 @@ public class Drivetrain extends SubsystemBase {
         m_differentialDrive.feed();
     }
 
+    public void zeroGyro(){
+        m_pigeon.resetGyro();
+    }
+
+    public void resetEncoders(){
+        m_leftLeader.setSelectedSensorPosition(0);
+        m_rightLeader.setSelectedSensorPosition(0);
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        zeroGyro();
+        m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+    }
+
     // -----------------------------------------------------------
     // System State
     // -----------------------------------------------------------
@@ -281,11 +296,6 @@ public class Drivetrain extends SubsystemBase {
 
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
-    }
-  
-    public void resetEncoders(){
-        m_leftLeader.setSelectedSensorPosition(0);
-        m_rightLeader.setSelectedSensorPosition(0);
     }
 
     public double getLeftVoltage(){
@@ -322,10 +332,6 @@ public class Drivetrain extends SubsystemBase {
         return (getLeftDistanceMeters() + getRightDistanceMeters()) /2;
     }
 
-    public void resetOdometry(Pose2d pose) {
-        resetEncoders();
-        m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
-    }
 
     // Required methods for SmartSubsystem
     public double getDistance(){
