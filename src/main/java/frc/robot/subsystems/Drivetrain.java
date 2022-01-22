@@ -259,12 +259,17 @@ public class Drivetrain extends SubsystemBase {
         m_differentialDrive.setMaxOutput(maxOutput);
     }
 
-    // Required methods for SmartSubsystem
-    public void setPower(double power){}
-    public void setPosition(double position){}
-    public void setVelocity(double velocity){}
-    public void setMotion(double position){}
-    public void stop(){}
+    public void disableMotorSafety(){
+        m_differentialDrive.setSafetyEnabled(false);
+    }
+
+    public void enableMotorSafety(){
+        m_differentialDrive.setSafetyEnabled(true);
+    }
+
+    public void feedWatchdog(){
+        m_differentialDrive.feed();
+    }
 
     // -----------------------------------------------------------
     // System State

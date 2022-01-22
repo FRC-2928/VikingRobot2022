@@ -8,6 +8,10 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class RunRamseteTrajectory extends RamseteCommand {
+
+  Drivetrain m_drivetrain;
+  Trajectory m_trajectory;
+
   /**
    * Creates a new RamseteTrajectoryCommand.
    */
@@ -20,6 +24,20 @@ public class RunRamseteTrajectory extends RamseteCommand {
       drivetrain::setOutputMetersPerSecond,
       drivetrain
     );
+    m_drivetrain = drivetrain;
+    m_trajectory = trajectory;
+  }
+
+  public void initialize() {
+    super.initialize();
+    m_drivetrain.resetOdometry(m_trajectory.getInitialPose());
+    m_drivetrain.disableMotorSafety();    
+  }
+
+  public void end(boolean interrupted) {
+    super.end(true);
+    m_drivetrain.stopDrivetrain();
+    m_drivetrain.enableMotorSafety();
   }
 
 }
