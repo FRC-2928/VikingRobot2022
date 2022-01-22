@@ -53,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDriveWheelSpeeds m_prevSpeeds;
     private double m_targetVelocityRotationsPerSecond;
 
-    private double m_leftPosition, m_rightPosition;
+    //private double m_leftPosition, m_rightPosition;
     private Supplier<Transmission.GearState> m_gearStateSupplier;
     private double m_prevLeftEncoder, m_prevRightEncoder;
     private double m_prevSetOutputTime; 
@@ -152,17 +152,12 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
     
-        double leftEncoderCount = m_leftLeader.getSelectedSensorPosition();
-        double rightEncoderCount = m_rightLeader.getSelectedSensorPosition();
-        double deltaLeftCount = leftEncoderCount - m_prevLeftEncoder;
-        double deltaRightCount = rightEncoderCount - m_prevRightEncoder;
-        double m_leftWheelRotations, m_rightWheelRotations;
+
+        double leftWheelRotations, rightWheelRotations;
 
         var gearState = m_gearStateSupplier.get();
-        m_leftWheelRotations = motorRotationsToWheelRotations(deltaLeftCount, gearState);
-        m_rightWheelRotations = motorRotationsToWheelRotations(deltaRightCount, gearState);
-        m_leftPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaLeftCount, gearState));
-        m_rightPosition += wheelRotationsToMeters(motorRotationsToWheelRotations(deltaRightCount, gearState));
+        double leftPosition = getLeftDistanceMeters();
+        double rightPosition = getRightDistanceMeters();
 
         double leftEncoderVelocity = m_leftLeader.getSelectedSensorVelocity();
         double rightEncoderVelocity = m_rightLeader.getSelectedSensorVelocity();
@@ -171,22 +166,21 @@ public class Drivetrain extends SubsystemBase {
 
         // Update the odometry in the periodic block
         m_yaw = m_pigeon.getYaw();
-        m_pose = m_odometry.update(Rotation2d.fromDegrees(m_yaw), m_leftPosition, m_rightPosition);
+        m_pose = m_odometry.update(Rotation2d.fromDegrees(m_yaw), leftPosition, rightPosition);
 
         //Stores current values for next run through
-        m_prevLeftEncoder = leftEncoderCount;
-        m_prevRightEncoder = rightEncoderCount;
+        //m_prevLeftEncoder = leftEncoderCount;
+        //m_prevRightEncoder = rightEncoderCount;
 
-        SmartDashboard.putNumber("Left Wheel Position", m_leftPosition);
-        SmartDashboard.putNumber("Right Wheel Position", m_rightPosition);
-        SmartDashboard.putNumber("Rotations Left Wheel", m_leftWheelRotations);
-        SmartDashboard.putNumber("Rotations Right Wheel", m_rightWheelRotations);
-        SmartDashboard.putNumber("Right Wheel Position", m_rightPosition);
+        SmartDashboard.putNumber("Left Wheel Position", leftPosition);
+        SmartDashboard.putNumber("Right Wheel Position", rightPosition);
+        //SmartDashboard.putNumber("Rotations Left Wheel", m_leftWheelRotations);
+        //SmartDashboard.putNumber("Rotations Right Wheel", m_rightWheelRotations);
         SmartDashboard.putNumber("Left Wheel Speed", m_leftVelocity);
         SmartDashboard.putNumber("Right Wheel Speed", m_rightVelocity);
         SmartDashboard.putNumber("Robot yaw", m_yaw);
-        SmartDashboard.putNumber("Drivetrain Left encoder", leftEncoderCount);
-        SmartDashboard.putNumber("Drivetrain Right encoder", rightEncoderCount);
+        //SmartDashboard.putNumber("Drivetrain Left encoder", leftEncoderCount);
+        //SmartDashboard.putNumber("Drivetrain Right encoder", rightEncoderCount);
     }
     public double metersToWheelRotations(double metersPerSecond) {
         return metersPerSecond / (DrivetrainConstants.kWheelDiameterMeters * Math.PI);
@@ -303,11 +297,20 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getLeftDistanceMeters() {
-        return m_leftPosition;
+        var gearState = m_gearStateSupplier.get();
+        double leftEncoderCount = m_leftLeader.getSelectedSensorPosition();
+        double leftWheelRotations = motorRotationsToWheelRotations(leftEncoderCount, gearState);
+        double leftPosition = wheelRotationsToMeters(leftWheelRotations);
+        return leftPosition;
+
     }
 
     public double getRightDistanceMeters() {
-        return m_rightPosition;
+        var gearState = m_gearStateSupplier.get();
+        double rightEncoderCount = m_rightLeader.getSelectedSensorPosition();
+        double rightWheelRotations = motorRotationsToWheelRotations(rightEncoderCount, gearState);
+        double rightPosition = wheelRotationsToMeters(rightWheelRotations);
+        return rightPosition;
     }
 
     public double getAvgDistanceMeters(){
