@@ -246,7 +246,7 @@ public class Drivetrain extends SubsystemBase {
         // Convert meters per second to rotations per second
         var gearState = m_gearStateSupplier.get();
         double leftVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(leftMetersPerSecond), gearState);
-        double rightVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(leftMetersPerSecond), gearState);
+        double rightVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(rightMetersPerSecond), gearState);
 
         SmartDashboard.putNumber("left velocity ticks per second", leftVelocityTicksPerSec);
         SmartDashboard.putNumber("right velocity ticks per second", rightVelocityTicksPerSec);

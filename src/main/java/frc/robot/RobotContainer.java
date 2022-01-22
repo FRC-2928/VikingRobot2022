@@ -121,17 +121,8 @@ public class RobotContainer {
   //added 1/19/21 STILL NOT TESTED, should reset the encoders in theory
   public void configureResetEncoders() {
     m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
-
-    m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
+    
   }
-  
-
-
-  
-
-  
-
-  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
