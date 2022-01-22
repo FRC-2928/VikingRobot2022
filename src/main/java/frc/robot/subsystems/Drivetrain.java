@@ -116,7 +116,7 @@ public class Drivetrain extends SubsystemBase {
             fx.configFactoryDefault();
 
             //Sets voltage compensation to 12, used for percent output
-            fx.configVoltageCompSaturation(6.5);
+            fx.configVoltageCompSaturation(8);
             fx.enableVoltageCompensation(true);
 
             //Setting just in case
@@ -237,14 +237,22 @@ public class Drivetrain extends SubsystemBase {
         // Calculate feedforward for the left and right wheels.
         double leftFeedForward = m_feedForward.calculate(leftMetersPerSecond);
         double rightFeedForward = m_feedForward.calculate(rightMetersPerSecond);
+
+        SmartDashboard.putNumber("left feed forward", leftFeedForward);
+        SmartDashboard.putNumber("right feed forward", rightFeedForward);
+
+        
         
         // Convert meters per second to rotations per second
         var gearState = m_gearStateSupplier.get();
         double leftVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(leftMetersPerSecond), gearState);
         double rightVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(leftMetersPerSecond), gearState);
 
-        m_leftLeader.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward/12.0);
-        m_rightLeader.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward/12.0);
+        SmartDashboard.putNumber("left velocity ticks per second", leftVelocityTicksPerSec);
+        SmartDashboard.putNumber("right velocity ticks per second", rightVelocityTicksPerSec);
+
+        m_leftLeader.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward);
+        m_rightLeader.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward);
 
         m_differentialDrive.feed();
     }
