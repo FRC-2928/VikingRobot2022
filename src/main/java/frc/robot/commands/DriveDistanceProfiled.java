@@ -51,14 +51,21 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
 
   public void initialize(){
     super.initialize();
+    getController().reset(0,0);
     m_drivetrain.stopDrivetrain();
     m_drivetrain.resetEncoders();
     SmartDashboard.putBoolean("atGoal", false);
   }
 
-  @Override
+  public void execute() {
+    super.execute();
+    SmartDashboard.putNumber("Position Error", getController().getPositionError());
+  }
+
   public void end(boolean interrupted) {
+    super.end(interrupted);
     m_drivetrain.stopDrivetrain();
+    getController().reset(0,0.0);
     SmartDashboard.putBoolean("atGoal", true);
     //CommandScheduler.getInstance().cancel(this);
   }
