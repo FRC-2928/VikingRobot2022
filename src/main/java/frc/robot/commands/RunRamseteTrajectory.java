@@ -35,7 +35,7 @@ public class RunRamseteTrajectory extends RamseteCommand {
   }
 
   public void end(boolean interrupted) {
-    super.end(true);
+    super.end(interrupted);
     m_drivetrain.stopDrivetrain();
     m_drivetrain.enableMotorSafety();
   }
