@@ -23,7 +23,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            32,
+            5,
             0,
             0,
             // The motion profile constraints
