@@ -108,11 +108,13 @@ public class Drivetrain extends SubsystemBase {
     
         Rotation2d initialHeading = new Rotation2d(m_yaw);
 
+        // Zero the encoders
+        resetEncoders();
+
         // Start with default Pose2d(0, 0, 0)
         m_odometry = new DifferentialDriveOdometry(initialHeading);
 
-        // Zero the encoders
-        resetEncoders();
+        
 
         setupShuffleboard();
     }        
@@ -244,7 +246,7 @@ public class Drivetrain extends SubsystemBase {
 
         // Update the odometry in the periodic block
         m_yaw = m_pigeon.getYaw();
-        m_odometry.update(Rotation2d.fromDegrees(m_yaw), leftPosition, rightPosition);
+        m_odometry.update(Rotation2d.fromDegrees(Math.IEEEremainder(m_yaw, 360.0d) * -1.0d), leftPosition, rightPosition);
         m_headingEntry.setDouble(m_yaw);
 
         m_odometryXEntry.setDouble(m_odometry.getPoseMeters().getX());
@@ -312,7 +314,6 @@ public class Drivetrain extends SubsystemBase {
 
     public void setOutputMetersPerSecond(double leftMetersPerSecond, double rightMetersPerSecond) {
         
-
         // Calculate feedforward for the left and right wheels.
         double leftFeedForward = m_feedForward.calculate(leftMetersPerSecond);
         double rightFeedForward = m_feedForward.calculate(rightMetersPerSecond);
@@ -331,8 +332,8 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("left velocity ticks per second", leftVelocityTicksPerSec);
         SmartDashboard.putNumber("right velocity ticks per second", rightVelocityTicksPerSec);
 
-        m_leftLeader.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward);
-        m_rightLeader.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward);
+        m_leftLeader.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward * .67);
+        m_rightLeader.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward * .67);
 
         m_differentialDrive.feed();
     }
