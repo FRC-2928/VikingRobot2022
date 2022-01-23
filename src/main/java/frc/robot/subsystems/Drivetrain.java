@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -172,20 +173,31 @@ public class Drivetrain extends SubsystemBase {
         // Create a tab for the Drivetrain
         ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drivetrain");
         m_driveTab.add("Heading Deg.", getHeading())
+            .withWidget(BuiltInWidgets.kGraph)      
+            .withSize(3,3)
             .withPosition(0, 0)
             .getEntry();  
         m_driveTab.add("Left Wheel Pos.", getLeftDistanceMeters())
-            .withPosition(2, 0)
+            .withWidget(BuiltInWidgets.kGraph)      
+            .withSize(3,3)  
+            .withPosition(4, 0)
             .getEntry();  
         m_driveTab.add("Right Wheel Pos.", getRightDistanceMeters())
-            .withPosition(4, 0)
+            .withWidget(BuiltInWidgets.kGraph)      
+            .withSize(3,3)
+            .withPosition(7, 0)
             .getEntry(); 
         m_driveTab.add("Left FF", 0)
-            .withPosition(2, 4)
+            .withWidget(BuiltInWidgets.kGraph)      
+            .withSize(3,3)            
+            .withPosition(4, 3)
             .getEntry();  
         m_driveTab.add("Right FF", 0)
-            .withPosition(4, 4)
-            .getEntry();               
+            .withWidget(BuiltInWidgets.kGraph)            
+            .withSize(3,3)
+            .withPosition(7, 3)
+            .getEntry();        
+                   
     }
 
     // -----------------------------------------------------------
@@ -322,7 +334,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
-        // zeroGyro();
+        //zeroGyro();
         m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
     }
 
