@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -31,11 +32,21 @@ public class RunRamseteTrajectory extends RamseteCommand {
   public void initialize() {
     super.initialize();
     m_drivetrain.resetOdometry(m_trajectory.getInitialPose());
+    SmartDashboard.putNumber("start odometry heading", m_drivetrain.getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("start heading", m_drivetrain.getHeading());
     m_drivetrain.disableMotorSafety();    
   }
 
+  public void execute() {
+    super.execute();
+    SmartDashboard.putNumber("current heading", m_drivetrain.getHeading());
+
+  }
+
+  @Override
   public void end(boolean interrupted) {
-    super.end(interrupted);
+    end(interrupted);
+    SmartDashboard.putNumber("end heading", m_drivetrain.getHeading());
     m_drivetrain.stopDrivetrain();
     m_drivetrain.enableMotorSafety();
   }
