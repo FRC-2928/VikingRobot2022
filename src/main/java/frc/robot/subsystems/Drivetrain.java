@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -64,6 +65,9 @@ public class Drivetrain extends SubsystemBase {
     private double m_leftVelocity, m_rightVelocity; 
 
     ShuffleboardTab m_driveTab;
+
+    NetworkTableEntry m_leftFFEntry;
+    NetworkTableEntry m_rightFFEntry;
 
     // -----------------------------------------------------------
     // Initialization
@@ -187,16 +191,17 @@ public class Drivetrain extends SubsystemBase {
             .withSize(3,3)
             .withPosition(7, 0)
             .getEntry(); 
-        m_driveTab.add("Left FF", 0)
+        m_leftFFEntry=m_driveTab.add("Left FF", 0)
             .withWidget(BuiltInWidgets.kGraph)      
             .withSize(3,3)            
             .withPosition(4, 3)
             .getEntry();  
-        m_driveTab.add("Right FF", 0)
+        m_rightFFEntry=m_driveTab.add("Right FF", 0)
             .withWidget(BuiltInWidgets.kGraph)            
             .withSize(3,3)
             .withPosition(7, 3)
             .getEntry();        
+            
                    
     }
 
@@ -286,8 +291,11 @@ public class Drivetrain extends SubsystemBase {
         double leftFeedForward = m_feedForward.calculate(leftMetersPerSecond);
         double rightFeedForward = m_feedForward.calculate(rightMetersPerSecond);
 
-        SmartDashboard.putNumber("left feed forward", leftFeedForward);
-        SmartDashboard.putNumber("right feed forward", rightFeedForward);
+        //SmartDashboard.putNumber("left feed forward", leftFeedForward);
+        //SmartDashboard.putNumber("right feed forward", rightFeedForward);
+
+        m_rightFFEntry.setDouble(rightFeedForward);
+        m_leftFFEntry.setDouble(leftFeedForward);
         
         // Convert meters per second to rotations per second
         var gearState = m_gearStateSupplier.get();
