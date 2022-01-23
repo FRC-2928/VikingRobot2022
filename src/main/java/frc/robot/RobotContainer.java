@@ -9,6 +9,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -111,7 +113,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     configureDrivetrainButtons();
-
+    
   }
 
   public void configureDrivetrainButtons() {
@@ -125,20 +127,15 @@ public class RobotContainer {
     m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
 
   }
-
+    
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-
-    
-     //  default:
-       return m_autoChooser.getSelected(); 
-        
-      
-    }
+  public Command getAutonomousCommand() {  
+    return m_autoChooser.getSelected();    
+  }
 
     
     // // Create a voltage constraint to ensure we don't accelerate too fast

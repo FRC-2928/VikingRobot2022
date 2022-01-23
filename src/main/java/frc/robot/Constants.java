@@ -100,6 +100,7 @@ public final class Constants {
             // Assumes the encoders are directly mounted on the wheel shafts
             (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
         public static final double kUnitsPerRevolution = 1.0;
+        
         //TODO change to correct values
         public static final double kHighGearRatio = 2.91;
         public static final double kLowGearRatio = 9.08;
@@ -119,18 +120,16 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelMetersPerSecondSquared = 3;
-
+    
         // Setup trajectory constraints
-    public static final TrajectoryConfig kTrajectoryConfig =
-    new TrajectoryConfig(kMaxSpeedMetersPerSecond, 
-                        kMaxAccelMetersPerSecondSquared)
-        .setKinematics(DrivetrainConstants.kDriveKinematics)
-        .addConstraint(DrivetrainConstants.kAutoVoltageConstraint);
-        // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
-        public static final double kRamseteB = 2;
-        public static final double kRamseteZeta = 0.7;
+        public static final TrajectoryConfig kTrajectoryConfig =
+        new TrajectoryConfig(DrivetrainConstants.kMaxSpeedMetersPerSecond, 
+                             DrivetrainConstants.kMaxAccelMetersPerSecondSquared)
+            .setKinematics(DrivetrainConstants.kDriveKinematics)
+            .addConstraint(DrivetrainConstants.kAutoVoltageConstraint);
+            // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+            public static final double kRamseteB = 2;
+            public static final double kRamseteZeta = 0.7;
     }
 
     public static final class PIDConstants{

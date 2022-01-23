@@ -54,6 +54,7 @@ public class DriveDistanceProfiled extends ProfiledPIDCommand {
     getController().reset(0,0);
     m_drivetrain.stopDrivetrain();
     m_drivetrain.resetEncoders();
+    m_drivetrain.setPIDSlot(0);
     SmartDashboard.putBoolean("atGoal", false);
   }
 

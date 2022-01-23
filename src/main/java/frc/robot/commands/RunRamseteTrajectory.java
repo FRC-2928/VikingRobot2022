@@ -32,6 +32,7 @@ public class RunRamseteTrajectory extends RamseteCommand {
   public void initialize() {
     super.initialize();
     m_drivetrain.resetOdometry(m_trajectory.getInitialPose());
+    m_drivetrain.setPIDSlot(0);
     SmartDashboard.putNumber("start odometry heading", m_drivetrain.getPose().getRotation().getDegrees());
     SmartDashboard.putNumber("start heading", m_drivetrain.getHeading());
     m_drivetrain.disableMotorSafety();    
@@ -39,13 +40,15 @@ public class RunRamseteTrajectory extends RamseteCommand {
 
   public void execute() {
     super.execute();
+    SmartDashboard.putNumber("Odometry X", m_drivetrain.getPose().getX());
+    SmartDashboard.putNumber("Odometry Y", m_drivetrain.getPose().getY());
+    SmartDashboard.putNumber("Odometry heading", m_drivetrain.getPose().getRotation().getDegrees());
     SmartDashboard.putNumber("current heading", m_drivetrain.getHeading());
-
   }
 
   @Override
   public void end(boolean interrupted) {
-    end(interrupted);
+    super.end(interrupted);
     SmartDashboard.putNumber("end heading", m_drivetrain.getHeading());
     m_drivetrain.stopDrivetrain();
     m_drivetrain.enableMotorSafety();

@@ -16,6 +16,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -47,7 +49,7 @@ public class Drivetrain extends SubsystemBase {
     //Drivetrain odometry to keep track of our position on the field
     private DifferentialDriveOdometry m_odometry;
 
-    private Pose2d m_pose;
+    // private Pose2d m_pose;
 
     public static final double kNominalVoltageVolts = 12.0;
     private DifferentialDriveWheelSpeeds m_prevSpeeds;
@@ -59,6 +61,8 @@ public class Drivetrain extends SubsystemBase {
     private double m_prevSetOutputTime; 
 
     private double m_leftVelocity, m_rightVelocity; 
+
+    ShuffleboardTab m_driveTab;
 
     // -----------------------------------------------------------
     // Initialization
@@ -77,6 +81,9 @@ public class Drivetrain extends SubsystemBase {
 
         // Motors
         configmotors();
+
+        // PID values for the talons
+        setWheelPIDF();
         
         m_differentialDrive = new DifferentialDrive(m_leftLeader, m_rightLeader);   
 
@@ -89,20 +96,21 @@ public class Drivetrain extends SubsystemBase {
         // Setup odometry to start at position 0,0 (top left of field)
         m_yaw = m_pigeon.getYaw();
         SmartDashboard.putNumber("Initial robot yaw", m_yaw);
+    
         Rotation2d initialHeading = new Rotation2d(m_yaw);
-        m_odometry = new DifferentialDriveOdometry(initialHeading);
 
-        // We could start it elsewhere...
-        // m_pose = new Pose2d(0,0,initialHeading);
-        // m_odometry = new DifferentialDriveOdometry(initialHeading, m_pose);
+        // Start with default Pose2d(0, 0, 0)
+        m_odometry = new DifferentialDriveOdometry(initialHeading);
 
         // Zero the encoders
         resetEncoders();
+
+        setupShuffleboard();
     }        
 
     public void configmotors() {
 
-               //Setting followers, followers don't automatically followtLeader's inverts so you must set the invert type to FollotLeader
+        //Setting followers, followers don't automatically followtLeader's inverts so you must set the invert type to FollotLeader
         m_leftFollower.follow(m_leftLeader, FollowerType.PercentOutput);
         m_leftFollower.setInverted(InvertType.FollowMaster);
         m_rightFollower.follow(m_rightLeader, FollowerType.PercentOutput);
@@ -146,6 +154,28 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    public void setWheelPIDF() {
+
+        // set the PID values for each individual wheel
+        for(TalonFX fx : new TalonFX[] {m_leftLeader, m_rightLeader}){
+            
+            fx.config_kP(0, DrivetrainConstants.kGainsProfiled.kP, 0);
+            fx.config_kI(0, DrivetrainConstants.kGainsProfiled.kI, 0);
+            fx.config_kD(0, DrivetrainConstants.kGainsProfiled.kD, 0);
+            fx.config_kF(0, DrivetrainConstants.kGainsProfiled.kF, 0);
+            // m_talonsMaster.config_IntegralZone(0, 30);
+        }
+    }
+
+    private void setupShuffleboard() {
+
+        // Create a tab for the Drivetrain
+        ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drivetrain");
+        m_driveTab.add("Heading Angle Degrees", getHeading())
+            .withPosition(4, 0)
+            .getEntry();  
+    }
+
     // -----------------------------------------------------------
     // Process Logic
     // -----------------------------------------------------------
@@ -153,7 +183,7 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
     
 
-        double leftWheelRotations, rightWheelRotations;
+        // double leftWheelRotations, rightWheelRotations;
 
         var gearState = m_gearStateSupplier.get();
         double leftPosition = getLeftDistanceMeters();
@@ -166,7 +196,7 @@ public class Drivetrain extends SubsystemBase {
 
         // Update the odometry in the periodic block
         m_yaw = m_pigeon.getYaw();
-        m_pose = m_odometry.update(Rotation2d.fromDegrees(m_yaw), leftPosition, rightPosition);
+        m_odometry.update(Rotation2d.fromDegrees(m_yaw), leftPosition, rightPosition);
 
         //Stores current values for next run through
         //m_prevLeftEncoder = leftEncoderCount;
@@ -282,8 +312,14 @@ public class Drivetrain extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
-        zeroGyro();
+        // zeroGyro();
         m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+    }
+
+    public void setPIDSlot(int slot) {
+        int PID_PRIMARY = 0;
+        m_leftLeader.selectProfileSlot(slot, PID_PRIMARY);
+        m_rightLeader.selectProfileSlot(slot, PID_PRIMARY);
     }
 
     // -----------------------------------------------------------
