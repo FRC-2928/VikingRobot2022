@@ -68,6 +68,10 @@ public class Drivetrain extends SubsystemBase {
 
     NetworkTableEntry m_leftFFEntry;
     NetworkTableEntry m_rightFFEntry;
+    NetworkTableEntry m_headingEntry;
+    NetworkTableEntry m_leftWheelPositionEntry;
+    NetworkTableEntry m_rightWheelPositionEntry;
+    NetworkTableEntry m_odometryXEntry, m_odometryYEntry, m_odometryHeadingEntry;
 
     // -----------------------------------------------------------
     // Initialization
@@ -176,17 +180,18 @@ public class Drivetrain extends SubsystemBase {
 
         // Create a tab for the Drivetrain
         ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drivetrain");
-        m_driveTab.add("Heading Deg.", getHeading())
+        ShuffleboardTab m_odometryTab = Shuffleboard.getTab("Odometry");
+        m_headingEntry = m_driveTab.add("Heading Deg.", getHeading())
             .withWidget(BuiltInWidgets.kGraph)      
             .withSize(3,3)
             .withPosition(0, 0)
             .getEntry();  
-        m_driveTab.add("Left Wheel Pos.", getLeftDistanceMeters())
+        m_leftWheelPositionEntry = m_driveTab.add("Left Wheel Pos.", getLeftDistanceMeters())
             .withWidget(BuiltInWidgets.kGraph)      
             .withSize(3,3)  
             .withPosition(4, 0)
             .getEntry();  
-        m_driveTab.add("Right Wheel Pos.", getRightDistanceMeters())
+        m_rightWheelPositionEntry = m_driveTab.add("Right Wheel Pos.", getRightDistanceMeters())
             .withWidget(BuiltInWidgets.kGraph)      
             .withSize(3,3)
             .withPosition(7, 0)
@@ -200,8 +205,22 @@ public class Drivetrain extends SubsystemBase {
             .withWidget(BuiltInWidgets.kGraph)            
             .withSize(3,3)
             .withPosition(7, 3)
-            .getEntry();        
-            
+            .getEntry();    
+        m_odometryXEntry = m_odometryTab.add("X Odometry", 0)
+            .withWidget(BuiltInWidgets.kGraph)            
+            .withSize(3,3)
+            .withPosition(0, 0)
+            .getEntry();
+        m_odometryYEntry = m_odometryTab.add("Y Odometry", 0)
+            .withWidget(BuiltInWidgets.kGraph)            
+            .withSize(3,3)
+            .withPosition(4, 0)
+            .getEntry();
+        m_odometryHeadingEntry = m_odometryTab.add("Heading Odometry", 0)
+            .withWidget(BuiltInWidgets.kGraph)            
+            .withSize(3,3)
+            .withPosition(8, 0)
+            .getEntry();
                    
     }
 
@@ -226,6 +245,11 @@ public class Drivetrain extends SubsystemBase {
         // Update the odometry in the periodic block
         m_yaw = m_pigeon.getYaw();
         m_odometry.update(Rotation2d.fromDegrees(m_yaw), leftPosition, rightPosition);
+        m_headingEntry.setDouble(m_yaw);
+
+        m_odometryXEntry.setDouble(m_odometry.getPoseMeters().getX());
+        m_odometryYEntry.setDouble(m_odometry.getPoseMeters().getY());
+        m_odometryHeadingEntry.setDouble(m_odometry.getPoseMeters().getRotation().getDegrees());
 
         //Stores current values for next run through
         //m_prevLeftEncoder = leftEncoderCount;
@@ -233,6 +257,8 @@ public class Drivetrain extends SubsystemBase {
 
         SmartDashboard.putNumber("Left Wheel Position", leftPosition);
         SmartDashboard.putNumber("Right Wheel Position", rightPosition);
+        m_leftWheelPositionEntry.setDouble(leftPosition);
+        m_rightWheelPositionEntry.setDouble(rightPosition);
         //SmartDashboard.putNumber("Rotations Left Wheel", m_leftWheelRotations);
         //SmartDashboard.putNumber("Rotations Right Wheel", m_rightWheelRotations);
         SmartDashboard.putNumber("Left Wheel Speed", m_leftVelocity);
@@ -291,8 +317,8 @@ public class Drivetrain extends SubsystemBase {
         double leftFeedForward = m_feedForward.calculate(leftMetersPerSecond);
         double rightFeedForward = m_feedForward.calculate(rightMetersPerSecond);
 
-        //SmartDashboard.putNumber("left feed forward", leftFeedForward);
-        //SmartDashboard.putNumber("right feed forward", rightFeedForward);
+        SmartDashboard.putNumber("left meters per sec", leftMetersPerSecond);
+        SmartDashboard.putNumber("right meters per sec", rightMetersPerSecond);
 
         m_rightFFEntry.setDouble(rightFeedForward);
         m_leftFFEntry.setDouble(leftFeedForward);
