@@ -55,6 +55,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
+    m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
     m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
     m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
     
@@ -88,6 +89,21 @@ public class RobotContainer {
   }
 
   public Trajectory calibrateTrajectory() {
+    
+    // Note that all coordinates are in meters, and follow NWU conventions.
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(
+            new Translation2d(1.0, 0.0)
+        ),
+        new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
+        AutoConstants.kTrajectoryConfig);
+
+    return trajectory;
+  }
+
+  public Trajectory navigateConesTrajectory() {
     
     // Note that all coordinates are in meters, and follow NWU conventions.
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(

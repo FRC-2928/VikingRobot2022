@@ -245,8 +245,9 @@ public class Drivetrain extends SubsystemBase {
         m_rightVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(rightEncoderVelocity, gearState)) * 10);
 
         // Update the odometry in the periodic block
-        m_yaw = m_pigeon.getYaw();
-        m_odometry.update(Rotation2d.fromDegrees(Math.IEEEremainder(m_yaw, 360.0d) * -1.0d), leftPosition, rightPosition);
+        
+        //m_yaw = m_pigeon.getYaw();
+        m_odometry.update(getRotation(), leftPosition, rightPosition);
         m_headingEntry.setDouble(m_yaw);
 
         m_odometryXEntry.setDouble(m_odometry.getPoseMeters().getX());
@@ -265,7 +266,7 @@ public class Drivetrain extends SubsystemBase {
         //SmartDashboard.putNumber("Rotations Right Wheel", m_rightWheelRotations);
         SmartDashboard.putNumber("Left Wheel Speed", m_leftVelocity);
         SmartDashboard.putNumber("Right Wheel Speed", m_rightVelocity);
-        SmartDashboard.putNumber("Robot yaw", m_yaw);
+        SmartDashboard.putNumber("Robot yaw", getHeading());
         //SmartDashboard.putNumber("Drivetrain Left encoder", leftEncoderCount);
         //SmartDashboard.putNumber("Drivetrain Right encoder", rightEncoderCount);
     }
@@ -397,6 +398,12 @@ public class Drivetrain extends SubsystemBase {
 
     public double getRightVoltage(){
         return m_rightLeader.getMotorOutputVoltage();
+    }
+
+    public Rotation2d getRotation(){
+        m_yaw = m_pigeon.getYaw();
+        return (Rotation2d.fromDegrees(Math.IEEEremainder(m_yaw, 360.0d) * -1.0d));
+
     }
 
     // Gyro readings
