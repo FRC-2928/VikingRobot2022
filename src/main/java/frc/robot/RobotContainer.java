@@ -111,9 +111,14 @@ public class RobotContainer {
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(
             new Translation2d(3.0, 1.0),
-            new Translation2d(6.0, 0.0)
+            new Translation2d(6.0, -1.0),
+            new Translation2d(9.0, 1.0),
+            new Translation2d(12.0, 0.0),
+            new Translation2d(9.0, -1.0),
+            new Translation2d(6.0, 1.0),
+            new Translation2d(3.0, -1.0)
         ),
-        new Pose2d(8.0, 0.0, new Rotation2d(0)), // left
+        new Pose2d(0, 0, new Rotation2d(180)), // left
         AutoConstants.kTrajectoryConfig);
 
     return trajectory;

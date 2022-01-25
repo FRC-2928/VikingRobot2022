@@ -1,16 +1,10 @@
 {
   "SysId": {
     "Analysis Type": "Drivetrain",
-    "AnalyzerJSONLocation": "C:\\Users\\Viking Robotics\\Documents\\VikingRobot2022\\.SysId\\sysid_data20220115-154006.json",
-    "NetworkTables Settings": {
-      "serverTeam": "2928"
-    },
     "Program Log": {
       "window": {
         "visible": false
       }
-    },
-    "mode": "Client",
-    "serverTeam": "2928"
+    }
   }
 }

@@ -183,7 +183,7 @@ public class Drivetrain extends SubsystemBase {
         // Create a tab for the Drivetrain
         ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drivetrain");
         ShuffleboardTab m_odometryTab = Shuffleboard.getTab("Odometry");
-        m_headingEntry = m_driveTab.add("Heading Deg.", getHeading())
+        m_headingEntry = m_driveTab.add("Heading Deg.", getRotation().getDegrees())
             .withWidget(BuiltInWidgets.kGraph)      
             .withSize(3,3)
             .withPosition(0, 0)
@@ -266,7 +266,7 @@ public class Drivetrain extends SubsystemBase {
         //SmartDashboard.putNumber("Rotations Right Wheel", m_rightWheelRotations);
         SmartDashboard.putNumber("Left Wheel Speed", m_leftVelocity);
         SmartDashboard.putNumber("Right Wheel Speed", m_rightVelocity);
-        SmartDashboard.putNumber("Robot yaw", getHeading());
+        SmartDashboard.putNumber("Robot yaw", getRotation().getDegrees());
         //SmartDashboard.putNumber("Drivetrain Left encoder", leftEncoderCount);
         //SmartDashboard.putNumber("Drivetrain Right encoder", rightEncoderCount);
     }
@@ -371,7 +371,7 @@ public class Drivetrain extends SubsystemBase {
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
         //zeroGyro();
-        m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+        m_odometry.resetPosition(pose, getRotation());
     }
 
     public void setPIDSlot(int slot) {
@@ -407,9 +407,9 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Gyro readings
-    public double getHeading() {
-        return m_pigeon.getYaw();
-    }
+    //public double getHeading() {
+    //    return m_pigeon.getYaw();
+    //}
 
     public double getLeftDistanceMeters() {
         var gearState = m_gearStateSupplier.get();
