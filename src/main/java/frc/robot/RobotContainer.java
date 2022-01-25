@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -7,6 +9,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -104,26 +109,38 @@ public class RobotContainer {
   }
 
   public Trajectory navigateConesTrajectory() {
+
+    String trajectoryJSON = "Pathweaver/output/Figure8.wpilib.json";
+    Trajectory trajectory = new Trajectory();
+
+    try{
+        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+        trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      } catch (IOException ex) {
+
+        DriverStation.reportError("Unable to open Trjactory:" + trajectoryJSON, ex.getStackTrace());
+      }
+
+
     
     // Note that all coordinates are in meters, and follow NWU conventions.
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(3.0, 1.0),
-            new Translation2d(6.0, -1.0),
-            new Translation2d(9.0, 1.0),
-            new Translation2d(12.0, 0.0),
-            new Translation2d(9.0, -1.0),
-            new Translation2d(6.0, 1.0),
-            new Translation2d(3.0, -1.0)
-        ),
-        new Pose2d(0, 0, new Rotation2d(180)), // left
-        AutoConstants.kTrajectoryConfig);
+    // Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+    //     // Start at the origin facing the +X direction
+    //     new Pose2d(0, 0, new Rotation2d(0)),
+    //     List.of(
+    //         new Translation2d(3.0, 1.0),
+    //         new Translation2d(6.0, -1.0),
+    //         new Translation2d(9.0, 1.0),
+    //         new Translation2d(12.0, 0.0),
+    //         new Translation2d(9.0, -1.0),
+    //         new Translation2d(6.0, 1.0),
+    //         new Translation2d(3.0, -1.0)
+    //     ),
+    //     new Pose2d(0, 0, new Rotation2d(180)), // left
+    //     AutoConstants.kTrajectoryConfig);
 
     return trajectory;
   }
-
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by instantiating a {@link GenericHID} or one of its subclasses
