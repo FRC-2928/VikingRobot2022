@@ -2,6 +2,7 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -110,17 +111,17 @@ public class RobotContainer {
 
   public Trajectory navigateConesTrajectory() {
 
-    String trajectoryJSON = "Pathweaver/output/Figure8.wpilib.json";
+    // String trajectoryJSON = "Pathweaver/output/Figure8.wpilib.json";
+    String trajectoryJSON = "Figure8";
     Trajectory trajectory = new Trajectory();
 
     try{
-        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-        trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      trajectory = loadTrajectory(trajectoryJSON);
+        // Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+        // trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
       } catch (IOException ex) {
-
-        DriverStation.reportError("Unable to open Trjactory:" + trajectoryJSON, ex.getStackTrace());
+        DriverStation.reportError("Unable to open Trajactory:" + trajectoryJSON, ex.getStackTrace());
       }
-
 
     
     // Note that all coordinates are in meters, and follow NWU conventions.
@@ -141,6 +142,12 @@ public class RobotContainer {
 
     return trajectory;
   }
+
+  protected static Trajectory loadTrajectory(String trajectoryName) throws IOException {
+    return TrajectoryUtil.fromPathweaverJson(
+        Filesystem.getDeployDirectory().toPath().resolve(Paths.get("Pathweaver", "output", trajectoryName + ".wpilib.json")));
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by instantiating a {@link GenericHID} or one of its subclasses
