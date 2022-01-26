@@ -74,11 +74,12 @@ public final class Constants {
 
     public static final class DrivetrainConstants{
 
+        // kS (static friction), kV (velocity), and kA (acceleration)
         public static final double ksVolts = 0.6024;
         public static final double kvVoltSecondsPerMeter = 0.21907;
         public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
-        // Feedforward contraints
-           
+
+        // Feedforward contraints          
        public static final SimpleMotorFeedforward kFeedForward = 
        new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
 
@@ -86,21 +87,24 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(kTrackWidthMeters);
 
+        public static final double maxVoltage = 10;    
         public static final DifferentialDriveVoltageConstraint kAutoVoltageConstraint =
             new DifferentialDriveVoltageConstraint(
                 kFeedForward,
                 kDriveKinematics,
-                10);    
+                maxVoltage);    
 
         public static final boolean kGyroReversed = true;
 
         public static final int kEncoderCPR = 2048;
         public static final double kWheelDiameterMeters = 0.1015;
+
         public static final double kEncoderDistancePerPulse =
             // Assumes the encoders are directly mounted on the wheel shafts
             (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
-        public static final double kUnitsPerRevolution = 1.0;
-        
+
+        public static final double kUnitsPerRevolution = 2048;
+
         //TODO change to correct values
         public static final double kHighGearRatio = 2.91;
         public static final double kLowGearRatio = 9.08;
@@ -112,6 +116,8 @@ public final class Constants {
             new TrapezoidProfile.Constraints(kMaxSpeedMetersPerSecond, kMaxAccelMetersPerSecondSquared);
         
         // PID Constants
+        // The WPILib feedforward has kS (static friction), kV (velocity), and kA (acceleration) terms 
+        // whereas the Talon SRX / Spark MAX kF is only a kV (velocity) feedforward.
         //                                                  kp,  ki, kd,  kf, iz,  peak output
         public static final Gains kGainsProfiled = new Gains(0,  0,   0,   0,   0,  1.00);    
 
