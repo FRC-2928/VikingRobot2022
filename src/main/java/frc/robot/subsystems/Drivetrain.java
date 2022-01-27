@@ -333,8 +333,14 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("left velocity ticks per second", leftVelocityTicksPerSec);
         SmartDashboard.putNumber("right velocity ticks per second", rightVelocityTicksPerSec);
 
-        m_leftLeader.set(ControlMode.Velocity, leftVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, leftFeedForward * .67);
-        m_rightLeader.set(ControlMode.Velocity, rightVelocityTicksPerSec/10.0, DemandType.ArbitraryFeedForward, rightFeedForward * .67);
+        m_leftLeader.set(ControlMode.Velocity, 
+                        leftVelocityTicksPerSec/10.0, 
+                        DemandType.ArbitraryFeedForward, 
+                        leftFeedForward / DrivetrainConstants.k_MaxVolts);
+        m_rightLeader.set(ControlMode.Velocity, 
+                        rightVelocityTicksPerSec/10.0, 
+                        DemandType.ArbitraryFeedForward, 
+                        rightFeedForward / DrivetrainConstants.k_MaxVolts);
 
         m_differentialDrive.feed();
     }

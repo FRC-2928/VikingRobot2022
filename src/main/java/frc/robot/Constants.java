@@ -87,12 +87,12 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(kTrackWidthMeters);
 
-        public static final double maxVoltage = 10;    
+        public static final double k_MaxVolts = 10;    
         public static final DifferentialDriveVoltageConstraint kAutoVoltageConstraint =
             new DifferentialDriveVoltageConstraint(
                 kFeedForward,
                 kDriveKinematics,
-                maxVoltage);    
+                k_MaxVolts);    
 
         public static final boolean kGyroReversed = true;
 
@@ -119,7 +119,7 @@ public final class Constants {
         // The WPILib feedforward has kS (static friction), kV (velocity), and kA (acceleration) terms 
         // whereas the Talon SRX / Spark MAX kF is only a kV (velocity) feedforward.
         //                                                  kp,  ki, kd,  kf, iz,  peak output
-        public static final Gains kGainsProfiled = new Gains(0,  0,   0,   0,   0,  1.00);    
+        public static final Gains kGainsProfiled = new Gains(0.16,  0,   0,   0,   0,  1.00);    
 
         //public static final double kDistanceToleranceMeters = 0.1;
         //public static final double kVelocityToleranceMeters = 0.1;

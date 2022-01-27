@@ -61,6 +61,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
+    m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, figureEightTrajectory()));
     m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
     m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
     m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
@@ -131,12 +132,12 @@ public class RobotContainer {
   }
 
   public Trajectory figureEightTrajectory() {
-    // String trajectoryJSON = "Pathweaver/output/Figure8.wpilib.json";
+    //String trajectoryJSON = "Pathweaver/paths/Figure8.wpilib.json";
     String trajectoryJSON = "Figure8";
     Trajectory trajectory = new Trajectory();
 
     try{
-      trajectory = loadTrajectory(trajectoryJSON);
+        trajectory = loadTrajectory(trajectoryJSON);
         // Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
         // trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
       } catch (IOException ex) {
@@ -147,7 +148,7 @@ public class RobotContainer {
 
   protected static Trajectory loadTrajectory(String trajectoryName) throws IOException {
     return TrajectoryUtil.fromPathweaverJson(
-        Filesystem.getDeployDirectory().toPath().resolve(Paths.get("Pathweaver", "output", trajectoryName + ".wpilib.json")));
+        Filesystem.getDeployDirectory().toPath().resolve(Paths.get("output", trajectoryName + ".wpilib.json")));
   }
 
   /**
