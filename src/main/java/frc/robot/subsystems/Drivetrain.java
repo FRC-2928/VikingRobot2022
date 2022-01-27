@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.lang.reflect.Field;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -25,6 +26,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -65,6 +67,7 @@ public class Drivetrain extends SubsystemBase {
     private double m_leftVelocity, m_rightVelocity; 
 
     ShuffleboardTab m_driveTab;
+    private final Field2d m_field2d = new Field2d();
 
     NetworkTableEntry m_leftFFEntry;
     NetworkTableEntry m_rightFFEntry;
@@ -114,7 +117,8 @@ public class Drivetrain extends SubsystemBase {
         // Start with default Pose2d(0, 0, 0)
         m_odometry = new DifferentialDriveOdometry(initialHeading);
 
-        
+        m_field2d.setRobotPose(getPose());
+        SmartDashboard.putData("Field", m_field2d);
 
         setupShuffleboard();
     }        
@@ -249,6 +253,7 @@ public class Drivetrain extends SubsystemBase {
         //m_yaw = m_pigeon.getYaw();
         m_odometry.update(getRotation(), leftPosition, rightPosition);
         m_headingEntry.setDouble(m_yaw);
+        m_field2d.setRobotPose(getPose());
 
         m_odometryXEntry.setDouble(m_odometry.getPoseMeters().getX());
         m_odometryYEntry.setDouble(m_odometry.getPoseMeters().getY());

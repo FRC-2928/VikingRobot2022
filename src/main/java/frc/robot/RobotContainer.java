@@ -133,7 +133,7 @@ public class RobotContainer {
 
   public Trajectory figureEightTrajectory() {
     //String trajectoryJSON = "Pathweaver/paths/Figure8.wpilib.json";
-    String trajectoryJSON = "Figure8";
+    String trajectoryJSON = "Straight";
     Trajectory trajectory = new Trajectory();
 
     try{
