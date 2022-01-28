@@ -100,11 +100,11 @@ public class RobotContainer {
     // Note that all coordinates are in meters, and follow NWU conventions.
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(0, 4, new Rotation2d(0)),
         List.of(
-            new Translation2d(1.0, 0.0)
+            new Translation2d(1.0, 4.0)
         ),
-        new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
+        new Pose2d(3.0, 4.0, new Rotation2d(0)), // left
         AutoConstants.kTrajectoryConfig);
 
     return trajectory;
@@ -115,17 +115,17 @@ public class RobotContainer {
     // Note that all coordinates are in meters, and follow NWU conventions.
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(0, 4, new Rotation2d(0)),
         List.of(
-            new Translation2d(3.0, 1.0),
-            new Translation2d(6.0, -1.0),
-            new Translation2d(9.0, 1.0),
-            new Translation2d(12.0, 0.0),
-            new Translation2d(9.0, -1.0),
-            new Translation2d(6.0, 1.0),
-            new Translation2d(3.0, -1.0)
+            new Translation2d(3.0, 5.0),
+            new Translation2d(6.0, 3.0),
+            new Translation2d(9.0, 5.0),
+            new Translation2d(12.0, 4.0),
+            new Translation2d(9.0, 3.0),
+            new Translation2d(6.0, 5.0),
+            new Translation2d(3.0, 3.0)
         ),
-        new Pose2d(0, 0, new Rotation2d(180)), // left
+        new Pose2d(0, 4, new Rotation2d(180)), // left
         AutoConstants.kTrajectoryConfig);
 
     return trajectory;
@@ -133,7 +133,7 @@ public class RobotContainer {
 
   public Trajectory figureEightTrajectory() {
     //String trajectoryJSON = "Pathweaver/paths/Figure8.wpilib.json";
-    String trajectoryJSON = "Straight";
+    String trajectoryJSON = "Figure8";
     Trajectory trajectory = new Trajectory();
 
     try{
@@ -181,38 +181,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+      return m_autoChooser.getSelected();          
+  }
 
+  public Drivetrain getDrivetrain() {
+    return m_drivetrain;
+  }
     
-     //  default:
-       return m_autoChooser.getSelected(); 
-        
-      
-    }
-
-    
-    // // Create a voltage constraint to ensure we don't accelerate too fast
-    // var autoVoltageConstraint =
-    //     new DifferentialDriveVoltageConstraint(
-    //         new SimpleMotorFeedforward(DrivetrainConstants.ksVolts,
-    //                                    DrivetrainConstants.kvVoltSecondsPerMeter,
-    //                                    DrivetrainConstants.kaVoltSecondsSquaredPerMeter),
-    //         DrivetrainConstants.kDriveKinematics,
-    //         10);
-
-    // //Create config for trajectory
-    // TrajectoryConfig config =
-    //   new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
-    //                         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-    //       // Add kinematics to ensure max speed is actually obeyed
-    //       .setKinematics(DrivetrainConstants.kDriveKinematics)
-    //       // Apply the voltage constraint
-    //       .addConstraint(autoVoltageConstraint);
-
-    // // Get a trajectory
-    // Test1Trajectory trajectory1 = new Test1Trajectory(config);
-
-    // RamseteTrajectoryCommand trajectoryCommand = new RamseteTrajectoryCommand(m_drivetrain, trajectory1.getTrajectory());
-
-    // // Run path following command, then stop at the end.
-    // return trajectoryCommand.andThen(() -> m_drivetrain.stopDrivetrain());
   }

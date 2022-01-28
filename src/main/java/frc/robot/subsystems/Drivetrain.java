@@ -14,6 +14,9 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -31,6 +34,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotMap;
+
+// Imports for Simulation
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
+import com.ctre.phoenix.sensors.BasePigeonSimCollection;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+
 /**
    * DrivetrainSubsystem handles all subsystem level logic for the drivetrain.
    * Possibly also Ramsete idfk I haven't finished this class yet.
@@ -38,10 +52,15 @@ import frc.robot.Constants.RobotMap;
 import frc.robot.subsystems.Pigeon;
 
 public class Drivetrain extends SubsystemBase {
-    private WPI_TalonFX m_leftLeader, m_rightLeader;
-    private WPI_TalonFX m_leftFollower, m_rightFollower;
+    // private WPI_TalonFX m_leftLeader, m_rightLeader;
+    // private WPI_TalonFX m_leftFollower, m_rightFollower;
 
-    private Pigeon m_pigeon;
+    private final WPI_TalonFX m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
+    private final WPI_TalonFX m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
+    private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
+    private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
+
+    private Pigeon m_pigeon = new Pigeon();
 
     private double m_yaw;
 
@@ -69,12 +88,28 @@ public class Drivetrain extends SubsystemBase {
     ShuffleboardTab m_driveTab;
     private final Field2d m_field2d = new Field2d();
 
-    NetworkTableEntry m_leftFFEntry;
-    NetworkTableEntry m_rightFFEntry;
-    NetworkTableEntry m_headingEntry;
-    NetworkTableEntry m_leftWheelPositionEntry;
-    NetworkTableEntry m_rightWheelPositionEntry;
+    NetworkTableEntry m_leftFFEntry, m_rightFFEntry, m_headingEntry;
+    NetworkTableEntry m_leftWheelPositionEntry, m_rightWheelPositionEntry;
     NetworkTableEntry m_odometryXEntry, m_odometryYEntry, m_odometryHeadingEntry;
+
+
+    // ------ Simulation classes to help us simulate our robot ---------
+    WPI_Pigeon2 m_pigeon2 = new WPI_Pigeon2(1, "FastFD");
+    TalonFXSimCollection m_leftDriveSim = m_leftLeader.getSimCollection();
+    TalonFXSimCollection m_rightDriveSim = m_rightLeader.getSimCollection();
+    private final BasePigeonSimCollection m_pigeonSim = m_pigeon2.getSimCollection();
+
+    private final LinearSystem<N2, N2, N2> m_drivetrainSystem =
+        LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5, 0.3);
+
+    // Simulation model of the drivetrain 
+    private final DifferentialDrivetrainSim m_drivetrainSimulator =
+      new DifferentialDrivetrainSim(
+          m_drivetrainSystem, DCMotor.getFalcon500(2), 
+          DrivetrainConstants.kLowGearRatio, 
+          DrivetrainConstants.kTrackWidthMeters, 
+          DrivetrainConstants.kWheelDiameterMeters, 
+          null);
 
     // -----------------------------------------------------------
     // Initialization
@@ -83,13 +118,13 @@ public class Drivetrain extends SubsystemBase {
 
         m_gearStateSupplier = gearStateSupplier;
 
-        m_pigeon = new Pigeon();
+        // m_pigeon = new Pigeon();
         m_pigeon.resetGyro();
 
-        m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
-        m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
-        m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
-        m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
+        // m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
+        // m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
+        // m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
+        // m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
 
         // Motors
         configmotors();
@@ -186,7 +221,6 @@ public class Drivetrain extends SubsystemBase {
 
         // Create a tab for the Drivetrain
         ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drivetrain");
-        ShuffleboardTab m_odometryTab = Shuffleboard.getTab("Odometry");
         m_headingEntry = m_driveTab.add("Heading Deg.", getRotation().getDegrees())
             .withWidget(BuiltInWidgets.kGraph)      
             .withSize(3,3)
@@ -211,21 +245,23 @@ public class Drivetrain extends SubsystemBase {
             .withWidget(BuiltInWidgets.kGraph)            
             .withSize(3,3)
             .withPosition(7, 3)
-            .getEntry();    
+            .getEntry();   
+            
+        ShuffleboardTab m_odometryTab = Shuffleboard.getTab("Odometry");    
         m_odometryXEntry = m_odometryTab.add("X Odometry", 0)
             .withWidget(BuiltInWidgets.kGraph)            
-            .withSize(3,3)
-            .withPosition(0, 0)
+            .withSize(2,2)
+            .withPosition(7, 0)
             .getEntry();
         m_odometryYEntry = m_odometryTab.add("Y Odometry", 0)
             .withWidget(BuiltInWidgets.kGraph)            
-            .withSize(3,3)
-            .withPosition(4, 0)
+            .withSize(2,2)
+            .withPosition(9, 0)
             .getEntry();
         m_odometryHeadingEntry = m_odometryTab.add("Heading Odometry", 0)
             .withWidget(BuiltInWidgets.kGraph)            
-            .withSize(3,3)
-            .withPosition(8, 0)
+            .withSize(2,2)
+            .withPosition(8, 3)
             .getEntry();
                    
     }
@@ -235,8 +271,6 @@ public class Drivetrain extends SubsystemBase {
     // -----------------------------------------------------------
     @Override
     public void periodic() {
-    
-
         // double leftWheelRotations, rightWheelRotations;
 
         var gearState = m_gearStateSupplier.get();
@@ -248,20 +282,18 @@ public class Drivetrain extends SubsystemBase {
         m_leftVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(leftEncoderVelocity, gearState)) * 10);
         m_rightVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(rightEncoderVelocity, gearState)) * 10);
 
-        // Update the odometry in the periodic block
-        
-        //m_yaw = m_pigeon.getYaw();
-        m_odometry.update(getRotation(), leftPosition, rightPosition);
+        // Update the odometry for either real or simulated robot
+        if (RobotBase.isReal()) {
+            m_odometry.update(getRotation(), leftPosition, rightPosition);
+        } else {
+            m_odometry.update(getRotationSim(), leftPosition, rightPosition);
+        }      
         m_headingEntry.setDouble(m_yaw);
         m_field2d.setRobotPose(getPose());
 
         m_odometryXEntry.setDouble(m_odometry.getPoseMeters().getX());
         m_odometryYEntry.setDouble(m_odometry.getPoseMeters().getY());
         m_odometryHeadingEntry.setDouble(m_odometry.getPoseMeters().getRotation().getDegrees());
-
-        //Stores current values for next run through
-        //m_prevLeftEncoder = leftEncoderCount;
-        //m_prevRightEncoder = rightEncoderCount;
 
         SmartDashboard.putNumber("Left Wheel Position", leftPosition);
         SmartDashboard.putNumber("Right Wheel Position", rightPosition);
@@ -275,6 +307,14 @@ public class Drivetrain extends SubsystemBase {
         //SmartDashboard.putNumber("Drivetrain Left encoder", leftEncoderCount);
         //SmartDashboard.putNumber("Drivetrain Right encoder", rightEncoderCount);
     }
+
+    // Meters to encoder ticks
+    public double metersToEncoderTicks(double meters) {
+        var gearState = m_gearStateSupplier.get();
+        double wheelRotations = metersToWheelRotations(meters);
+        return wheelRotationsToEncoderTicks(wheelRotations, gearState);
+    }
+
     public double metersToWheelRotations(double metersPerSecond) {
         return metersPerSecond / (DrivetrainConstants.kWheelDiameterMeters * Math.PI);
     }
@@ -284,6 +324,13 @@ public class Drivetrain extends SubsystemBase {
             return wheelRotations * DrivetrainConstants.kEncoderCPR * DrivetrainConstants.kHighGearRatio;
         }
         return wheelRotations * DrivetrainConstants.kEncoderCPR * DrivetrainConstants.kLowGearRatio;
+    }
+
+    // Encoder ticks to meters
+    public double encoderTicksToMeters(double encoderTicks) {
+        var gearState = m_gearStateSupplier.get();
+        double wheelRotations = motorRotationsToWheelRotations(encoderTicks, gearState);
+        return wheelRotationsToMeters(wheelRotations);
     }
 
     public double motorRotationsToWheelRotations(double motorRotations, Transmission.GearState gearState) {
@@ -381,8 +428,11 @@ public class Drivetrain extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
-        //zeroGyro();
-        m_odometry.resetPosition(pose, getRotation());
+        if (RobotBase.isReal()) {
+          m_odometry.resetPosition(pose, getRotation());  
+        } else {
+            m_odometry.resetPosition(pose, getRotationSim());  
+        }       
     }
 
     public void setPIDSlot(int slot) {
@@ -414,13 +464,7 @@ public class Drivetrain extends SubsystemBase {
     public Rotation2d getRotation(){
         m_yaw = m_pigeon.getYaw();
         return (Rotation2d.fromDegrees(Math.IEEEremainder(m_yaw, 360.0d) * -1.0d));
-
     }
-
-    // Gyro readings
-    //public double getHeading() {
-    //    return m_pigeon.getYaw();
-    //}
 
     public double getLeftDistanceMeters() {
         var gearState = m_gearStateSupplier.get();
@@ -444,18 +488,53 @@ public class Drivetrain extends SubsystemBase {
     }
 
 
-    // Required methods for SmartSubsystem
-    public double getDistance(){
-        return 0;
-    }
-    public double getVelocity(){
-        return 0;
-    }
-    public boolean atReference(){
-        return true;
-    }
+    // -----------------------------------------------------------
+    // Simulation
+    // -----------------------------------------------------------
+    public void simulationPeriodic() {
+        /* Pass the robot battery voltage to the simulated Talon FXs */
+        m_leftDriveSim.setBusVoltage(RobotController.getInputVoltage());
+        m_rightDriveSim.setBusVoltage(RobotController.getInputVoltage());
+          
+        m_drivetrainSimulator.setInputs(m_leftDriveSim.getMotorOutputLeadVoltage(),
+                                        -m_rightDriveSim.getMotorOutputLeadVoltage());
+    
+        /*
+         * Advance the model by 20 ms. Note that if you are running this
+         * subsystem in a separate thread or have changed the nominal
+         * timestep of TimedRobot, this value needs to match it.
+         */
+        m_drivetrainSimulator.update(0.02);
+    
+        /*
+         * Update all of the sensors.
+         *
+         * Since WPILib's simulation class is assuming +V is forward,
+         * but -V is forward for the right motor, we need to negate the
+         * position reported by the simulation class. Basically, we
+         * negated the input, so we need to negate the output.
+         */
+        m_leftDriveSim.setIntegratedSensorRawPosition(
+                        (int)metersToEncoderTicks(
+                            m_drivetrainSimulator.getLeftPositionMeters()
+                        ));
+        m_leftDriveSim.setIntegratedSensorVelocity(
+                        (int)metersToEncoderTicks(
+                            m_drivetrainSimulator.getLeftVelocityMetersPerSecond() / 10
+                        ));
+        m_rightDriveSim.setIntegratedSensorRawPosition(
+                        (int)metersToEncoderTicks(
+                            -m_drivetrainSimulator.getRightPositionMeters()
+                        ));
+        m_rightDriveSim.setIntegratedSensorVelocity(
+                        (int)metersToEncoderTicks(
+                            -m_drivetrainSimulator.getRightVelocityMetersPerSecond() / 10
+                        ));
 
-    // -----------------------------------------------------------
-    // Testing and Configuration
-    // -----------------------------------------------------------
+        m_pigeonSim.setRawHeading(m_drivetrainSimulator.getHeading().getDegrees());
+      }
+
+      public Rotation2d getRotationSim() {
+        return m_pigeon2.getRotation2d();
+      }
 }
