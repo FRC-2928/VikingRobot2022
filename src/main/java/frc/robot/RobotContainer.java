@@ -61,6 +61,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
+    m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
     m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));
     m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
     m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
