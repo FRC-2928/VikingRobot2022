@@ -273,14 +273,13 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         // double leftWheelRotations, rightWheelRotations;
 
-        var gearState = m_gearStateSupplier.get();
         double leftPosition = getLeftDistanceMeters();
         double rightPosition = getRightDistanceMeters();
 
         double leftEncoderVelocity = m_leftLeader.getSelectedSensorVelocity();
         double rightEncoderVelocity = m_rightLeader.getSelectedSensorVelocity();
-        m_leftVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(leftEncoderVelocity, gearState)) * 10);
-        m_rightVelocity = (wheelRotationsToMeters(motorRotationsToWheelRotations(rightEncoderVelocity, gearState)) * 10);
+        m_leftVelocity = ((encoderTicksToMeters(leftEncoderVelocity)) * 10);
+        m_rightVelocity = ((encoderTicksToMeters(rightEncoderVelocity)) * 10);
 
         // Update the odometry for either real or simulated robot
         if (RobotBase.isReal()) {
@@ -467,20 +466,11 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getLeftDistanceMeters() {
-        var gearState = m_gearStateSupplier.get();
-        double leftEncoderCount = m_leftLeader.getSelectedSensorPosition();
-        double leftWheelRotations = motorRotationsToWheelRotations(leftEncoderCount, gearState);
-        double leftPosition = wheelRotationsToMeters(leftWheelRotations);
-        return leftPosition;
-
+        return encoderTicksToMeters(m_leftLeader.getSelectedSensorPosition());
     }
 
-    public double getRightDistanceMeters() {
-        var gearState = m_gearStateSupplier.get();
-        double rightEncoderCount = m_rightLeader.getSelectedSensorPosition();
-        double rightWheelRotations = motorRotationsToWheelRotations(rightEncoderCount, gearState);
-        double rightPosition = wheelRotationsToMeters(rightWheelRotations);
-        return rightPosition;
+    public double getRightDistanceMeters() {        
+        return encoderTicksToMeters(m_rightLeader.getSelectedSensorPosition());
     }
 
     public double getAvgDistanceMeters(){

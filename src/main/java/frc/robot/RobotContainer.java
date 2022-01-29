@@ -61,7 +61,8 @@ public class RobotContainer {
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
-    m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, figureEightTrajectory()));
+    m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));
+    m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
     m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
     m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
     m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
@@ -131,24 +132,16 @@ public class RobotContainer {
     return trajectory;
   }
 
-  public Trajectory figureEightTrajectory() {
-    //String trajectoryJSON = "Pathweaver/paths/Figure8.wpilib.json";
-    String trajectoryJSON = "Figure8";
+  public Trajectory loadTrajectory(String trajectoryJSON) {
     Trajectory trajectory = new Trajectory();
 
     try{
-        trajectory = loadTrajectory(trajectoryJSON);
-        // Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-        // trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+        trajectory = TrajectoryUtil.fromPathweaverJson(Paths.get("output", trajectoryPath + ".wpilib.json"));
       } catch (IOException ex) {
-        DriverStation.reportError("Unable to open Trajactory:" + trajectoryJSON, ex.getStackTrace());
+        DriverStation.reportError("Unable to open Trajectory:" + trajectoryJSON, ex.getStackTrace());
       }
       return trajectory;
-  }
-
-  protected static Trajectory loadTrajectory(String trajectoryName) throws IOException {
-    return TrajectoryUtil.fromPathweaverJson(
-        Filesystem.getDeployDirectory().toPath().resolve(Paths.get("output", trajectoryName + ".wpilib.json")));
   }
 
   /**
