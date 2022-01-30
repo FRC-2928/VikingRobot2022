@@ -27,8 +27,10 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
+import frc.robot.subsystems.Limelight.Limelights;
 import frc.robot.commands.RunRamseteTrajectory;
 import frc.robot.commands.DriveDistanceProfiled;
 
@@ -48,6 +50,7 @@ public class RobotContainer {
   
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final Limelight m_turretLimelight = new Limelight(Limelights.TURRET);
 
   
 
@@ -61,6 +64,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_autoChooser = new SendableChooser<>();
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
+    m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
     m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));
     m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
     m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
