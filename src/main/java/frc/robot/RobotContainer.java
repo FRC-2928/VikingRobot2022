@@ -27,8 +27,10 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
+import frc.robot.subsystems.Limelight.Limelights;
 import frc.robot.commands.RunRamseteTrajectory;
 import frc.robot.commands.DriveDistanceProfiled;
 
@@ -48,6 +50,7 @@ public class RobotContainer {
   
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final Limelight m_turretLimelight = new Limelight(Limelights.TURRET);
 
   
 
