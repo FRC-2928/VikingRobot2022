@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Pivot extends SubsystemBase {
-  /** Creates a new Pivot. */
-  public Pivot() {}
+public class Turret extends SubsystemBase {
+  /** Creates a new Turret. */
+  public Turret() {}
 
   @Override
   public void periodic() {
