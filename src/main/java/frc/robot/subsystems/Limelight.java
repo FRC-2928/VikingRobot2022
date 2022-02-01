@@ -51,7 +51,9 @@ public class Limelight{
 
       default:
       break;
+
     }
+    setPipeline(0);
   }
 
   // public LimelightData getLimelightData(){
@@ -71,7 +73,7 @@ public class Limelight{
   }
 
   public void setPipeline(double pipeline){
-    m_limelightNI.getTable(m_limelight).getEntry("pipeline").setNumber(pipeline);
+    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(pipeline);
   }
   
   // -----------------------------------------------------------
