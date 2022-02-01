@@ -34,7 +34,7 @@ public class Limelight{
   // Initialization
   // -----------------------------------------------------------
   public Limelight() {
-    setPipeline(0);
+    setStream(0);
   }
 
   public LimelightData getLimelightData(){
@@ -53,8 +53,8 @@ public class Limelight{
     m_skew = getSkew();
   }
 
-  public void setPipeline(double pipeline){
-    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(pipeline);
+  public void setStream(int stream){
+    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(stream);
   }
   
   // -----------------------------------------------------------

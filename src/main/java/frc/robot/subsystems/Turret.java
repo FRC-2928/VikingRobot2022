@@ -104,6 +104,8 @@ public class Turret extends SubsystemBase {
 
       SmartDashboard.putBoolean("target found", m_limelightData.getTargetFound());
       SmartDashboard.putNumber("skew", m_limelightData.getSkew());
+      SmartDashboard.putNumber("horizontal offset", m_limelightData.getHorizontalOffset());
+      SmartDashboard.putNumber("vertical offset", m_limelightData.getVerticalOffset());
       
     
   }
