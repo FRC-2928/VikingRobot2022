@@ -16,9 +16,9 @@ import frc.robot.Constants.LimelightConstants;
  */
 public class Limelight{
   //Pulls values from network tables
-  private NetworkTable m_limelightTable;
+//  private NetworkTable m_limelightTable;
   private NetworkTableInstance m_limelightNI = NetworkTableInstance.getDefault();
-  private String m_limelight;
+  private String m_limelight = "limelight";
 
   //Creates variables to assign
   private double m_horizontalOffset;
@@ -61,7 +61,7 @@ public class Limelight{
   // System State
   // -----------------------------------------------------------
   public double getSkew(){
-    return m_limelightTable.getEntry("ts").getDouble(0);
+    return m_limelightNI.getEntry("ts").getDouble(0);
   }
 
   public double getTargetDistance(){
@@ -70,12 +70,12 @@ public class Limelight{
   }
 
   public double getHorizontalOffset(){
-    m_horizontalOffset = m_limelightTable.getEntry("tx").getDouble(0);
+    m_horizontalOffset = m_limelightNI.getEntry("tx").getDouble(0);
     return m_horizontalOffset;
   }
 
   public double getVerticalOffset(){
-    m_verticalOffset = m_limelightTable.getEntry("ty").getDouble(0);
+    m_verticalOffset = m_limelightNI.getEntry("ty").getDouble(0);
     return m_verticalOffset;
   }
 
@@ -84,7 +84,7 @@ public class Limelight{
   }
 
   public boolean isTargetFound(){
-    if (m_limelightTable.getEntry("tv").getDouble(0) == 0){
+    if (m_limelightNI.getEntry("tv").getDouble(0) == 0){
       m_targetFound = false;
     }
     else{
