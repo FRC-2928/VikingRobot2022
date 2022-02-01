@@ -29,37 +29,18 @@ public class Limelight{
 
   private boolean m_targetFound;
 
-  //Enum for the two limelights on the robot
-  public enum Limelights{
-    DRIVER, TURRET;
-  }
 
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Limelight(Limelights camera) {
-    switch(camera){
-      case DRIVER:
-      m_limelightTable = m_limelightNI.getTable(LimelightConstants.kDriverLimelight);
-      m_limelight = LimelightConstants.kDriverLimelight;
-      break;
-
-      case TURRET:
-      m_limelightTable = m_limelightNI.getTable(LimelightConstants.kTurretLimelight);
-      m_limelight = LimelightConstants.kTurretLimelight;
-      break;
-
-      default:
-      break;
-
-    }
-    setPipeline(0);
+  public Limelight() {
+    setStream(0);
   }
 
-  // public LimelightData getLimelightData(){
-  //   updateReadings();
-  //   return new LimelightData(m_horizontalOffset, m_verticalOffset, m_targetDistance, m_targetFound, m_skew);
-  // }
+  public LimelightData getLimelightData(){
+    updateReadings();
+    return new LimelightData(m_horizontalOffset, m_verticalOffset, m_targetDistance, m_targetFound, m_skew);
+  }
 
   // -----------------------------------------------------------
   // Control Input
@@ -72,8 +53,8 @@ public class Limelight{
     m_skew = getSkew();
   }
 
-  public void setPipeline(double pipeline){
-    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(pipeline);
+  public void setStream(int stream){
+    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(stream);
   }
   
   // -----------------------------------------------------------
