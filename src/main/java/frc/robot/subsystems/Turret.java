@@ -4,21 +4,24 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Limelight.Limelights;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
 
-  private final Limelight m_turretLimelight = new Limelight(Limelights.TURRET);
+  private final Limelight m_turretLimelight = new Limelight();
+  private LimelightData m_limelightData = m_turretLimelight.getLimelightData();
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretSparkMax);
 
   // -----------------------------------------------------------
@@ -78,6 +81,14 @@ public class Turret extends SubsystemBase {
     return turretRotations * TurretConstants.kEncoderCPR * TurretConstants.kGearRatio;
   }
 
+  public void setTurretDegrees(double degrees){
+    double ticks = (degreesToEncoderTicks(degrees));
+    m_turretMotor.set(TalonSRXControlMode.MotionMagic, ticks);
+  }
+
+  public double getTurretDegrees(){
+    return encoderTicksToDegrees(m_turretMotor.getSelectedSensorPosition());
+  }
     
 
 
@@ -90,10 +101,19 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+      SmartDashboard.putBoolean("target found", m_limelightData.getTargetFound());
+      SmartDashboard.putNumber("skew", m_limelightData.getSkew());
+      
+    
   }
 
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
+
+  
+
+ 
 
 }

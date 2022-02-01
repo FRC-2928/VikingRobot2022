@@ -29,22 +29,18 @@ public class Limelight{
 
   private boolean m_targetFound;
 
-  //Enum for the two limelights on the robot
-  public enum Limelights{
-    DRIVER, TURRET;
-  }
 
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Limelight(Limelights camera) {
+  public Limelight() {
     setPipeline(0);
   }
 
-  // public LimelightData getLimelightData(){
-  //   updateReadings();
-  //   return new LimelightData(m_horizontalOffset, m_verticalOffset, m_targetDistance, m_targetFound, m_skew);
-  // }
+  public LimelightData getLimelightData(){
+    updateReadings();
+    return new LimelightData(m_horizontalOffset, m_verticalOffset, m_targetDistance, m_targetFound, m_skew);
+  }
 
   // -----------------------------------------------------------
   // Control Input
