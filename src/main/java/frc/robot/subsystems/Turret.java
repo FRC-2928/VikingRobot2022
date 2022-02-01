@@ -17,15 +17,25 @@ public class Turret extends SubsystemBase {
   private final Limelight m_turretLimelight;
   private final TalonSRX m_turretMotor;
 
-  
+  // -----------------------------------------------------------
+  // Initialization
+  // -----------------------------------------------------------
   public Turret() {
     m_turretLimelight = new Limelight(Limelights.TURRET);
     m_turretMotor = new TalonSRX(Constants.RobotMap.kTurretSparkMax);
   }
 
+  // -----------------------------------------------------------
+  // Control Input
+  // -----------------------------------------------------------
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  // -----------------------------------------------------------
+  // System State
+  // -----------------------------------------------------------
+
 }

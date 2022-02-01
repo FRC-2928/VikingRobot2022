@@ -9,10 +9,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LimelightConstants;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonPipelineResult;
-
 /**
  * Limelight utility is responsible for I/O with both Limelight 2+
  * Feeds turret limelight to flywheel/hood/turret and operator shuffleboard
@@ -38,6 +34,9 @@ public class Limelight{
     DRIVER, TURRET;
   }
 
+  // -----------------------------------------------------------
+  // Initialization
+  // -----------------------------------------------------------
   public Limelight(Limelights camera) {
     switch(camera){
       case DRIVER:
@@ -52,7 +51,9 @@ public class Limelight{
 
       default:
       break;
+
     }
+    setPipeline(0);
   }
 
   // public LimelightData getLimelightData(){
@@ -60,6 +61,9 @@ public class Limelight{
   //   return new LimelightData(m_horizontalOffset, m_verticalOffset, m_targetDistance, m_targetFound, m_skew);
   // }
 
+  // -----------------------------------------------------------
+  // Control Input
+  // -----------------------------------------------------------
   public void updateReadings(){
     m_horizontalOffset = getHorizontalOffset();
     m_verticalOffset = getVerticalOffset();
@@ -69,9 +73,12 @@ public class Limelight{
   }
 
   public void setPipeline(double pipeline){
-    m_limelightNI.getTable(m_limelight).getEntry("pipeline").setNumber(pipeline);
+    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(pipeline);
   }
   
+  // -----------------------------------------------------------
+  // System State
+  // -----------------------------------------------------------
   public double getSkew(){
     return m_limelightTable.getEntry("ts").getDouble(0);
   }
