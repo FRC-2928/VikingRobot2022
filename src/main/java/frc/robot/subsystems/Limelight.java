@@ -38,21 +38,6 @@ public class Limelight{
   // Initialization
   // -----------------------------------------------------------
   public Limelight(Limelights camera) {
-    switch(camera){
-      case DRIVER:
-      m_limelightTable = m_limelightNI.getTable(LimelightConstants.kDriverLimelight);
-      m_limelight = LimelightConstants.kDriverLimelight;
-      break;
-
-      case TURRET:
-      m_limelightTable = m_limelightNI.getTable(LimelightConstants.kTurretLimelight);
-      m_limelight = LimelightConstants.kTurretLimelight;
-      break;
-
-      default:
-      break;
-
-    }
     setPipeline(0);
   }
 

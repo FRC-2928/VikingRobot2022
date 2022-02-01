@@ -195,6 +195,11 @@ public final class Constants {
 
         // public static final double kTurretClimbPosition = 0; //Placeholders
         // public static final double kTurretControlPanelPosition = -90; //Placeholders
+        
+        public static final int kEncoderCPR = 4096;
+        public static final double kGearRatio = 10;
+
+        
     }
 
     public static final class FeederConstants {
