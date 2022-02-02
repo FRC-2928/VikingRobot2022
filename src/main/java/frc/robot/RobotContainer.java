@@ -32,6 +32,7 @@ import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
 import frc.robot.subsystems.Turret;
 import frc.robot.commands.RunRamseteTrajectory;
+import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.DriveDistanceProfiled;
 
 public class RobotContainer {
@@ -165,6 +166,8 @@ public class RobotContainer {
     m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
 
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
+
+    m_driverOI.trackTargetButton().whileHeld(new TurnToTarget(m_drivetrain, m_turret));
   }
 
   //added 1/19/21 STILL NOT TESTED, should reset the encoders in theory

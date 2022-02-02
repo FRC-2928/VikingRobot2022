@@ -39,7 +39,7 @@ public final class Constants {
         public static int kHoodSparkMax = 6;
 
         //Turret
-        public static final int kTurretSparkMax = 9;
+        public static final int kTurretTalonSRX = 9;
 
         //Climber
         public static final int kClimberMotor = 12; 
@@ -189,6 +189,12 @@ public final class Constants {
     }
 
     public static final class TurretConstants {
+        //                                                  kp,  ki, kd,  kf, iz,  peak output
+        public static final Gains kGainsTurret = new Gains(0,  0,   0,   0,   0,  1.00);
+
+        public static final double kTurretGearRatio = 9.08; 
+        public static final double kTurretDegreesPerRotation = 360;
+
         // public static final double kTurretErrorThreshold = 1;
         public static final double kTurretLeftLimit = 120;
         public static final double kTurretRightLimit = -120;

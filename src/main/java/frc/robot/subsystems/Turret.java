@@ -11,6 +11,7 @@ import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -21,14 +22,15 @@ public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
 
   private final Limelight m_turretLimelight = new Limelight();
-  private LimelightData m_limelightData = m_turretLimelight.getLimelightData();
-  private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretSparkMax);
+  private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
+  private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretTalonSRX);
 
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
   public Turret() {
     configMotors();
+    setTurretPIDF();
     resetEncoders();
   }
 
@@ -66,32 +68,17 @@ public class Turret extends SubsystemBase {
      m_turretMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
   }
 
-  public void resetEncoders(){
-    m_turretMotor.setSelectedSensorPosition(0);
-  }
-
-  public double encoderTicksToDegrees(double encoderTicks) {
-    double turretRotations = encoderTicks / (TurretConstants.kEncoderCPR * TurretConstants.kGearRatio);
-    return turretRotations * 360;
-  
+  public void setTurretPIDF() {
+    m_turretMotor.config_kP(0, TurretConstants.kGainsTurret.kP, 0);
+    m_turretMotor.config_kI(0, TurretConstants.kGainsTurret.kI, 0);
+    m_turretMotor.config_kD(0, TurretConstants.kGainsTurret.kD, 0);
+    m_turretMotor.config_kF(0, TurretConstants.kGainsTurret.kF, 0);
   }
 
   public double degreesToEncoderTicks(double degrees) {
     double turretRotations = degrees / 360;
     return turretRotations * TurretConstants.kEncoderCPR * TurretConstants.kGearRatio;
   }
-
-  public void setTurretDegrees(double degrees){
-    double ticks = (degreesToEncoderTicks(degrees));
-    m_turretMotor.set(TalonSRXControlMode.MotionMagic, ticks);
-  }
-
-  public double getTurretDegrees(){
-    return encoderTicksToDegrees(m_turretMotor.getSelectedSensorPosition());
-  }
-    
-
-
 
 
   // -----------------------------------------------------------
@@ -101,21 +88,63 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Target found", m_turretLimelight.isTargetFound());
+    SmartDashboard.putNumber("Target X", m_turretLimelight.getHorizontalOffset());
+    SmartDashboard.putNumber("Target Y", m_turretLimelight.getVerticalOffset());
+    SmartDashboard.putNumber("Target Skew", m_turretLimelight.getSkew());
+    SmartDashboard.putNumber("Target Area", m_turretLimelight.getArea());
+  }
 
-      SmartDashboard.putBoolean("target found", m_limelightData.getTargetFound());
-      SmartDashboard.putNumber("skew", m_limelightData.getSkew());
-      SmartDashboard.putNumber("horizontal offset", m_limelightData.getHorizontalOffset());
-      SmartDashboard.putNumber("vertical offset", m_limelightData.getVerticalOffset());
-      
+  public void resetEncoders(){
+    m_turretMotor.setSelectedSensorPosition(0);
+  }
+
+  public void setTurretDegrees(double angleDegrees) {
+    double encoderTicks = getDegreesToEncoderTicks(angleDegrees);
+    m_turretMotor.set(ControlMode.MotionMagic, encoderTicks);
+
+      SmartDashboard.putBoolean("target found", m_turretLimelightData.getTargetFound());
+      SmartDashboard.putNumber("skew", m_turretLimelightData.getSkew());
+      SmartDashboard.putNumber("horizontal offset", m_turretLimelightData.getHorizontalOffset());
+      SmartDashboard.putNumber("vertical offset", m_turretLimelightData.getVerticalOffset());      
     
   }
 
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
+  public double encoderTicksToDegrees(double encoderTicks) {
+    // Convert encoder ticks to turret rotations
+    double turretRotations = encoderTicks / (TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio);
+    // Convert turret rotations to degrees
+    return turretRotations * 360;
+  }
 
-  
+  public double getDegreesToEncoderTicks(double degrees) {
+    // Convert degrees to turret rotations
+    double turretRotations = degrees / 360;
+    // Convert turret rotations to encoder ticks
+    return turretRotations * TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio;
+  }
 
+  public double getTurretDegrees() {
+    return encoderTicksToDegrees(m_turretMotor.getSelectedSensorPosition());
+  }
+
+  public boolean targetTracked() {
+    return m_turretLimelight.isTargetFound();
+  }
+
+  public double targetHorizontalOffset() {
+    return m_turretLimelight.getHorizontalOffset();
+  }
+
+  public boolean targetLocked() {
+    double offsetX = m_turretLimelight.getHorizontalOffset();
+    if (targetTracked() & (offsetX > 170 & offsetX < 190)) {
+      return true;
+    }
+    return false;
+  }
  
-
 }
