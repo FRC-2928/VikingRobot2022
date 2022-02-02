@@ -16,9 +16,9 @@ import frc.robot.Constants.LimelightConstants;
  */
 public class Limelight{
   //Pulls values from network tables
-  private NetworkTable m_limelightTable;
+//  private NetworkTable m_limelightTable;
   private NetworkTableInstance m_limelightNI = NetworkTableInstance.getDefault();
-  private String m_limelight;
+  private String m_limelight = "limelight";
 
   //Creates variables to assign
   private double m_horizontalOffset;
@@ -29,35 +29,18 @@ public class Limelight{
 
   private boolean m_targetFound;
 
-  //Enum for the two limelights on the robot
-  public enum Limelights{
-    DRIVER, TURRET;
-  }
 
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Limelight(Limelights camera) {
-    switch(camera){
-      case DRIVER:
-      m_limelightTable = m_limelightNI.getTable(LimelightConstants.kDriverLimelight);
-      m_limelight = LimelightConstants.kDriverLimelight;
-      break;
-
-      case TURRET:
-      m_limelightTable = m_limelightNI.getTable(LimelightConstants.kTurretLimelight);
-      m_limelight = LimelightConstants.kTurretLimelight;
-      break;
-
-      default:
-      break;
-    }
+  public Limelight() {
+    setStream(0);
   }
 
-  // public LimelightData getLimelightData(){
-  //   updateReadings();
-  //   return new LimelightData(m_horizontalOffset, m_verticalOffset, m_targetDistance, m_targetFound, m_skew);
-  // }
+  public LimelightData getLimelightData(){
+    updateReadings();
+    return new LimelightData(m_horizontalOffset, m_verticalOffset, m_targetDistance, m_targetFound, m_skew);
+  }
 
   // -----------------------------------------------------------
   // Control Input
@@ -70,15 +53,15 @@ public class Limelight{
     m_skew = getSkew();
   }
 
-  public void setPipeline(double pipeline){
-    m_limelightNI.getTable(m_limelight).getEntry("pipeline").setNumber(pipeline);
+  public void setStream(int stream){
+    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(stream);
   }
   
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
   public double getSkew(){
-    return m_limelightTable.getEntry("ts").getDouble(0);
+    return m_limelightNI.getEntry("ts").getDouble(0);
   }
 
   public double getTargetDistance(){
@@ -87,12 +70,12 @@ public class Limelight{
   }
 
   public double getHorizontalOffset(){
-    m_horizontalOffset = m_limelightTable.getEntry("tx").getDouble(0);
+    m_horizontalOffset = m_limelightNI.getEntry("tx").getDouble(0);
     return m_horizontalOffset;
   }
 
   public double getVerticalOffset(){
-    m_verticalOffset = m_limelightTable.getEntry("ty").getDouble(0);
+    m_verticalOffset = m_limelightNI.getEntry("ty").getDouble(0);
     return m_verticalOffset;
   }
 
@@ -101,7 +84,7 @@ public class Limelight{
   }
 
   public boolean isTargetFound(){
-    if (m_limelightTable.getEntry("tv").getDouble(0) == 0){
+    if (m_limelightNI.getEntry("tv").getDouble(0) == 0){
       m_targetFound = false;
     }
     else{

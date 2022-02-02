@@ -192,16 +192,20 @@ public final class Constants {
         //                                                  kp,  ki, kd,  kf, iz,  peak output
         public static final Gains kGainsTurret = new Gains(0,  0,   0,   0,   0,  1.00);
 
-        public static final int kEncoderCPR = 2048;
         public static final double kTurretGearRatio = 9.08; 
         public static final double kTurretDegreesPerRotation = 360;
 
         // public static final double kTurretErrorThreshold = 1;
-        // public static final double kTurretLeftLimit = 320;
-        // public static final double kTurretRightLimit = -320;
+        public static final double kTurretLeftLimit = 120;
+        public static final double kTurretRightLimit = -120;
 
         // public static final double kTurretClimbPosition = 0; //Placeholders
         // public static final double kTurretControlPanelPosition = -90; //Placeholders
+        
+        public static final int kEncoderCPR = 4096;
+        public static final double kGearRatio = 10;
+
+        
     }
 
     public static final class FeederConstants {
