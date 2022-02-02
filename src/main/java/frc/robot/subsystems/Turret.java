@@ -30,6 +30,7 @@ public class Turret extends SubsystemBase {
   // -----------------------------------------------------------
   public Turret() {
     configMotors();
+    setTurretPIDF();
     resetEncoders();
   }
 
@@ -67,6 +68,12 @@ public class Turret extends SubsystemBase {
      m_turretMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
   }
 
+  public void setTurretPIDF() {
+    m_turretMotor.config_kP(0, TurretConstants.kGainsTurret.kP, 0);
+    m_turretMotor.config_kI(0, TurretConstants.kGainsTurret.kI, 0);
+    m_turretMotor.config_kD(0, TurretConstants.kGainsTurret.kD, 0);
+    m_turretMotor.config_kF(0, TurretConstants.kGainsTurret.kF, 0);
+  }
 
   public double degreesToEncoderTicks(double degrees) {
     double turretRotations = degrees / 360;
@@ -126,6 +133,10 @@ public class Turret extends SubsystemBase {
 
   public boolean targetTracked() {
     return m_turretLimelight.isTargetFound();
+  }
+
+  public double targetHorizontalOffset() {
+    return m_turretLimelight.getHorizontalOffset();
   }
 
   public boolean targetLocked() {
