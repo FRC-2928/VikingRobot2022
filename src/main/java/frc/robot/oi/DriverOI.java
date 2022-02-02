@@ -36,9 +36,9 @@ public class DriverOI {
     // ---------------- Shooting ----------------------------
 
 
-    public Button trackTargetButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-    }
+    // public Button getAutoShootingButton() {
+    //     return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+    // }
 
 
     // public Button getSetpointShootingButton(){

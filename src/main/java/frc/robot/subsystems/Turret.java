@@ -130,21 +130,5 @@ public class Turret extends SubsystemBase {
   public double getTurretDegrees() {
     return encoderTicksToDegrees(m_turretMotor.getSelectedSensorPosition());
   }
-
-  public boolean targetTracked() {
-    return m_turretLimelight.isTargetFound();
-  }
-
-  public double targetHorizontalOffset() {
-    return m_turretLimelight.getHorizontalOffset();
-  }
-
-  public boolean targetLocked() {
-    double offsetX = m_turretLimelight.getHorizontalOffset();
-    if (targetTracked() & (offsetX > 170 & offsetX < 190)) {
-      return true;
-    }
-    return false;
-  }
  
 }
