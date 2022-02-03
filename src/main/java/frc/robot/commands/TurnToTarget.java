@@ -28,6 +28,7 @@ public class TurnToTarget extends PIDCommand {
           drivetrain.drive(0, output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain, turret);
     // Configure additional PID options by calling `getController` here.
   }
 
