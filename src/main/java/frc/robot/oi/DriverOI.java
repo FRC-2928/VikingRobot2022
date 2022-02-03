@@ -80,6 +80,10 @@ public class DriverOI {
         return new JoystickButton(m_controller, XboxController.Button.kY.value);
     }
 
+    public Button getTurnToTargetButton() {
+        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+    }
+
 
     public DoubleSupplier getMoveSupplier() {
         return () -> -m_controller.getLeftY();
