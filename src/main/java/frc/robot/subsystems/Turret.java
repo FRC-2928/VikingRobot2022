@@ -130,5 +130,7 @@ public class Turret extends SubsystemBase {
   public double getTurretDegrees() {
     return encoderTicksToDegrees(m_turretMotor.getSelectedSensorPosition());
   }
- 
+  public double targetHorizontalOffset() {
+    return m_turretLimelight.getHorizontalOffset();
+  }
 }
