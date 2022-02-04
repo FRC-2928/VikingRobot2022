@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Limelight;
@@ -32,6 +34,7 @@ public class Turret extends SubsystemBase {
     configMotors();
     setTurretPIDF();
     resetEncoders();
+    setupShuffleboard();
   }
 
   public void configMotors(){
@@ -75,11 +78,9 @@ public class Turret extends SubsystemBase {
     m_turretMotor.config_kF(0, TurretConstants.kGainsTurret.kF, 0);
   }
 
-  public double degreesToEncoderTicks(double degrees) {
-    double turretRotations = degrees / 360;
-    return turretRotations * TurretConstants.kEncoderCPR * TurretConstants.kGearRatio;
+  public void setupShuffleboard() {
+    ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
   }
-
 
   // -----------------------------------------------------------
   // Control Input
@@ -130,7 +131,10 @@ public class Turret extends SubsystemBase {
   public double getTurretDegrees() {
     return encoderTicksToDegrees(m_turretMotor.getSelectedSensorPosition());
   }
+
   public double targetHorizontalOffset() {
-    return m_turretLimelight.getHorizontalOffset();
+    double offset = m_turretLimelight.getHorizontalOffset();
+    SmartDashboard.putNumber("Horizontal Offset", offset);
+    return offset;
   }
 }
