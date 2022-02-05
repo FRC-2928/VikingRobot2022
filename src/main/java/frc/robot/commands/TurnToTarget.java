@@ -13,6 +13,8 @@ import frc.robot.subsystems.Turret;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TurnToTarget extends PIDCommand {
+  Drivetrain m_drivetrain;
+
   /** Creates a new TurnToTarget. */
   public TurnToTarget(Drivetrain drivetrain, Turret turret) {
     super(
@@ -29,7 +31,14 @@ public class TurnToTarget extends PIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain, turret);
+    m_drivetrain = drivetrain;
+    
     // Configure additional PID options by calling `getController` here.
+  }
+
+  public void initialize() {
+    super.initialize();
+    m_drivetrain.disableMotorSafety();    
   }
 
   // Returns true when the command should end.
@@ -37,4 +46,12 @@ public class TurnToTarget extends PIDCommand {
   public boolean isFinished() {
     return false;
   }
+
+  public void end(boolean interrupted) {
+    super.end(interrupted);
+    //SmartDashboard.putNumber("end heading", m_drivetrain.getHeading());
+    m_drivetrain.stopDrivetrain();
+    m_drivetrain.enableMotorSafety();
+  }
+
 }
