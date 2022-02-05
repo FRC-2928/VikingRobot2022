@@ -14,19 +14,27 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.RobotMap;
 import frc.robot.Constants.TurretConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
-  private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeSparkMax);
+ 
+  private final WPI_TalonSRX m_rightRampMotor = new WPI_TalonSRX(RobotMap.kRightRampMotor);
+  private final WPI_TalonSRX m_leftRampMotor = new WPI_TalonSRX(RobotMap.kLeftRampMotor);
+  
+  private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
   private NetworkTableEntry m_targetHOEntry;
 
 
@@ -41,6 +49,10 @@ public class Intake extends SubsystemBase {
   }
 
   public void configMotors(){
+
+    m_leftRampMotor.follow(m_rightRampMotor, FollowerType.PercentOutput);
+    
+    
       //Reset settings for safety
      m_intakeMotor.configFactoryDefault();
 

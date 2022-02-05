@@ -27,8 +27,8 @@ public final class Constants {
         public static final int kDrivetrainRightBackTalonFX = 0;
 
         //Feeder
-        public static int kIndexSparkMax = 10;
-		public static int kHopperSparkMax = 11;
+        public static int kLeftRampMotor = 10;
+		public static int kRightRampMotor = 11;
 
         public static final int kIRSensorBottom = 9;
         public static final int kIRSensorMiddle = 8;
@@ -48,7 +48,7 @@ public final class Constants {
         public static int kControlPanelSparkMax = 4;
 
         //Intake
-        public static final int kIntakeSparkMax = 5; //placeholder
+        public static final int kIntakeMotor = 5; //placeholder
 
         //Solenoids
         // public static final int kDrivetrainShiftSolenoid = 6; 
