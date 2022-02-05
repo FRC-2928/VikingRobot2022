@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -26,7 +27,12 @@ public class Flywheel extends SubsystemBase {
   // Initialization
   // -----------------------------------------------------------
   /** Creates a new Flywheel. */
-  public Flywheel() {}
+  public Flywheel() {
+    configMotors();
+    resetEncoders();
+    setFlywheelPIDF();
+    setupShuffleboard();
+  }
 
   public void configMotors(){
     //Reset settings for safety
@@ -63,10 +69,10 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void setFlywheelPIDF() {
-    m_flywheelTalon.config_kP(0, FlywheelConstants.kPFlywheel, 0);
-    m_flywheelTalon.config_kI(0, FlywheelConstants.kIFlywheel, 0);
-    m_flywheelTalon.config_kD(0, FlywheelConstants.kDFlywheel, 0);
-    m_flywheelTalon.config_kF(0, FlywheelConstants.kFFlywheel, 0);
+    m_flywheelTalon.config_kP(0, FlywheelConstants.kGainsFlywheel.kP, 0);
+    m_flywheelTalon.config_kI(0, FlywheelConstants.kGainsFlywheel.kI, 0);
+    m_flywheelTalon.config_kD(0, FlywheelConstants.kGainsFlywheel.kD, 0);
+    m_flywheelTalon.config_kF(0, FlywheelConstants.kGainsFlywheel.kF, 0);
   }
 
   public void setupShuffleboard() {
@@ -86,6 +92,14 @@ public class Flywheel extends SubsystemBase {
     m_flywheelTalon.setSelectedSensorPosition(0);
   }
 
+  /**
+   * 
+   * @param power the percent power value between -1 and 1
+   */
+  public void setPower(double power){
+    m_flywheelTalon.set(ControlMode.PercentOutput, power);
+  }
+
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
@@ -93,13 +107,13 @@ public class Flywheel extends SubsystemBase {
     double ticksPerSec = m_flywheelTalon.getSelectedSensorVelocity() * 10;
     return (ticksToRotations(ticksPerSec) * 60);
   }
-  
+
   public double rotationsToTicks(double rotations){
-    return ((rotations * 4096) * FlywheelConstants.gearRatio);
+    return ((rotations * FlywheelConstants.kEncoderCPR) * FlywheelConstants.gearRatio);
   }
 
   public double ticksToRotations(double ticks){
-    return ((ticks / 4096) / FlywheelConstants.gearRatio);
+    return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.gearRatio);
   }
   
 
