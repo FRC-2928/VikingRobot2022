@@ -19,7 +19,7 @@ public class TurnToTarget extends PIDCommand {
   public TurnToTarget(Drivetrain drivetrain, Turret turret) {
     super(
         // The controller that the command will use
-        new PIDController(-0.05, 0, 0),
+        new PIDController(0.02, 0, 0),
         // This should return the measurement
         () -> turret.targetHorizontalOffset(),
         // This should return the setpoint (can also be a constant)
@@ -38,7 +38,8 @@ public class TurnToTarget extends PIDCommand {
 
   public void initialize() {
     super.initialize();
-    m_drivetrain.disableMotorSafety();    
+    m_drivetrain.disableMotorSafety();  
+    System.out.println("IN PID");  
   }
 
   // Returns true when the command should end.
@@ -52,6 +53,7 @@ public class TurnToTarget extends PIDCommand {
     //SmartDashboard.putNumber("end heading", m_drivetrain.getHeading());
     m_drivetrain.stopDrivetrain();
     m_drivetrain.enableMotorSafety();
+    System.out.println("Done PID");
   }
 
 }

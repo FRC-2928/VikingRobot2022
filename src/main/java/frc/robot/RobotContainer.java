@@ -91,6 +91,8 @@ public class RobotContainer {
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
+
+    m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret));        
   }
 
   public void onAutoInit(){

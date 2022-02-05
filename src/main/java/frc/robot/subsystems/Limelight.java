@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.LimelightConstants;
 
 /**
@@ -16,9 +17,7 @@ import frc.robot.Constants.LimelightConstants;
  */
 public class Limelight{
   //Pulls values from network tables
-//  private NetworkTable m_limelightTable;
-  private NetworkTableInstance m_limelightNI = NetworkTableInstance.getDefault();
-  private String m_limelight = "limelight";
+  private NetworkTable m_limelightNI = NetworkTableInstance.getDefault().getTable("limelight");
 
   //Creates variables to assign
   private double m_horizontalOffset;
@@ -54,7 +53,7 @@ public class Limelight{
   }
 
   public void setStream(int stream){
-    m_limelightNI.getTable(m_limelight).getEntry("stream").setNumber(stream);
+    m_limelightNI.getEntry("stream").setNumber(stream);
   }
   
   // -----------------------------------------------------------

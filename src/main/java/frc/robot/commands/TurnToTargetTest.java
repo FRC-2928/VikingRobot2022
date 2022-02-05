@@ -32,7 +32,7 @@ public class TurnToTargetTest extends CommandBase {
     double measurement = m_turret.targetHorizontalOffset();
     SmartDashboard.putNumber("Measurement", measurement);
     double output = measurement * kP;
-    m_drivetrain.drive(0, -output);
+    m_drivetrain.drive(0, output);
   }
 
   // Called once the command ends or is interrupted.
