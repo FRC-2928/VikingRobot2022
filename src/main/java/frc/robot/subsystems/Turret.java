@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +27,7 @@ public class Turret extends SubsystemBase {
   private final Limelight m_turretLimelight = new Limelight();
   private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretTalonSRX);
+  private NetworkTableEntry m_targetHOEntry;
 
   // -----------------------------------------------------------
   // Initialization
@@ -80,6 +82,10 @@ public class Turret extends SubsystemBase {
 
   public void setupShuffleboard() {
     ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
+    m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", targetHorizontalOffset())
+            .withSize(2,1)
+            .withPosition(3, 0)
+            .getEntry(); 
   }
 
   // -----------------------------------------------------------
