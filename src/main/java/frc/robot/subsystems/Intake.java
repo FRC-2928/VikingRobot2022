@@ -26,6 +26,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeSparkMax);
+  private NetworkTableEntry m_targetHOEntry;
 
 
   // -----------------------------------------------------------
@@ -102,5 +103,7 @@ public class Intake extends SubsystemBase {
   // System State
   // -----------------------------------------------------------
 
+  
+  
 }
 
