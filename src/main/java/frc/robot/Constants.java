@@ -161,6 +161,12 @@ public final class Constants {
         // public static final double kSetpointFarTrench = 6000;
 
         // public static final double kFlywheelErrorThreshold = 75;
+        public static final double kPFlywheel = 0;
+        public static final double kIFlywheel = 0;
+        public static final double kDFlywheel = 0;
+        public static final double kFFlywheel = 0;
+
+        public static final double gearRatio = 1;
     }
 
     public static final class HoodConstants{
