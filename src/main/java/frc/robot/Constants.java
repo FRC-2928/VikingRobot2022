@@ -161,12 +161,13 @@ public final class Constants {
         // public static final double kSetpointFarTrench = 6000;
 
         // public static final double kFlywheelErrorThreshold = 75;
-        public static final double kPFlywheel = 0;
-        public static final double kIFlywheel = 0;
-        public static final double kDFlywheel = 0;
-        public static final double kFFlywheel = 0;
+
+        //TODO: change to correct values
+        public static final Gains kGainsFlywheel = new Gains(0,  0,   0,   0,   0,  1.00);
 
         public static final double gearRatio = 1;
+
+        public static final double kEncoderCPR = 2048;
     }
 
     public static final class HoodConstants{
@@ -227,9 +228,12 @@ public final class Constants {
 
     public static final class ClimberConstants {
 
-        // public static double kP = 0.055;
-        // public static double kD = 0.5;
-        // public static double kF = 0.4; //Placeholders
+        //TODO: change to correct values
+        public static final Gains kGainsClimber = new Gains(0,  0,   0,   0,   0,  1.00);
+
+        public static final double gearRatio = 1;
+
+        public static final double kEncoderCPR = 4096;
 
         // public static final double kStowedPositionSetpoint = 0.025; // Meters - Test this before use
         // public static final double kDeployedPositionSetpoint = 1.016; // Meters
