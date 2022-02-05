@@ -244,9 +244,10 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        public static double kP = 0.055;
-        public static double kD = 0.5;
-        public static double kF = 0.4;
+        public static double IntakekP = 0.055;
+        public static double IntakekI = 0;
+        public static double IntakekD = 0.5;
+        public static double IntakekF = 0.4;
 		public static double kClimberErrorThreshold = 0.5; // 5 cm
     }
 

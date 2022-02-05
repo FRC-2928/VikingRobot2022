@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -74,10 +75,10 @@ public class Intake extends SubsystemBase {
   }
 
   public void setIntakePIDF() {
-    m_intakeMotor.config_kP(0, TurretConstants.kGainsTurret.kP, 0);
-    m_intakeMotor.config_kI(0, TurretConstants.kGainsTurret.kI, 0);
-    m_intakeMotor.config_kD(0, TurretConstants.kGainsTurret.kD, 0);
-    m_intakeMotor.config_kF(0, TurretConstants.kGainsTurret.kF, 0);
+    m_intakeMotor.config_kP(0, IntakeConstants.IntakekP, 0);
+    m_intakeMotor.config_kI(0, IntakeConstants.IntakekI, 0);
+    m_intakeMotor.config_kD(0, IntakeConstants.IntakekD, 0);
+    m_intakeMotor.config_kF(0, IntakeConstants.IntakekF, 0);
   }
 
   public void resetEncoders(){
