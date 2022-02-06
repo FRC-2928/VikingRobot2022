@@ -242,6 +242,10 @@ public class Intake extends SubsystemBase {
     return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
     
   }
+
+  public boolean isFeederBrakeOff(){
+    return !(isFeederBrakeOn());
+  }
    
   public boolean isFeederClear(){
     
@@ -270,6 +274,10 @@ public class Intake extends SubsystemBase {
   //TODO: maybe switch true to false depending on which solenoid state is the open ramp
   public boolean isRampOpen(){
     return (m_rampSolenoid.get());
+  }
+
+  public boolean isRampClosed(){
+    return !(isRampOpen());
   }
 
   
