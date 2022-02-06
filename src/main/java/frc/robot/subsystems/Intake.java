@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +32,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
+  Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
  
   private final WPI_TalonSRX m_rightRampMotor = new WPI_TalonSRX(RobotMap.kRightRampMotor);
   private final WPI_TalonSRX m_leftRampMotor = new WPI_TalonSRX(RobotMap.kLeftRampMotor);
@@ -52,27 +55,28 @@ public class Intake extends SubsystemBase {
 
     m_leftRampMotor.follow(m_rightRampMotor, FollowerType.PercentOutput);
     
+    for(TalonSRX srx : new TalonSRX[] {m_intakeMotor, m_rightRampMotor, m_leftRampMotor}) {
     
       //Reset settings for safety
-     m_intakeMotor.configFactoryDefault();
+      srx.configFactoryDefault();
 
       //Sets voltage compensation to 12, used for percent output
-     m_intakeMotor.configVoltageCompSaturation(10);
-     m_intakeMotor.enableVoltageCompensation(true);
+      srx.configVoltageCompSaturation(10);
+      srx.enableVoltageCompensation(true);
 
       //Setting just in case
-     m_intakeMotor.configNominalOutputForward(0);
-     m_intakeMotor.configNominalOutputReverse(0);
-     m_intakeMotor.configPeakOutputForward(1);
-     m_intakeMotor.configPeakOutputReverse(-1);
+      srx.configNominalOutputForward(0);
+      srx.configNominalOutputReverse(0);
+      srx.configPeakOutputForward(1);
+      srx.configPeakOutputReverse(-1);
 
-     m_intakeMotor.configOpenloopRamp(0.1);
+      srx.configOpenloopRamp(0.1);
 
       //Setting deadband(area required to start moving the motor) to 1%
-     m_intakeMotor.configNeutralDeadband(0.01);
+      srx.configNeutralDeadband(0.01);
 
       //Set to brake mode, will brake the motor when no power is sent
-     m_intakeMotor.setNeutralMode(NeutralMode.Coast);
+      srx.setNeutralMode(NeutralMode.Coast);
 
       /** 
        * Setting input side current limit (amps)
@@ -80,10 +84,12 @@ public class Intake extends SubsystemBase {
        * 40 amp breaker can support above 40 amps for a little bit
        * Falcons have insane acceleration so allowing it to reach 80 for 0.03 seconds should be fine
        */
-     m_intakeMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
+      srx.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
 
       //Either using the integrated Falcon sensor or an external one, will change if needed
-     m_intakeMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
+      srx.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
+
+    }
   }
 
   public void setIntakePIDF() {
@@ -114,66 +120,95 @@ public class Intake extends SubsystemBase {
 
   public void stopIntakeMotor(){
 
+    m_intakeMotor.set(ControlMode.PercentOutput, 0);
 
   }
 
-  public void startIntakeMotor(){
+  /**
+   * 
+   * @param output the percent output of the motor, between -1 and 1
+   */
+  public void startIntakeMotor(double output){
 
+    m_intakeMotor.set(ControlMode.PercentOutput, output);
 
   }
 
   public void stopFeederMotor(){
 
+    m_rightRampMotor.set(ControlMode.PercentOutput, 0);
 
   }
 
-  public void startFeederMotor(){
+  /**
+   * 
+   * @param output the percent output of the motor, between -1 and 1
+   */
+  public void startFeederMotor(double output){
 
+    m_rightRampMotor.set(ControlMode.PercentOutput, output);
 
   }
 
   public void setFeederBrakeOff(){
 
 
-
   }
+
+  public void overrideFeederBreak(boolean override){
+    m_rightRampMotor.overrideLimitSwitchesEnable(override);
+  }
+
+  public void overrideIntakeBreak(boolean override){
+    m_intakeMotor.overrideLimitSwitchesEnable(override);
+  }
+
+  //TODO: maybe switch false and true depending on which solenoid state is the open ramp
+  public void openRamp(){
+    m_rampSolenoid.set(true);
+  }
+
+  public void closeRamp(){
+    m_rampSolenoid.set(false);
+  }
+
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
 
-  public void isFeederBrakeOn(){
+  public boolean isFeederBrakeOn(){
     //clear the talon to see if brake is on
-
+    return true;
     
   }
    
-  public void isFeederClear(){
+  public boolean isFeederClear(){
+    return true;
+
+  }
+
+  public boolean isBallOnRamp(){
+
+
+    return true;
+
+  }
+
+  public boolean isBallOnDeck(){
+
+    return true;
 
 
   }
 
-  public void isRampOpen(){
+  public boolean isIntakeArmUp(){
 
-
-    
-  }
-
-  public void isBallOnRamp(){
-
-
+    return true;
 
   }
 
-  public void isBallOnDeck(){
-
-
-
-  }
-
-  public void isIntakeArmUp(){
-
-
-
+  public boolean isRampOpen(){
+    return (m_rampSolenoid.get());
   }
 
   

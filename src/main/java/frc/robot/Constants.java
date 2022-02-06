@@ -54,9 +54,9 @@ public final class Constants {
         // public static final int kDrivetrainShiftSolenoid = 6; 
         public static final int kDrivetrainShiftSolenoidHigh = 1;
         public static final int kDrivetrainShiftSolenoidLow = 0;
-        public static final int kIntakeArmSolenoid = 4;
-        public static final int kIntakeBaseSolenoid = 5;
-        public static final int kRatchetSolenoid = 1;
+        public static final int kRampSolenoid = 4;
+        // public static final int kIntakeBaseSolenoid = 5;
+        // public static final int kRatchetSolenoid = 1;
         
         //Sensors
         public static final int kPigeonIMU = 3;
@@ -165,7 +165,7 @@ public final class Constants {
         //TODO: change to correct values
         public static final Gains kGainsFlywheel = new Gains(0,  0,   0,   0,   0,  1.00);
 
-        public static final double gearRatio = 1;
+        public static final double kGearRatio = 1;
 
         public static final double kEncoderCPR = 2048;
     }
@@ -199,7 +199,7 @@ public final class Constants {
         //                                                  kp,  ki, kd,  kf, iz,  peak output
         public static final Gains kGainsTurret = new Gains(0,  0,   0,   0,   0,  1.00);
 
-        public static final double kTurretGearRatio = 9.08; 
+        public static final double kTurretGearRatio = 9.08;
         public static final double kTurretDegreesPerRotation = 360;
 
         // public static final double kTurretErrorThreshold = 1;
@@ -210,7 +210,7 @@ public final class Constants {
         // public static final double kTurretControlPanelPosition = -90; //Placeholders
         
         public static final int kEncoderCPR = 4096;
-        public static final double kGearRatio = 10;
+        public static final double kGearRatio = (50/9);
 
         
     }
@@ -231,7 +231,7 @@ public final class Constants {
         //TODO: change to correct values
         public static final Gains kGainsClimber = new Gains(0,  0,   0,   0,   0,  1.00);
 
-        public static final double gearRatio = 1;
+        public static final double kGearRatio = 1;
 
         public static final double kEncoderCPR = 4096;
 

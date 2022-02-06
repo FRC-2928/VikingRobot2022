@@ -112,11 +112,11 @@ public class Climber extends SubsystemBase {
 
   //TODO: add whatever other step is in here, depending on mechanics....
   public double MetersToTicks(double meters){
-    return ((meters * ClimberConstants.kEncoderCPR) * ClimberConstants.gearRatio);
+    return ((meters * ClimberConstants.kEncoderCPR) * ClimberConstants.kGearRatio);
   }
 
   public double ticksToMeters(double ticks){
-    return ((ticks / ClimberConstants.kEncoderCPR) / ClimberConstants.gearRatio);
+    return ((ticks / ClimberConstants.kEncoderCPR) / ClimberConstants.kGearRatio);
   }
   
 }

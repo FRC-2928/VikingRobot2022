@@ -109,11 +109,11 @@ public class Flywheel extends SubsystemBase {
   }
 
   public double rotationsToTicks(double rotations){
-    return ((rotations * FlywheelConstants.kEncoderCPR) * FlywheelConstants.gearRatio);
+    return ((rotations * FlywheelConstants.kEncoderCPR) * FlywheelConstants.kGearRatio);
   }
 
   public double ticksToRotations(double ticks){
-    return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.gearRatio);
+    return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.kGearRatio);
   }
   
 
