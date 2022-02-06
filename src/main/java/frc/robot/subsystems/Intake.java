@@ -22,6 +22,8 @@ import frc.robot.Constants.TurretConstants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
@@ -38,7 +40,6 @@ public class Intake extends SubsystemBase {
   private final WPI_TalonSRX m_leftRampMotor = new WPI_TalonSRX(RobotMap.kLeftRampMotor);
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
-  private NetworkTableEntry m_targetHOEntry;
 
 
   // -----------------------------------------------------------
@@ -54,6 +55,12 @@ public class Intake extends SubsystemBase {
   public void configMotors(){
 
     m_leftRampMotor.follow(m_rightRampMotor, FollowerType.PercentOutput);
+
+    //configure limit switches for intake motor and leading feeder motor
+    m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+      LimitSwitchNormal.NormallyOpen, 0);
+    m_rightRampMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+      LimitSwitchNormal.NormallyOpen, 0);
     
     for(TalonSRX srx : new TalonSRX[] {m_intakeMotor, m_rightRampMotor, m_leftRampMotor}) {
     
@@ -155,10 +162,18 @@ public class Intake extends SubsystemBase {
 
   }
 
+  /**
+   * 
+   * @param override true if the limit switch is being overriden
+   */
   public void overrideFeederBreak(boolean override){
     m_rightRampMotor.overrideLimitSwitchesEnable(override);
   }
 
+  /**
+   * 
+   * @param override true if the limit switch is being overriden
+   */
   public void overrideIntakeBreak(boolean override){
     m_intakeMotor.overrideLimitSwitchesEnable(override);
   }
@@ -207,6 +222,7 @@ public class Intake extends SubsystemBase {
 
   }
 
+  //TODO: maybe switch true to false depending on which solenoid state is the open ramp
   public boolean isRampOpen(){
     return (m_rampSolenoid.get());
   }
