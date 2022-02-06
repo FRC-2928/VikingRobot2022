@@ -65,7 +65,7 @@ public class Climber extends SubsystemBase {
     m_climberMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
 
     //Either using the integrated Falcon sensor or an external one, will change if needed
-    m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
+    m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
   }
 
   public void setClimberPIDF() {

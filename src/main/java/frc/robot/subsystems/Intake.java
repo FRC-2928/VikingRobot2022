@@ -158,24 +158,21 @@ public class Intake extends SubsystemBase {
   }
 
   public void setFeederBrakeOff(){
-
+    m_rightFeederMotor.overrideLimitSwitchesEnable(false);
 
   }
 
-  /**
-   * 
-   * @param override true if the limit switch is being overriden
-   */
-  public void overrideFeederBreak(boolean override){
-    m_rightFeederMotor.overrideLimitSwitchesEnable(override);
+  public void setFeederBrakeOn(){
+    m_rightFeederMotor.overrideLimitSwitchesEnable(true);
   }
 
-  /**
-   * 
-   * @param override true if the limit switch is being overriden
-   */
-  public void overrideIntakeBreak(boolean override){
-    m_intakeMotor.overrideLimitSwitchesEnable(override);
+  
+  public void setIntakeBrakeOn(){
+    m_intakeMotor.overrideLimitSwitchesEnable(true);
+  }
+
+  public void setIntakeBrakeOff(){
+    m_intakeMotor.overrideLimitSwitchesEnable(false);
   }
 
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
