@@ -14,10 +14,15 @@ import frc.robot.subsystems.Intake;
 public class OpenRamp extends SequentialCommandGroup {
   /** Creates a new OpenRamp. */
   public OpenRamp(Intake intake) {
-    
-    new TriggerOpenRamp(intake);
-    new WaitCommand(0.01);
-    new SetRampStable(intake);
+
+
+    addCommands(
+
+      new TriggerOpenRamp(intake),
+      
+      new WaitCommand(0.01),
+      
+      new SetRampStable(intake));
 
   }
 }
