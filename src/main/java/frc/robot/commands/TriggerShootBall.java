@@ -16,12 +16,10 @@ public class TriggerShootBall extends CommandBase {
   Flywheel m_flywheel;
 
   /** Creates a new CheckAndShootBall. */
-  public TriggerShootBall(Intake intake, Turret turret, Flywheel flywheel) {
+  public TriggerShootBall(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake, turret, flywheel);
+    addRequirements(intake);
     m_intake = intake;
-    m_turret = turret;
-    m_flywheel = flywheel;
   }
 
   // Called when the command is initially scheduled.
@@ -31,8 +29,7 @@ public class TriggerShootBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //to check: flywheel at speed, target in range, turret is locked
-    //if((m_flywheel.isAtRPM()) && m_turret.isInRange && m_turret.isLockedOnTarget);
+    // to check: there is a ball (of right color), ramp is fully closed
   }
 
   // Called once the command ends or is interrupted.

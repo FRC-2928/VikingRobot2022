@@ -6,26 +6,22 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Turret;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootBall extends SequentialCommandGroup {
+public class EjectBall extends SequentialCommandGroup {
 
   Intake m_intake;
-  Turret m_turret;
-
-  /** Creates a new ShootBall. */
-  public ShootBall(Intake intake) {
-    m_intake = intake;
-
+  
+  /** Creates a new EjectBall. */
+  public EjectBall(Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new TriggerShootBall(m_intake), 
-                new WaitCommand(.02), 
-                new SetFeederCleared(m_intake));
+    addCommands(new OpenRamp(intake), 
+                new TriggerEjectBall(intake), 
+                new WaitCommand(.02),
+                new CloseRamp(intake));
   }
 }
