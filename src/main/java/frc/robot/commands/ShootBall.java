@@ -27,7 +27,8 @@ public class ShootBall extends SequentialCommandGroup {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new TriggerShootBall(m_intake, m_turret, m_flywheel), new WaitCommand(.02), 
-      new SetFeederCleared(m_intake));
+    addCommands(new TriggerShootBall(m_intake, m_turret, m_flywheel), 
+                new WaitCommand(.02), 
+                new SetFeederCleared(m_intake));
   }
 }
