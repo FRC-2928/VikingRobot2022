@@ -53,6 +53,8 @@ public class Intake extends SubsystemBase {
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
+  private boolean m_rampstable = true;
+
 
   // -----------------------------------------------------------
   // Initialization
@@ -221,6 +223,10 @@ public class Intake extends SubsystemBase {
     m_rampSolenoid.set(false);
   }
 
+  public void setRampStable(){
+    m_rampstable = true;
+
+  }
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
