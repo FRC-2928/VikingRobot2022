@@ -144,11 +144,18 @@ public class Intake extends SubsystemBase {
   public void isFeederBrakeOn(){
     //clear the talon to see if brake is on
 
+    
   }
    
   public void isFeederClear(){
 
 
+  }
+
+  public void isRampOpen(){
+
+
+    
   }
 
   public void isBallOnRamp(){
