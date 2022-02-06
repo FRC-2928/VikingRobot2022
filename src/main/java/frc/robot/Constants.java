@@ -288,5 +288,11 @@ public final class Constants {
         public static final double kTurretGearRatio = 169.155; 
         public static final double kTurretDegreesPerRotation = 360; 
     }
+
+    //Color Panel for Intake
+    public enum ControlPanelColor {
+
+        RED, BLUE, GREEN, YELLOW, UNKNOWN;
+    }
   
 }
