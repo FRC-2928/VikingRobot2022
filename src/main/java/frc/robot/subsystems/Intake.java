@@ -36,8 +36,8 @@ public class Intake extends SubsystemBase {
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
  
-  private final WPI_TalonSRX m_rightRampMotor = new WPI_TalonSRX(RobotMap.kRightRampMotor);
-  private final WPI_TalonSRX m_leftRampMotor = new WPI_TalonSRX(RobotMap.kLeftRampMotor);
+  private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(RobotMap.kRightRampMotor);
+  private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(RobotMap.kLeftRampMotor);
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
@@ -54,15 +54,15 @@ public class Intake extends SubsystemBase {
 
   public void configMotors(){
 
-    m_leftRampMotor.follow(m_rightRampMotor, FollowerType.PercentOutput);
+    m_leftFeederMotor.follow(m_rightFeederMotor, FollowerType.PercentOutput);
 
     //configure limit switches for intake motor and leading feeder motor
     m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
       LimitSwitchNormal.NormallyOpen, 0);
-    m_rightRampMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+    m_rightFeederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
       LimitSwitchNormal.NormallyOpen, 0);
     
-    for(TalonSRX srx : new TalonSRX[] {m_intakeMotor, m_rightRampMotor, m_leftRampMotor}) {
+    for(TalonSRX srx : new TalonSRX[] {m_intakeMotor, m_rightFeederMotor, m_leftFeederMotor}) {
     
       //Reset settings for safety
       srx.configFactoryDefault();
@@ -143,7 +143,7 @@ public class Intake extends SubsystemBase {
 
   public void stopFeederMotor(){
 
-    m_rightRampMotor.set(ControlMode.PercentOutput, 0);
+    m_rightFeederMotor.set(ControlMode.PercentOutput, 0);
 
   }
 
@@ -153,7 +153,7 @@ public class Intake extends SubsystemBase {
    */
   public void startFeederMotor(double output){
 
-    m_rightRampMotor.set(ControlMode.PercentOutput, output);
+    m_rightFeederMotor.set(ControlMode.PercentOutput, output);
 
   }
 
@@ -167,7 +167,7 @@ public class Intake extends SubsystemBase {
    * @param override true if the limit switch is being overriden
    */
   public void overrideFeederBreak(boolean override){
-    m_rightRampMotor.overrideLimitSwitchesEnable(override);
+    m_rightFeederMotor.overrideLimitSwitchesEnable(override);
   }
 
   /**
@@ -193,32 +193,31 @@ public class Intake extends SubsystemBase {
 
   public boolean isFeederBrakeOn(){
     //clear the talon to see if brake is on
-    return true;
+    return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
     
   }
    
   public boolean isFeederClear(){
-    return true;
+    
+    return isFeederClear();
 
   }
 
   public boolean isBallOnRamp(){
 
-
-    return true;
+    return isIntakeArmUp();
 
   }
 
   public boolean isBallOnDeck(){
 
-    return true;
-
-
+    return isFeederBrakeOn();
+    
   }
 
   public boolean isIntakeArmUp(){
 
-    return true;
+    return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
 
   }
 
