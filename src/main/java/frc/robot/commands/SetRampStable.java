@@ -24,7 +24,7 @@ public class SetRampStable extends InstantCommand {
   @Override
   public void initialize() {
 
-    m_intake.setRampStable();
+    m_intake.setRampState(true);
 
   }
 }

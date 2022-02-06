@@ -24,6 +24,7 @@ public class TriggerOpenRamp extends InstantCommand {
   @Override
   public void initialize() {
 
+    m_intake.setRampState(false);
     m_intake.openRamp();
 
   }

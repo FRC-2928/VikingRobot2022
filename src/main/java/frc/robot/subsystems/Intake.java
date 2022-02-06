@@ -229,8 +229,8 @@ public class Intake extends SubsystemBase {
     m_isFeederClear = true;
   }
 
-  public void setRampStable(){
-    m_rampstable = true;
+  public void setRampState(boolean state){
+    m_rampstable = state;
 
   }
   // -----------------------------------------------------------
