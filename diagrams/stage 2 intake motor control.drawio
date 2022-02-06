@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-02-06T20:35:28.680Z" agent="5.0 (Windows)" etag="CAIKhMziWVEpY3Ai2LD-" version="16.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2022-02-06T20:36:39.672Z" agent="5.0 (Windows)" etag="mLUYxBNGfrUEf3R6fh0z" version="16.5.3" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="867" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -34,10 +34,10 @@
         <mxCell id="536bruX3yoWRHG2eDpTa-6" value="Stage 2 intake motor logic flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="50" y="30" width="330" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="4tGKsylCyCgwFJGUTlz1-0" value="&lt;div&gt;set brake override to&lt;/div&gt;&lt;div&gt;ON&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="4tGKsylCyCgwFJGUTlz1-0" value="&lt;div&gt;set Talon power&lt;/div&gt;&lt;div&gt;to 80%&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="160" y="400" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="4tGKsylCyCgwFJGUTlz1-1" value="&lt;div&gt;Set Talon power &lt;br&gt;&lt;/div&gt;&lt;div&gt;to 80%&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="4tGKsylCyCgwFJGUTlz1-1" value="&lt;div&gt;set brake override&lt;/div&gt;&lt;div&gt;to ON&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="160" y="470" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="4tGKsylCyCgwFJGUTlz1-4" value="" style="endArrow=block;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endFill=0;endSize=8;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="4tGKsylCyCgwFJGUTlz1-0" target="4tGKsylCyCgwFJGUTlz1-1">
@@ -57,13 +57,13 @@
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="4tGKsylCyCgwFJGUTlz1-8" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="4tGKsylCyCgwFJGUTlz1-5" target="4tGKsylCyCgwFJGUTlz1-1">
+        <mxCell id="4tGKsylCyCgwFJGUTlz1-8" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="4tGKsylCyCgwFJGUTlz1-5">
           <mxGeometry y="10" relative="1" as="geometry">
             <mxPoint as="offset" />
-            <mxPoint x="170" y="240" as="targetPoint" />
+            <mxPoint x="220" y="530" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="380" y="590" />
-              <mxPoint x="380" y="490" />
+              <mxPoint x="320" y="590" />
+              <mxPoint x="320" y="530" />
             </Array>
             <mxPoint x="180" y="330" as="sourcePoint" />
           </mxGeometry>
@@ -88,9 +88,6 @@
             <mxPoint x="230" y="340" as="sourcePoint" />
             <mxPoint x="220" y="290" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="4tGKsylCyCgwFJGUTlz1-16" value="What order should these be in?" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="280" y="440" width="180" height="20" as="geometry" />
         </mxCell>
         <mxCell id="4tGKsylCyCgwFJGUTlz1-17" value="&lt;div&gt;set brake override to&lt;/div&gt;&lt;div&gt;OFF&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="160" y="660" width="120" height="40" as="geometry" />
