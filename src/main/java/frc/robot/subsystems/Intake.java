@@ -53,6 +53,7 @@ public class Intake extends SubsystemBase {
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
+  private boolean m_isFeederClear;
   private boolean m_rampstable = true;
 
 
@@ -63,6 +64,7 @@ public class Intake extends SubsystemBase {
     configMotors();
     setIntakePIDF();
     resetEncoders();
+    m_isFeederClear = false;
     
   }
 
@@ -223,6 +225,10 @@ public class Intake extends SubsystemBase {
     m_rampSolenoid.set(false);
   }
 
+  public void setFeederCleared(){
+    m_isFeederClear = true;
+  }
+
   public void setRampStable(){
     m_rampstable = true;
 
@@ -239,7 +245,7 @@ public class Intake extends SubsystemBase {
    
   public boolean isFeederClear(){
     
-    return isFeederClear();
+    return m_isFeederClear;
 
   }
 
