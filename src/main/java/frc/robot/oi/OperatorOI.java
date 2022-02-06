@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.oi.DriverOI;
 
-public class DriverOI {
+public class OperatorOI {
     private XboxController m_controller;
 
-    public DriverOI(XboxController controller) {
+    public OperatorOI(XboxController controller) {
         m_controller = controller;
     }
 
@@ -35,7 +35,13 @@ public class DriverOI {
 
     // ---------------- Shooting ----------------------------
 
+      public Button getShootingButton(){
+        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+      }  
 
+      public Button getEjectingButton(){
+        return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+      }
     
     // public Button getAutoShootingButton() {
     //     return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
@@ -68,30 +74,30 @@ public class DriverOI {
 
     // ---------------- Drivetrain ----------------------------
 
-    public Button getResetEncodersButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kB.value);
-    }
+    // public Button getResetEncodersButton() {
+    //     return new JoystickButton(m_controller, XboxController.Button.kB.value);
+    // }
 
-    public Button getShiftLowButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kX.value);
-    }
-
-
-    public Button getShiftHighButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kY.value);
-    }
-
-    public Button getTurnToTargetButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-    }
+    // public Button getShiftLowButton() {
+    //     return new JoystickButton(m_controller, XboxController.Button.kX.value);
+    // }
 
 
-    public DoubleSupplier getMoveSupplier() {
-        return () -> -m_controller.getLeftY();
-    }
+    // public Button getShiftHighButton() {
+    //     return new JoystickButton(m_controller, XboxController.Button.kY.value);
+    // }
+
+    // public Button getTurnToTargetButton() {
+    //     return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+    // }
 
 
-    public DoubleSupplier getRotateSupplier() {
-        return () -> m_controller.getRightX();
-    }
+    // public DoubleSupplier getMoveSupplier() {
+    //     return () -> -m_controller.getLeftY();
+    // }
+
+
+    // public DoubleSupplier getRotateSupplier() {
+    //     return () -> m_controller.getRightX();
+    // }
 }
