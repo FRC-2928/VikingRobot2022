@@ -39,6 +39,8 @@ import frc.robot.Constants.RobotMap;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
@@ -60,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
     private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
     private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
 
-    private Pigeon m_pigeon = new Pigeon();
+    private WPI_PigeonIMU m_pigeon = new WPI_PigeonIMU(RobotMap.kPigeonIMU);
 
     private double m_yaw;
 
@@ -94,10 +96,9 @@ public class Drivetrain extends SubsystemBase {
 
 
     // ------ Simulation classes to help us simulate our robot ---------
-    WPI_Pigeon2 m_pigeon2 = new WPI_Pigeon2(1, "FastFD");
     TalonFXSimCollection m_leftDriveSim = m_leftLeader.getSimCollection();
     TalonFXSimCollection m_rightDriveSim = m_rightLeader.getSimCollection();
-    private final BasePigeonSimCollection m_pigeonSim = m_pigeon2.getSimCollection();
+    private final BasePigeonSimCollection m_pigeonSim = m_pigeon.getSimCollection();
 
     private final LinearSystem<N2, N2, N2> m_drivetrainSystem =
         LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5, 0.3);
@@ -119,7 +120,7 @@ public class Drivetrain extends SubsystemBase {
         m_gearStateSupplier = gearStateSupplier;
 
         // m_pigeon = new Pigeon();
-        m_pigeon.resetGyro();
+        zeroGyro();
 
         // m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
         // m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
@@ -282,11 +283,8 @@ public class Drivetrain extends SubsystemBase {
         m_rightVelocity = ((encoderTicksToMeters(rightEncoderVelocity)) * 10);
 
         // Update the odometry for either real or simulated robot
-        if (RobotBase.isReal()) {
-            m_odometry.update(getRotation(), leftPosition, rightPosition);
-        } else {
-            m_odometry.update(getRotationSim(), leftPosition, rightPosition);
-        }      
+        m_odometry.update(getRotation(), leftPosition, rightPosition);
+   
         m_headingEntry.setDouble(m_yaw);
         m_field2d.setRobotPose(getPose());
 
@@ -418,7 +416,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void zeroGyro(){
-        m_pigeon.resetGyro();
+        m_pigeon.reset();
     }
 
     public void resetEncoders(){
@@ -428,11 +426,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
-        if (RobotBase.isReal()) {
-          m_odometry.resetPosition(pose, getRotation());  
-        } else {
-            m_odometry.resetPosition(pose, getRotationSim());  
-        }       
+        m_odometry.resetPosition(pose, getRotation());       
     }
 
     public void setPIDSlot(int slot) {
@@ -463,7 +457,11 @@ public class Drivetrain extends SubsystemBase {
 
     public Rotation2d getRotation(){
         m_yaw = m_pigeon.getYaw();
-        return (Rotation2d.fromDegrees(Math.IEEEremainder(m_yaw, 360.0d) * -1.0d));
+        if (RobotBase.isReal()) {
+           return (Rotation2d.fromDegrees(Math.IEEEremainder(m_yaw, 360.0d) * -1.0d)); 
+        } else {
+            return (Rotation2d.fromDegrees(m_yaw));
+        }       
     }
 
     public double getLeftDistanceMeters() {
@@ -525,7 +523,4 @@ public class Drivetrain extends SubsystemBase {
         m_pigeonSim.setRawHeading(m_drivetrainSimulator.getHeading().getDegrees());
       }
 
-      public Rotation2d getRotationSim() {
-        return m_pigeon2.getRotation2d();
-      }
 }
