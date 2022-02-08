@@ -165,6 +165,8 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putString("Detected Color", colorString);
     SmartDashboard.putNumber("Intake Motor Voltage", m_intakeMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("Intake Motor Percent", m_intakeMotor.getMotorOutputPercent());
+    SmartDashboard.putNumber("Feeder Motor Voltage", m_rightFeederMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Feeder Motor Percent", m_rightFeederMotor.getMotorOutputPercent());
     
   }
 

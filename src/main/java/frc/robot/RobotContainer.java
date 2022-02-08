@@ -32,11 +32,11 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
 import frc.robot.subsystems.Turret;
-import frc.robot.commands.RunRamseteTrajectory;
-import frc.robot.commands.ToggleFeederMotor;
-import frc.robot.commands.ToggleIntakeMotor;
-import frc.robot.commands.TurnToTarget;
-import frc.robot.commands.DriveDistanceProfiled;
+import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
+import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
+import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
+import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
+import frc.robot.commands.TurretCommands.TurnToTarget;
 
 public class RobotContainer {
 

@@ -115,6 +115,18 @@ public class Flywheel extends SubsystemBase {
   public double ticksToRotations(double ticks){
     return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.kGearRatio);
   }
+
+  /**
+   * 
+   * @return the percent output of the motor (-100 to 100)
+   */
+  public double getPower(){
+    return(m_flywheelTalon.getMotorOutputPercent());
+  }
+
+  public boolean isFlywheelMotorOn(){
+    return(m_flywheelTalon.getMotorOutputPercent() > 10);
+  }
   
 
 }
