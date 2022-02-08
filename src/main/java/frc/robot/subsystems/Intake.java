@@ -198,21 +198,21 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void setFeederBrakeOff(){
+  public void setFeederBrakeDisabled(){
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
 
   }
 
-  public void setFeederBrakeOn(){
+  public void setFeederBrakeEnabled(){
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
   }
 
   
-  public void setIntakeBrakeOn(){
+  public void setIntakeBrakeEnabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(true);
   }
 
-  public void setIntakeBrakeOff(){
+  public void setIntakeBrakeDisabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(false);
   }
 
@@ -237,14 +237,21 @@ public class Intake extends SubsystemBase {
   // System State
   // -----------------------------------------------------------
 
-  public boolean isFeederBrakeOn(){
+  public boolean readyToShoot() {
+    if (feederHasBall() && isRampClosed()) {
+      return true;
+    } 
+    return false;
+  }
+
+  public boolean isFeederBrakeActivated(){
     //clear the talon to see if brake is on
     return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
     
   }
 
-  public boolean isFeederBrakeOff(){
-    return !(isFeederBrakeOn());
+  public boolean isFeederBrakeDeactivated(){
+    return !(isFeederBrakeActivated());
   }
    
   public boolean isFeederClear(){
@@ -253,16 +260,14 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public boolean isBallOnRamp(){
+  public boolean intakeHasBall(){
 
     return isIntakeArmUp();
 
   }
 
-  public boolean isBallOnDeck(){
-
-    return isFeederBrakeOn();
-    
+  public boolean feederHasBall(){
+    return isFeederBrakeActivated();  
   }
 
   public boolean isIntakeArmUp(){
