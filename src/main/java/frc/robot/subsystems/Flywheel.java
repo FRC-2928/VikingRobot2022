@@ -22,6 +22,7 @@ import frc.robot.Constants.TurretConstants;
 public class Flywheel extends SubsystemBase {
 
   private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(RobotMap.kFlywheelTalonFX);
+  double m_powerOutput;
 
   // -----------------------------------------------------------
   // Initialization
@@ -98,6 +99,25 @@ public class Flywheel extends SubsystemBase {
    */
   public void setPower(double power){
     m_flywheelTalon.set(ControlMode.PercentOutput, power);
+  }
+
+  public void incrementPower(double increment){
+    if(getPower() < FlywheelConstants.kMotorLimit){
+      m_powerOutput += increment;
+      setPower(m_powerOutput);
+    } else {
+      setPower(.9);
+    }
+
+  }
+
+  public void decrementPower(double decrement){
+    if(m_powerOutput <= 0){
+      setPower(0);
+    } else{
+      m_powerOutput -= decrement;
+      setPower(m_powerOutput);
+    }
   }
 
   // -----------------------------------------------------------

@@ -10,13 +10,11 @@ import frc.robot.subsystems.Flywheel;
 
 public class IncrementFlywheel extends CommandBase {
 
-  double m_powerOutput;
   static final double increment = .05;
   Flywheel m_flywheel;
 
   /** Creates a new IncrementFlywheel. */
   public IncrementFlywheel(Flywheel flywheel) {
-    m_powerOutput = 0;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(flywheel);
     m_flywheel = flywheel;
@@ -30,12 +28,7 @@ public class IncrementFlywheel extends CommandBase {
   @Override
   public void execute() {
 
-    if(m_flywheel.getPower() < FlywheelConstants.kMotorLimit){
-      m_powerOutput += increment;
-      m_flywheel.setPower(m_powerOutput);
-    } else {
-      m_flywheel.setPower(.9);
-    }
+    m_flywheel.incrementPower(increment);
 
   }
 

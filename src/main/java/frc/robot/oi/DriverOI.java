@@ -74,6 +74,18 @@ public class DriverOI {
     //     return new Button(() -> m_controller.getRightTriggerAxis() > 0.2);
     // }
 
+    public Button getIncrementFlywheelButton(){
+        return new JoystickButton(m_controller, XboxController.Button.kStart.value);
+    }
+
+    public Button getDecrementFlywheelButton(){
+        return new JoystickButton(m_controller, XboxController.Button.kBack.value);
+    }
+
+    public Button getToggleFlywheelButton(){
+        return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    }
+
     // ---------------- Drivetrain ----------------------------
 
     // public Button getResetEncodersButton() {

@@ -11,29 +11,25 @@ public class DecrementFlywheel extends CommandBase {
 
   Flywheel m_flywheel;
   static final double decrement = .05;
-  double m_powerOutput;
   
   /** Creates a new DecrementFlywheel. */
   public DecrementFlywheel(Flywheel flywheel) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(flywheel);
     m_flywheel = flywheel;
-    m_powerOutput = m_flywheel.getPower();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_powerOutput <= 0){
-      m_flywheel.setPower(0);
-    } else{
-      m_flywheel.setPower(m_powerOutput);
-    }
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_flywheel.decrementPower(decrement);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
