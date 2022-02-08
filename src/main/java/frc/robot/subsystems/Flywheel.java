@@ -6,18 +6,17 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants.FlywheelConstants;
 import frc.robot.Constants.RobotMap;
-import frc.robot.Constants.TurretConstants;
 
 public class Flywheel extends SubsystemBase {
 
@@ -87,6 +86,8 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
+    SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
   }
 
   public void resetEncoders(){
@@ -106,7 +107,7 @@ public class Flywheel extends SubsystemBase {
       m_powerOutput += increment;
       setPower(m_powerOutput);
     } else {
-      setPower(.9);
+      setPower(FlywheelConstants.kIdealMotorPower);
     }
 
   }

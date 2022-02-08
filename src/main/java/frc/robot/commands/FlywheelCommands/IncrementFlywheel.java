@@ -5,7 +5,6 @@
 package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.FlywheelConstants;
 import frc.robot.subsystems.Flywheel;
 
 public class IncrementFlywheel extends CommandBase {
