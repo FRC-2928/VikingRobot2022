@@ -26,6 +26,14 @@ public class DriverOI {
     //     return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
     // }
 
+    public Button getToggleIntakeMotorButton(){
+        return new JoystickButton(m_controller, XboxController.Button.kA.value);
+    }
+
+    public Button getToggleFeederMotorButton(){
+        return new JoystickButton(m_controller, XboxController.Button.kB.value);
+    }
+
     // ---------------- Climber ----------------------------
 
 
@@ -68,9 +76,9 @@ public class DriverOI {
 
     // ---------------- Drivetrain ----------------------------
 
-    public Button getResetEncodersButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kB.value);
-    }
+    // public Button getResetEncodersButton() {
+    //     return new JoystickButton(m_controller, XboxController.Button.kB.value);
+    // }
 
     public Button getShiftLowButton() {
         return new JoystickButton(m_controller, XboxController.Button.kX.value);

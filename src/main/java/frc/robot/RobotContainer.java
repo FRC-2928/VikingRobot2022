@@ -27,11 +27,14 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
 import frc.robot.subsystems.Turret;
 import frc.robot.commands.RunRamseteTrajectory;
+import frc.robot.commands.ToggleFeederMotor;
+import frc.robot.commands.ToggleIntakeMotor;
 import frc.robot.commands.TurnToTarget;
 import frc.robot.commands.DriveDistanceProfiled;
 
@@ -42,6 +45,7 @@ public class RobotContainer {
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
   private final Turret m_turret = new Turret();
+  private final Intake m_intake = new Intake();
 
   
   
@@ -170,13 +174,17 @@ public class RobotContainer {
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
 
     m_driverOI.getTurnToTargetButton().whileHeld(new TurnToTarget(m_drivetrain, m_turret));
+
+    m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
+
+    m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
   }
 
   //added 1/19/21 STILL NOT TESTED, should reset the encoders in theory
-  public void configureResetEncoders() {
-    m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
+  // public void configureResetEncoders() {
+  //   m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
 
-  }
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -163,6 +163,8 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
     SmartDashboard.putString("Detected Color", colorString);
+    SmartDashboard.putNumber("Intake Motor Voltage", m_intakeMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Intake Motor Percent", m_intakeMotor.getMotorOutputPercent());
     
   }
 
@@ -284,6 +286,14 @@ public class Intake extends SubsystemBase {
   public boolean isRampClosed(){
     return !(isRampOpen());
   }
+
+  public boolean isIntakeMotorOn(){
+   return (m_intakeMotor.getMotorOutputPercent() > 10);
+  }
+
+  public boolean isFeederMotorOn(){
+    return (m_rightFeederMotor.getMotorOutputPercent() > 10);
+   }
 
   
   
