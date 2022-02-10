@@ -28,7 +28,7 @@ public class DecrementFlywheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_flywheel.decrementPower(decrement);
+    m_flywheel.decrementVelocity(decrement);
   }
 
   // Called once the command ends or is interrupted.

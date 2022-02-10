@@ -21,7 +21,7 @@ import frc.robot.Constants.RobotMap;
 public class Flywheel extends SubsystemBase {
 
   private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(RobotMap.kFlywheelTalonFX);
-  double m_powerOutput;
+  double m_velocity;
 
   // -----------------------------------------------------------
   // Initialization
@@ -96,28 +96,29 @@ public class Flywheel extends SubsystemBase {
 
   /**
    * 
-   * @param power the percent power value between -1 and 1
+   * @param velocity change in ticks per sec
    */
-  public void setPower(double power){
-    m_flywheelTalon.set(ControlMode.PercentOutput, power);
+  public void setVelocity(double velocity){
+    //turn change in ticks per sec to change in ticks per 100 ms
+    velocity /= 10;
+    m_flywheelTalon.set(ControlMode.Velocity, velocity);
   }
 
-  public void incrementPower(double increment){
-    if(getPower() < FlywheelConstants.kMotorLimit){
-      m_powerOutput += increment;
-      setPower(m_powerOutput);
+  public void incrementVelocity(double increment){
+    if(getVelocity() < FlywheelConstants.kMaxVelocity){
+      m_velocity += increment;
+      setVelocity(m_velocity);
     } else {
-      setPower(FlywheelConstants.kIdealMotorPower);
+      setVelocity(FlywheelConstants.kIdealVelocity);
     }
-
   }
 
-  public void decrementPower(double decrement){
-    if(m_powerOutput <= 0){
-      setPower(0);
+  public void decrementVelocity(double decrement){
+    if(m_velocity <= 0){
+      setVelocity(0);
     } else{
-      m_powerOutput -= decrement;
-      setPower(m_powerOutput);
+      m_velocity -= decrement;
+      setVelocity(m_velocity);
     }
   }
 
@@ -143,6 +144,14 @@ public class Flywheel extends SubsystemBase {
    */
   public double getPower(){
     return(m_flywheelTalon.getMotorOutputPercent());
+  }
+
+  /**
+   * 
+   * @return velocity in ticks per sec
+   */
+  public double getVelocity(){
+    return (m_flywheelTalon.getSelectedSensorVelocity() * 10);
   }
 
   public boolean isFlywheelMotorOn(){

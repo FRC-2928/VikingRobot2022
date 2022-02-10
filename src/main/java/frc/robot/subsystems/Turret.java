@@ -163,8 +163,7 @@ public class Turret extends SubsystemBase {
     return offset;
   }
 
-  //TODO: add limit switch
-  public boolean isBrakeActivated(){
-    return true;
+  public boolean isLimitSwitchClosed(){
+    return m_turretMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 }

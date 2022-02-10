@@ -27,7 +27,7 @@ public class IncrementFlywheel extends CommandBase {
   @Override
   public void execute() {
 
-    m_flywheel.incrementPower(increment);
+    m_flywheel.incrementVelocity(increment);
 
   }
 

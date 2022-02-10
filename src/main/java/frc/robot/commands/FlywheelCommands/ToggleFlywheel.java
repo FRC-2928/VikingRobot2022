@@ -25,9 +25,9 @@ public class ToggleFlywheel extends InstantCommand {
   @Override
   public void initialize() {
     if(m_flywheel.isFlywheelMotorOn()){
-      m_flywheel.setPower(0);
+      m_flywheel.setVelocity(0);
     } else {
-      m_flywheel.setPower(FlywheelConstants.kIdealMotorPower);
+      m_flywheel.setVelocity(FlywheelConstants.kIdealVelocity);
     }
   }
 }

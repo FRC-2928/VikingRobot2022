@@ -37,6 +37,6 @@ public class RegisterTurret extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_turret.isBrakeActivated();
+    return m_turret.isLimitSwitchClosed();
   }
 }
