@@ -181,9 +181,19 @@ public class Intake extends SubsystemBase {
    * @param output the percent output of the motor, between -1 and 1
    */
   public void startIntakeMotor(double output){
-
     m_intakeMotor.set(ControlMode.PercentOutput, output);
+    setIntakeBrakeOverride();
+  }
 
+  /**
+   * sets the intake brake enabled if the feeder has a ball, and disabled if not
+   */
+  public void setIntakeBrakeOverride(){
+    if(feederHasBall()){
+      setIntakeBrakeEnabled();
+    } else {
+      setIntakeBrakeDisabled();
+    }
   }
 
   public void stopFeederMotor(){
@@ -197,27 +207,37 @@ public class Intake extends SubsystemBase {
    * @param output the percent output of the motor, between -1 and 1
    */
   public void startFeederMotor(double output){
-
     m_rightFeederMotor.set(ControlMode.PercentOutput, output);
-
+    setFeederBrakeEnabled();
   }
 
+  /**
+   * ignore feeder limit switch
+   */
   public void setFeederBrakeDisabled(){
-    m_rightFeederMotor.overrideLimitSwitchesEnable(false);
-
-  }
-
-  public void setFeederBrakeEnabled(){
+    //overriding the brake (true) means the brake is disabled
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
   }
 
-  
-  public void setIntakeBrakeEnabled(){
-    m_intakeMotor.overrideLimitSwitchesEnable(true);
+  /**
+   * listen to feeder limit switch
+   */
+  public void setFeederBrakeEnabled(){
+    m_rightFeederMotor.overrideLimitSwitchesEnable(false);
   }
 
-  public void setIntakeBrakeDisabled(){
+  /**
+   * listen to intake limit switch
+   */
+  public void setIntakeBrakeEnabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(false);
+  }
+
+  /**
+   * ignore intake limit switch - motor keeps running
+   */
+  public void setIntakeBrakeDisabled(){
+    m_intakeMotor.overrideLimitSwitchesEnable(true);
   }
 
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
@@ -295,7 +315,11 @@ public class Intake extends SubsystemBase {
 
   public boolean isFeederMotorOn(){
     return (m_rightFeederMotor.getMotorOutputPercent() > 10);
-   }
+  }
+
+  
+
+
 
   
   
