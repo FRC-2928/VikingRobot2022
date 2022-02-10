@@ -173,8 +173,10 @@ public final class Constants {
 
         //TODO: set to actual desired power
         public static final double kIdealMotorPower = .9;
-        public static final double kMaxVelocity = 1;
-        public static final double kIdealVelocity = 1;
+        
+        //velocity in ticks per sec
+        public static final double kMaxVelocity = 80000;
+        public static final double kIdealVelocity = 60000;
     }
 
     public static final class HoodConstants{

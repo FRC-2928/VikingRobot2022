@@ -37,6 +37,7 @@ import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.DrivetrainCommands.TurnToTarget;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
+import frc.robot.commands.TurretCommands.MoveTurret;
 
 public class RobotContainer {
 
@@ -178,6 +179,9 @@ public class RobotContainer {
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
 
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
+
+    m_driverOI.getTurnTurretLeftButton().whenHeld(new MoveTurret(m_turret, -1));
+    m_driverOI.getTurnTurretRightButton().whenHeld(new MoveTurret(m_turret, 1));
   }
 
   

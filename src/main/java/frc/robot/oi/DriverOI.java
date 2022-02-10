@@ -86,6 +86,14 @@ public class DriverOI {
         return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
     }
 
+    public Button getTurnTurretLeftButton(){
+        return new Button(() -> m_controller.getPOV() == 270);
+    }
+
+    public Button getTurnTurretRightButton(){
+        return new Button(() -> m_controller.getPOV() == 90);
+    }
+
     // ---------------- Drivetrain ----------------------------
 
     // public Button getResetEncodersButton() {
