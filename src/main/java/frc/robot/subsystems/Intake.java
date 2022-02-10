@@ -194,7 +194,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    setIntakeBrakeState();
+    setIntakeBrakeOverride();
 
     // Shuffleboard output
     m_intakeMotorEntry.setNumber(m_intakeMotor.getSelectedSensorVelocity());
@@ -239,14 +239,6 @@ public class Intake extends SubsystemBase {
     return m_commandsLayout;
   }
 
-  public void setIntakeBrakeState() {
-    if (feederHasBall()) {
-      setIntakeBrakeEnabled();
-    } else {
-      setIntakeBrakeDisabled();
-    }
-  }
-
   public void stopIntakeMotor(){
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
     setIntakeBrakeDisabled();
@@ -264,6 +256,18 @@ public class Intake extends SubsystemBase {
   public void startIntakeMotor(double output){
     setFeederBrakeEnabled();
     m_intakeMotor.set(ControlMode.PercentOutput, output);
+    setIntakeBrakeOverride();
+  }
+
+  /**
+   * sets the intake brake enabled if the feeder has a ball, and disabled if not
+   */
+  public void setIntakeBrakeOverride(){
+    if(feederHasBall()){
+      setIntakeBrakeEnabled();
+    } else {
+      setIntakeBrakeDisabled();
+    }
   }
 
   public void stopFeederMotor(){
@@ -276,34 +280,37 @@ public class Intake extends SubsystemBase {
    * @param output the percent output of the motor, between -1 and 1
    */
   public void startFeederMotor(double output){
-    System.out.println("Starting Feeder motor...");
-    setIntakeBrakeState();
     m_rightFeederMotor.set(ControlMode.PercentOutput, output);
+    setFeederBrakeEnabled();
   }
 
+  /**
+   * ignore feeder limit switch
+   */
   public void setFeederBrakeDisabled(){
-    m_rightFeederMotor.overrideLimitSwitchesEnable(false);
-    m_feederBrakeEnabled = false;
-    m_feederBrakeEnabledEntry.setBoolean(m_feederBrakeEnabled);
-  }
-
-  public void setFeederBrakeEnabled(){
+    //overriding the brake (true) means the brake is disabled
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
-    m_feederBrakeEnabled = true;
-    m_feederBrakeEnabledEntry.setBoolean(m_feederBrakeEnabled);
   }
 
-  
+  /**
+   * listen to feeder limit switch
+   */
+  public void setFeederBrakeEnabled(){
+    m_rightFeederMotor.overrideLimitSwitchesEnable(false);
+  }
+
+  /**
+   * listen to intake limit switch
+   */
   public void setIntakeBrakeEnabled(){
-    m_intakeMotor.overrideLimitSwitchesEnable(true);
-    m_intakeBrakeEnabled = true;
-    m_intakeBrakeEnabledEntry.setBoolean(m_intakeBrakeEnabled);
+    m_intakeMotor.overrideLimitSwitchesEnable(false);
   }
 
+  /**
+   * ignore intake limit switch - motor keeps running
+   */
   public void setIntakeBrakeDisabled(){
-    m_intakeMotor.overrideLimitSwitchesEnable(false);
-    m_intakeBrakeEnabled = false;
-    m_intakeBrakeEnabledEntry.setBoolean(m_intakeBrakeEnabled);
+    m_intakeMotor.overrideLimitSwitchesEnable(true);
   }
 
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
@@ -391,7 +398,11 @@ public class Intake extends SubsystemBase {
 
   public boolean isFeederMotorOn(){
     return (m_rightFeederMotor.getMotorOutputPercent() > 10);
-   }
+  }
+
+  
+
+
 
   // -----------------------------------------------------------
   // Simulation
