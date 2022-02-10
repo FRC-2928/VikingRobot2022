@@ -178,7 +178,7 @@ public class Intake extends SubsystemBase {
 
   /**
    * 
-   * @param output the percent output of the motor, between -1 and 1
+   * @param output the output of the motor, between -1 and 1
    */
   public void startIntakeMotor(double output){
     m_intakeMotor.set(ControlMode.PercentOutput, output);
@@ -204,7 +204,7 @@ public class Intake extends SubsystemBase {
 
   /**
    * 
-   * @param output the percent output of the motor, between -1 and 1
+   * @param output the output of the motor, between -1 and 1
    */
   public void startFeederMotor(double output){
     m_rightFeederMotor.set(ControlMode.PercentOutput, output);
@@ -310,18 +310,14 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean isIntakeMotorOn(){
-   return (m_intakeMotor.getMotorOutputPercent() > 10);
+    //not percent, range between -1 and 1
+    return (m_intakeMotor.getMotorOutputPercent() > .1);
   }
 
   public boolean isFeederMotorOn(){
-    return (m_rightFeederMotor.getMotorOutputPercent() > 10);
-  }
-
-  
-
-
-
-  
+    //not percent, range between -1 and 1
+    return (m_rightFeederMotor.getMotorOutputPercent() > .1);
+  }  
   
 }
 

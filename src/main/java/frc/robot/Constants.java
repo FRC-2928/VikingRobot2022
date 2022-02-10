@@ -211,6 +211,9 @@ public final class Constants {
         public static final double kTurretLeftLimit = 120;
         public static final double kTurretRightLimit = -120;
 
+        //TODO: set to actual desired value
+        public static final double kTurretMaxTicks = 1;
+
         // public static final double kTurretClimbPosition = 0; //Placeholders
         // public static final double kTurretControlPanelPosition = -90; //Placeholders
         

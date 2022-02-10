@@ -4,21 +4,17 @@
 
 package frc.robot.commands.TurretCommands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.Turret;
 
-public class TurnToTargetTest extends CommandBase {
-  private final Drivetrain m_drivetrain;
-  private final Turret m_turret;
-  private final static double kP = 0.05;
+public class RegisterTurret extends CommandBase {
 
-  /** Creates a new TurnToTargetTest. */
-  public TurnToTargetTest(Drivetrain drivetrain, Turret turret) {
+  Turret m_turret;
+  /** Creates a new RegisterTurret. */
+  public RegisterTurret(Turret turret) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain, turret);
-    m_drivetrain = drivetrain;
+    addRequirements(turret);
     m_turret = turret;
   }
 
@@ -29,21 +25,18 @@ public class TurnToTargetTest extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double measurement = m_turret.targetHorizontalOffset();
-    SmartDashboard.putNumber("Measurement", measurement);
-    double output = measurement * kP;
-    m_drivetrain.drive(0, output);
+    m_turret.setPower(.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.drive(0, 0);
+    m_turret.setSensorTicks(TurretConstants.kTurretMaxTicks);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_turret.isBrakeActivated();
   }
 }

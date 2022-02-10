@@ -6,17 +6,16 @@ package frc.robot.commands.TurretCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Turret;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TurnToTarget extends PIDCommand {
-  Drivetrain m_drivetrain;
+public class TurnTurretToTarget extends PIDCommand {
+  Turret m_turret;
 
   /** Creates a new TurnToTarget. */
-  public TurnToTarget(Drivetrain drivetrain, Turret turret) {
+  public TurnTurretToTarget(Turret turret) {
     super(
         // The controller that the command will use
         new PIDController(0.02, 0, 0),
@@ -27,18 +26,17 @@ public class TurnToTarget extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          drivetrain.drive(0, output);
+          turret.setTurretDegrees(output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain, turret);
-    m_drivetrain = drivetrain;
+    addRequirements(turret);
+    m_turret = turret;
     
     // Configure additional PID options by calling `getController` here.
   }
 
   public void initialize() {
-    super.initialize();
-    m_drivetrain.disableMotorSafety();  
+    super.initialize();  
     System.out.println("IN PID");  
   }
 
@@ -51,8 +49,6 @@ public class TurnToTarget extends PIDCommand {
   public void end(boolean interrupted) {
     super.end(interrupted);
     //SmartDashboard.putNumber("end heading", m_drivetrain.getHeading());
-    m_drivetrain.stopDrivetrain();
-    m_drivetrain.enableMotorSafety();
     System.out.println("Done PID");
   }
 

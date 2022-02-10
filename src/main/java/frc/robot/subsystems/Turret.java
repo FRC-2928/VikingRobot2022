@@ -71,6 +71,9 @@ public class Turret extends SubsystemBase {
 
       //Either using the integrated Falcon sensor or an external one, will change if needed
      m_turretMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
+
+    //  m_turretMotor.configForwardLimitSwitchSource(type, normalOpenOrClose);
+    //  m_turretMotor.configReverseLimitSwitchSource(type, normalOpenOrClose);
   }
 
   public void setTurretPIDF() {
@@ -117,6 +120,22 @@ public class Turret extends SubsystemBase {
     
   }
 
+  /**
+   * sets the power of the turret motor
+   * @param power the power value between -1 and 1
+   */
+  public void setPower(double power){
+    m_turretMotor.set(ControlMode.PercentOutput, power);
+  }
+
+  /**
+   * resets the encoder to the given tick value
+   * @param ticks the number of ticks the encoder should be set to
+   */
+  public void setSensorTicks(double ticks){
+    m_turretMotor.setSelectedSensorPosition(ticks);
+  }
+
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
@@ -142,5 +161,10 @@ public class Turret extends SubsystemBase {
     double offset = m_turretLimelight.getHorizontalOffset();
     SmartDashboard.putNumber("Horizontal Offset", offset);
     return offset;
+  }
+
+  //TODO: add limit switch
+  public boolean isBrakeActivated(){
+    return true;
   }
 }
