@@ -6,24 +6,26 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Turret;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TriggerEjectBall extends InstantCommand {
+public class EnableFeederBrake extends InstantCommand {
 
   Intake m_intake;
-  
-  public TriggerEjectBall(Intake intake) {
+  public EnableFeederBrake(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     m_intake = intake;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.setFeederBrakeDisabled();
-    m_intake.startFeederMotor(.2);
+
+    m_intake.setFeederBrakeEnabled();
+    
   }
 }

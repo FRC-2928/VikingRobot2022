@@ -23,5 +23,6 @@ public class EjectBall extends SequentialCommandGroup {
                 new TriggerEjectBall(intake), 
                 new WaitCommand(.02),
                 new CloseRamp(intake));
+                new EnableFeederBrake(intake);
   }
 }
