@@ -5,11 +5,6 @@
         "header": {
           "open": true
         }
-      },
-      "Talon FX[15]/Integrated Sensor": {
-        "header": {
-          "open": true
-        }
       }
     }
   },
@@ -17,6 +12,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Drivetrain": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/Transmission": "Subsystem",
       "/LiveWindow/Turret": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
@@ -24,6 +20,8 @@
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/Shuffleboard/Intake/Commands/ToggleFeederMotor": "Command",
+      "/Shuffleboard/Intake/Commands/ToggleIntakeMotor": "Command",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },

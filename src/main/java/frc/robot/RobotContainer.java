@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,6 +16,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -96,7 +100,11 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
 
-    m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret));        
+    m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret));  
+    
+    m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
+    m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
+    m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerIntakeBrakeActivatedSim, m_intake)); 
   }
 
   public void onAutoInit(){

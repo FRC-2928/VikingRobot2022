@@ -253,11 +253,15 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
+        public static double kIntakeDefaultSpeed = 0.2;
+        public static double kFeederDefaultSpeed = 0.2;
+        public static double kFeederHighSpeed = 0.8;
+        
         public static double IntakekP = 0.055;
         public static double IntakekI = 0;
         public static double IntakekD = 0.5;
         public static double IntakekF = 0.4;
-		public static double kClimberErrorThreshold = 0.5; // 5 cm
+		// public static double kClimberErrorThreshold = 0.5; // 5 cm
     }
 
     public static final class LimelightConstants{
