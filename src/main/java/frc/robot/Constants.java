@@ -154,13 +154,9 @@ public final class Constants {
     }
     
     public static final class FlywheelConstants {
-        //Setpoints in RPM
-        // public static final double kSetpointWall = 3000;
-        // public static final double kSetpointInitiationLine = 4000;
-        // public static final double kSetpointCloseTrench = 5000;
-        // public static final double kSetpointFarTrench = 6000;
-
-        // public static final double kFlywheelErrorThreshold = 75;
+        public static final double ksVolts = 0.6024;
+        public static final double kvVoltSecondsPerMeter = 0.21907;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
 
         //TODO: change to correct values
         public static final Gains kGainsFlywheel = new Gains(0,  0,   0,   0,   0,  1.00);
@@ -260,6 +256,10 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
+        public static final double ksVolts = 0.6024;
+        public static final double kvVoltSecondsPerMeter = 0.21907;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
+
         public static double IntakekP = 0.055;
         public static double IntakekI = 0;
         public static double IntakekD = 0.5;

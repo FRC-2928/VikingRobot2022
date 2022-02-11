@@ -25,6 +25,5 @@ public class SetRampStable extends InstantCommand {
   public void initialize() {
 
     m_intake.setRampState(true);
-
   }
 }

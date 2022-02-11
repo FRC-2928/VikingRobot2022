@@ -35,6 +35,8 @@ import frc.robot.subsystems.Turret;
 import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.DrivetrainCommands.TurnToTarget;
+import frc.robot.commands.IntakeCommands.EjectBall;
+import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
 import frc.robot.commands.TurretCommands.MoveTurret;
@@ -97,7 +99,13 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
 
-    m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret));        
+    m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret)); 
+    
+    m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
+    m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
+    m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerIntakeSwitchActivatedSim, m_intake));
+    m_intake.getCommandsLayout().add(new ShootBall(m_intake)); 
+    m_intake.getCommandsLayout().add(new EjectBall(m_intake)); 
   }
 
   public void onAutoInit(){

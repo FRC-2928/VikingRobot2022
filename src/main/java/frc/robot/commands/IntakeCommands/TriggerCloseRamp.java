@@ -25,6 +25,7 @@ public class TriggerCloseRamp extends InstantCommand {
   
     m_intake.setRampState(false);
     m_intake.closeRamp();
+    System.out.println("Trigger close ramp...");
   
   }
 }

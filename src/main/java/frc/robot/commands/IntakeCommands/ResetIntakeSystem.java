@@ -11,10 +11,10 @@ import frc.robot.subsystems.Turret;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class EnableFeederBrake extends InstantCommand {
+public class ResetIntakeSystem extends InstantCommand {
 
   Intake m_intake;
-  public EnableFeederBrake(Intake intake) {
+  public ResetIntakeSystem(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
     m_intake = intake;
@@ -26,6 +26,9 @@ public class EnableFeederBrake extends InstantCommand {
   public void initialize() {
 
     m_intake.setFeederBrakeEnabled();
+    m_intake.startFeederMotor(0.2);
     
+    m_intake.setIntakeBrakeDisabled();
+    m_intake.startIntakeMotor(0.2);
   }
 }

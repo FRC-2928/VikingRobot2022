@@ -4,6 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake;
@@ -22,6 +23,8 @@ public class OpenRamp extends SequentialCommandGroup {
       
       new WaitCommand(0.01),
       
+      // new InstantCommand(intake::setRampStable,intake),
+
       new SetRampStable(intake));
 
   }

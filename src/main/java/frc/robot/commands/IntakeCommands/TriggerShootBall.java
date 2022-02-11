@@ -23,7 +23,12 @@ public class TriggerShootBall extends CommandBase {
   @Override
   public void initialize() {
     if (m_intake.readyToShoot()) {
+      // Override all brakes
+      System.out.println("Ready to shoot...");
       m_intake.setFeederBrakeDisabled();
+      m_intake.setIntakeBrakeDisabled();
+
+      // Start feeder motor at high power
       m_intake.startFeederMotor(0.8);
       m_counter = 0;
     } else {
@@ -41,12 +46,13 @@ public class TriggerShootBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setFeederBrakeEnabled();
+    m_intake.startFeederMotor(0.2);
+    m_intake.startIntakeMotor(0.2);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_counter > 2;
+    return m_intake.intakeCleared() && m_intake.feederCleared();
   }
 }

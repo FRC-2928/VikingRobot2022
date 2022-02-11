@@ -30,8 +30,10 @@ public class ToggleIntakeMotor extends InstantCommand {
     
     if(m_intake.isIntakeMotorOn()){
       m_intake.stopIntakeMotor();
+      System.out.println("Intake motor stopped...");
     } else {
       m_intake.startIntakeMotor(.2);
+      System.out.println("Intake motor started...");
     }
   }
 }

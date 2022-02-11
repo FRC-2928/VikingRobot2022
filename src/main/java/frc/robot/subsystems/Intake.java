@@ -5,12 +5,19 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +27,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.simulation.IntakeSim;
+
+import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -29,6 +39,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -56,7 +67,33 @@ public class Intake extends SubsystemBase {
   private boolean m_isFeederClear;
   private boolean m_rampstable = true;
 
+  // ------- Shuffleboard variables ----------------------------------------
+  private ShuffleboardTab m_intakeTab;
+  private ShuffleboardLayout m_commandsLayout;
+  NetworkTableEntry m_intakeBrakeEnabledEntry, m_feederBrakeEnabledEntry;
+  NetworkTableEntry m_intakeBrakeActivatedEntry, m_feederBrakeActivatedEntry;
+  NetworkTableEntry m_intakeHasBallEntry, m_feederHasBallEntry;
+  NetworkTableEntry m_intakeMotorEntry, m_feederMotorEntry;
+  NetworkTableEntry m_rampEntry;
 
+  // ------ Simulation classes to help us simulate our robot ----------------
+  TalonSRXSimCollection m_intakeMotorSim = m_intakeMotor.getSimCollection();
+  TalonSRXSimCollection m_leftFeederMotorSim = m_leftFeederMotor.getSimCollection();
+  TalonSRXSimCollection m_rightFeederMotorSim = m_rightFeederMotor.getSimCollection();
+  private boolean m_intakeSwitchActivatedSim = false;
+  private boolean m_feederSwitchActivatedSim = false;
+  private boolean m_intakeBrakeActivatedSim = false;
+  private boolean m_feederBrakeActivatedSim = false;
+  private boolean m_rampOpenSim = false;
+  private int m_cycles = 0;
+  private boolean m_intakeBrakeEnabled, m_feederBrakeEnabled;
+
+  // private final LinearSystem<N1, N1, N1> m_intakeSystem =
+  //   LinearSystemId.identifyVelocitySystem(IntakeConstants.kvVoltSecondsPerMeter, 
+  //                                         IntakeConstants.kaVoltSecondsSquaredPerMeter);
+
+  private final IntakeSim m_intakeSim = new IntakeSim();                                        
+  
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
@@ -64,8 +101,8 @@ public class Intake extends SubsystemBase {
     configMotors();
     setIntakePIDF();
     resetEncoders();
-    m_isFeederClear = false;
-    
+    setupShuffleboard();
+    m_isFeederClear = false;  
   }
 
   public void configMotors(){
@@ -127,7 +164,41 @@ public class Intake extends SubsystemBase {
   }
 
   public void setupShuffleboard() {
-    ShuffleboardTab m_intakeTab = Shuffleboard.getTab("Intake");  
+    m_intakeTab = Shuffleboard.getTab("Intake"); 
+
+    // Intake
+    ShuffleboardLayout intakeLayout = Shuffleboard.getTab("Intake")
+      .getLayout("Intake", BuiltInLayouts.kList)
+      .withSize(1, 3)
+      .withPosition(5, 0); 
+    m_intakeBrakeEnabledEntry = intakeLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
+    m_intakeBrakeActivatedEntry = intakeLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
+    m_intakeMotorEntry = intakeLayout.add("Motor Speed", m_intakeMotor.getMotorOutputPercent()).getEntry(); 
+    m_intakeHasBallEntry = intakeLayout.add("Has Ball", intakeHasBall()).getEntry();   
+  
+    // Feeder
+    ShuffleboardLayout feederLayout = Shuffleboard.getTab("Intake")
+      .getLayout("Feeder", BuiltInLayouts.kList)
+      .withSize(1, 3)
+      .withPosition(6, 0); 
+    m_feederBrakeEnabledEntry = feederLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
+    m_feederBrakeActivatedEntry = feederLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
+    m_feederMotorEntry = feederLayout.add("Motor Speed", m_rightFeederMotor.getMotorOutputPercent()).getEntry();  
+    m_feederHasBallEntry = feederLayout.add("Has Ball", feederHasBall()).getEntry(); 
+
+    // Ramp
+    ShuffleboardLayout rampLayout = Shuffleboard.getTab("Intake")
+      .getLayout("Ramp", BuiltInLayouts.kList)
+      .withSize(1, 1)
+      .withPosition(8, 0); 
+    m_rampEntry = rampLayout.add("Ramp Open", isRampOpen()).getEntry();  
+
+    // Commands
+    m_commandsLayout = Shuffleboard.getTab("Intake")
+      .getLayout("Commands", BuiltInLayouts.kList)
+      .withSize(2, 3)
+      .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
+      .withPosition(2, 0);  
   }
 
 
@@ -137,7 +208,22 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+
+    // Shuffleboard output
+    m_intakeMotorEntry.setNumber(m_intakeMotor.getMotorOutputPercent());
+    m_feederMotorEntry.setNumber(m_rightFeederMotor.getMotorOutputPercent());
+
+    m_intakeBrakeActivatedEntry.setBoolean(isIntakeBrakeActivated());
+    m_feederBrakeActivatedEntry.setBoolean(isFeederBrakeActivated());
+
+    m_intakeHasBallEntry.setBoolean(intakeHasBall());
+    m_feederHasBallEntry.setBoolean(feederHasBall());
+
+    m_feederBrakeEnabledEntry.setBoolean(isFeederBrakeEnabled());
+    m_intakeBrakeEnabledEntry.setBoolean(isIntakeBrakeEnabled());
+
+    m_rampEntry.setBoolean(isRampOpen());
+
 
     Color detectedColor = m_colorSensor.getColor();
 
@@ -170,10 +256,12 @@ public class Intake extends SubsystemBase {
     
   }
 
+  public ShuffleboardLayout getCommandsLayout() {
+    return m_commandsLayout;
+  }
+
   public void stopIntakeMotor(){
-
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
-
   }
 
   /**
@@ -197,9 +285,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void stopFeederMotor(){
-
     m_rightFeederMotor.set(ControlMode.PercentOutput, 0);
-
   }
 
   /**
@@ -217,6 +303,8 @@ public class Intake extends SubsystemBase {
   public void setFeederBrakeDisabled(){
     //overriding the brake (true) means the brake is disabled
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
+    m_feederBrakeEnabled = false;
+    m_feederBrakeActivatedSim = false;  
   }
 
   /**
@@ -224,6 +312,7 @@ public class Intake extends SubsystemBase {
    */
   public void setFeederBrakeEnabled(){
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
+    m_feederBrakeEnabled = true; 
   }
 
   /**
@@ -231,6 +320,7 @@ public class Intake extends SubsystemBase {
    */
   public void setIntakeBrakeEnabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(false);
+    m_intakeBrakeEnabled = true;
   }
 
   /**
@@ -238,15 +328,19 @@ public class Intake extends SubsystemBase {
    */
   public void setIntakeBrakeDisabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(true);
+    m_intakeBrakeEnabled = false;
+    m_intakeBrakeActivatedSim = false;
   }
 
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
   public void openRamp(){
     m_rampSolenoid.set(true);
+    m_rampOpenSim = true;
   }
 
   public void closeRamp(){
     m_rampSolenoid.set(false);
+    m_rampOpenSim = false;
   }
 
   public void setFeederCleared(){
@@ -255,8 +349,16 @@ public class Intake extends SubsystemBase {
 
   public void setRampState(boolean state){
     m_rampstable = state;
-
   }
+
+  public void setRampStable() {
+    m_rampstable = true;
+  }
+
+  public void setRampUnstable() {
+    m_rampstable = false;
+  }
+
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
@@ -269,40 +371,60 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean isFeederBrakeActivated(){
-    //clear the talon to see if brake is on
-    return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
-    
+    // Simulate this return if not running on the real robot
+    if (RobotBase.isReal()) {
+      return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
+    }
+    return m_feederBrakeActivatedSim; 
   }
 
   public boolean isFeederBrakeDeactivated(){
     return !(isFeederBrakeActivated());
   }
    
-  public boolean isFeederClear(){
-    
-    return m_isFeederClear;
+  public boolean isIntakeBrakeActivated() {
+    // Simulate this return if not running on the real robot
+    if (RobotBase.isReal()) {
+      return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
+    }
+    return m_intakeBrakeActivatedSim;
+  }
 
+  public boolean isIntakeSwitchActivated() {
+    // Simulate this return if not running on the real robot
+    if (RobotBase.isReal()) {
+      return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
+    }
+    return m_intakeSwitchActivatedSim;
   }
 
   public boolean intakeHasBall(){
+    return feederHasBall() && isIntakeBrakeActivated();
+  }
 
-    return isIntakeArmUp();
-
+  public boolean intakeCleared() {
+    return !intakeHasBall();
   }
 
   public boolean feederHasBall(){
     return isFeederBrakeActivated();  
   }
 
+  public boolean feederCleared() {
+    return !feederHasBall();
+  }
+
   public boolean isIntakeArmUp(){
-
-    return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
-
+    return isIntakeBrakeActivated();
   }
 
   //TODO: maybe switch true to false depending on which solenoid state is the open ramp
   public boolean isRampOpen(){
-    return (m_rampSolenoid.get());
+    // Simulate this return if not running on the real robot
+    if (RobotBase.isReal()) {
+      return (m_rampSolenoid.get());
+    }  
+    return m_rampOpenSim;
   }
 
   public boolean isRampClosed(){
@@ -318,6 +440,80 @@ public class Intake extends SubsystemBase {
     //not percent, range between -1 and 1
     return (m_rightFeederMotor.getMotorOutputPercent() > .1);
   }  
+
+  public boolean isIntakeBrakeEnabled() {
+    return m_intakeBrakeEnabled;
+  }
+
+  public boolean isFeederBrakeEnabled() {
+    return m_feederBrakeEnabled;
+  }
+
+  // -----------------------------------------------------------
+  // Simulation
+  // -----------------------------------------------------------
   
+  public void simulationPeriodic() {
+
+    if (isIntakeSwitchActivated()) {
+      if (feederHasBall()) {
+        triggerIntakeBrakeActivatedSim();
+      }
+
+      if (m_cycles > 10) {
+        triggerFeederBrakeActivatedSim(); 
+        triggerIntakeSwitchDeactivatedSim();         
+      }       
+      m_cycles += 1;
+    }
+
+    if (feederHasBall()) {
+      setIntakeBrakeEnabled();
+    }
+
+    // setIntakeBrakeOverride();
+
+    /* Pass the robot battery voltage to the simulated Talon SRXs */
+    m_intakeMotorSim.setBusVoltage(RobotController.getInputVoltage());
+    m_leftFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());
+    m_rightFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());
+
+    // In this method, we update our simulation of what our intake is doing
+    // First, we set our "inputs" (voltages)
+    m_intakeSim.setInput(m_intakeMotorSim.getMotorOutputLeadVoltage());
+    m_intakeSim.setInput(m_rightFeederMotorSim.getMotorOutputLeadVoltage());
+
+    // Next, we update it. The standard loop time is 20ms.
+    m_intakeSim.update(0.02);
+
+    // Finally, we set our simulated encoder's readings
+    m_intakeMotorSim.setQuadratureRawPosition((int)m_intakeSim.getOutput(0));
+    m_rightFeederMotorSim.setQuadratureRawPosition((int)m_intakeSim.getOutput(0));
+  }  
+  
+
+  public void triggerIntakeSwitchActivatedSim() {
+    m_intakeSwitchActivatedSim = true;
+    m_cycles = 0;
+  }
+
+  public void triggerIntakeSwitchDeactivatedSim() {
+    m_intakeSwitchActivatedSim = false;
+  }
+
+  public void triggerIntakeBrakeActivatedSim() {
+    m_intakeBrakeActivatedSim = true;
+    stopIntakeMotor();
+  }
+
+  public void triggerIntakeBrakeDeactivatedSim() {
+    m_intakeBrakeActivatedSim = false;
+  }
+
+  public void triggerFeederBrakeActivatedSim() {
+    m_feederBrakeActivatedSim = true;
+    stopFeederMotor();
+  }
+
 }
 
