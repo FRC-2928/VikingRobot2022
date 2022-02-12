@@ -260,6 +260,7 @@ public class Intake extends SubsystemBase {
     return m_commandsLayout;
   }
 
+  // --------- Intake Motor ------------------------------
   public void stopIntakeMotor(){
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
   }
@@ -284,6 +285,26 @@ public class Intake extends SubsystemBase {
     }
   }
 
+  /**
+   * listen to intake limit switch
+   */
+  public void setIntakeBrakeEnabled(){
+    m_intakeMotor.overrideLimitSwitchesEnable(false);
+    m_intakeBrakeEnabled = true;
+  }
+
+  /**
+   * ignore intake limit switch - motor keeps running
+   */
+  public void setIntakeBrakeDisabled(){
+    m_intakeMotor.overrideLimitSwitchesEnable(true);
+    m_intakeBrakeEnabled = false;
+    if (!RobotBase.isReal()) {
+      triggerDeactiveIntakeSwitchSim();
+    }
+  }
+
+  // --------- Feeder Motor ------------------------------
   public void stopFeederMotor(){
     m_rightFeederMotor.set(ControlMode.PercentOutput, 0);
   }
@@ -304,7 +325,9 @@ public class Intake extends SubsystemBase {
     //overriding the brake (true) means the brake is disabled
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
     m_feederBrakeEnabled = false;
-    m_feederBrakeActivatedSim = false;  
+    if (!RobotBase.isReal()) {
+      triggerDeactivateFeederSwitchSim();
+    }
   }
 
   /**
@@ -315,22 +338,12 @@ public class Intake extends SubsystemBase {
     m_feederBrakeEnabled = true; 
   }
 
-  /**
-   * listen to intake limit switch
-   */
-  public void setIntakeBrakeEnabled(){
-    m_intakeMotor.overrideLimitSwitchesEnable(false);
-    m_intakeBrakeEnabled = true;
+  public void setFeederCleared(){
+    setFeederBrakeEnabled();
+    m_isFeederClear = true;
   }
 
-  /**
-   * ignore intake limit switch - motor keeps running
-   */
-  public void setIntakeBrakeDisabled(){
-    m_intakeMotor.overrideLimitSwitchesEnable(true);
-    m_intakeBrakeEnabled = false;
-    m_intakeBrakeActivatedSim = false;
-  }
+  // --------- Ramp ------------------------------
 
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
   public void openRamp(){
@@ -341,10 +354,6 @@ public class Intake extends SubsystemBase {
   public void closeRamp(){
     m_rampSolenoid.set(false);
     m_rampOpenSim = false;
-  }
-
-  public void setFeederCleared(){
-    m_isFeederClear = true;
   }
 
   public void setRampState(boolean state){
@@ -370,24 +379,15 @@ public class Intake extends SubsystemBase {
     return false;
   }
 
-  public boolean isFeederBrakeActivated(){
-    // Simulate this return if not running on the real robot
-    if (RobotBase.isReal()) {
-      return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
-    }
-    return m_feederBrakeActivatedSim; 
-  }
+  // --------- Intake ------------------------------  
 
-  public boolean isFeederBrakeDeactivated(){
-    return !(isFeederBrakeActivated());
-  }
-   
   public boolean isIntakeBrakeActivated() {
-    // Simulate this return if not running on the real robot
-    if (RobotBase.isReal()) {
-      return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
-    }
-    return m_intakeBrakeActivatedSim;
+    return isIntakeSwitchActivated() && isIntakeBrakeEnabled();
+    // // Simulate this return if not running on the real robot
+    // if (RobotBase.isReal()) {
+    //   return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
+    // }
+    // return m_intakeBrakeActivatedSim;
   }
 
   public boolean isIntakeSwitchActivated() {
@@ -406,6 +406,35 @@ public class Intake extends SubsystemBase {
     return !intakeHasBall();
   }
 
+
+  public boolean isIntakeMotorOn(){
+    //not percent, range between -1 and 1
+    return (m_intakeMotor.getMotorOutputPercent() > .1);
+  }
+
+  public boolean isIntakeBrakeEnabled() {
+    return m_intakeBrakeEnabled;
+  }
+
+  // --------- Feeder ------------------------------
+
+  public boolean isFeederBrakeActivated(){
+    return isFeederSwitchActivated() && isFeederBrakeEnabled();
+  }
+
+  public boolean isFeederSwitchActivated() {
+    // Simulate this return if not running on the real robot
+    if (RobotBase.isReal()) {
+      return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
+    }
+    // return m_intakeSim.isFeederSwitchClosed();
+    return m_feederSwitchActivatedSim; 
+  }
+
+  public boolean isFeederBrakeDeactivated(){
+    return !(isFeederBrakeActivated());
+  }
+   
   public boolean feederHasBall(){
     return isFeederBrakeActivated();  
   }
@@ -414,9 +443,16 @@ public class Intake extends SubsystemBase {
     return !feederHasBall();
   }
 
-  public boolean isIntakeArmUp(){
-    return isIntakeBrakeActivated();
+  public boolean isFeederMotorOn(){
+    //not percent, range between -1 and 1
+    return (m_rightFeederMotor.getMotorOutputPercent() > .1);
+  }  
+
+  public boolean isFeederBrakeEnabled() {
+    return m_feederBrakeEnabled;
   }
+
+  // --------- Ramp ------------------------------
 
   //TODO: maybe switch true to false depending on which solenoid state is the open ramp
   public boolean isRampOpen(){
@@ -431,24 +467,6 @@ public class Intake extends SubsystemBase {
     return !(isRampOpen());
   }
 
-  public boolean isIntakeMotorOn(){
-    //not percent, range between -1 and 1
-    return (m_intakeMotor.getMotorOutputPercent() > .1);
-  }
-
-  public boolean isFeederMotorOn(){
-    //not percent, range between -1 and 1
-    return (m_rightFeederMotor.getMotorOutputPercent() > .1);
-  }  
-
-  public boolean isIntakeBrakeEnabled() {
-    return m_intakeBrakeEnabled;
-  }
-
-  public boolean isFeederBrakeEnabled() {
-    return m_feederBrakeEnabled;
-  }
-
   // -----------------------------------------------------------
   // Simulation
   // -----------------------------------------------------------
@@ -457,12 +475,12 @@ public class Intake extends SubsystemBase {
 
     if (isIntakeSwitchActivated()) {
       if (feederHasBall()) {
-        triggerIntakeBrakeActivatedSim();
+        triggerActivateIntakeSwitchSim();
       }
 
       if (m_cycles > 10) {
-        triggerFeederBrakeActivatedSim(); 
-        triggerIntakeSwitchDeactivatedSim();         
+        triggerActivateFeederSwitchSim(); 
+        triggerDeactiveIntakeSwitchSim();         
       }       
       m_cycles += 1;
     }
@@ -471,18 +489,26 @@ public class Intake extends SubsystemBase {
       setIntakeBrakeEnabled();
     }
 
-    // setIntakeBrakeOverride();
-
     /* Pass the robot battery voltage to the simulated Talon SRXs */
-    m_intakeMotorSim.setBusVoltage(RobotController.getInputVoltage());
-    m_leftFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());
-    m_rightFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());
+    // If the brake is activated we simulate the fact that the motor has stopped.
+    if (isIntakeBrakeActivated()) {
+      m_intakeMotorSim.setBusVoltage(0);
+    } else {
+      m_intakeMotorSim.setBusVoltage(RobotController.getInputVoltage());
+    }
 
-    // In this method, we update our simulation of what our intake is doing
+    if (isFeederBrakeActivated()) {
+      m_rightFeederMotorSim.setBusVoltage(0);
+    } else {
+      m_rightFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());
+    }
+    m_leftFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());
+    
+    // In this method, we update our simulation of what our intake is doing.
     // First, we set our "inputs" (voltages)
     m_intakeSim.setInput(m_intakeMotorSim.getMotorOutputLeadVoltage());
     m_intakeSim.setInput(m_rightFeederMotorSim.getMotorOutputLeadVoltage());
-
+    
     // Next, we update it. The standard loop time is 20ms.
     m_intakeSim.update(0.02);
 
@@ -491,28 +517,21 @@ public class Intake extends SubsystemBase {
     m_rightFeederMotorSim.setQuadratureRawPosition((int)m_intakeSim.getOutput(0));
   }  
   
-
-  public void triggerIntakeSwitchActivatedSim() {
+  public void triggerActivateIntakeSwitchSim() {
     m_intakeSwitchActivatedSim = true;
     m_cycles = 0;
   }
 
-  public void triggerIntakeSwitchDeactivatedSim() {
+  public void triggerDeactiveIntakeSwitchSim() {
     m_intakeSwitchActivatedSim = false;
   }
 
-  public void triggerIntakeBrakeActivatedSim() {
-    m_intakeBrakeActivatedSim = true;
-    stopIntakeMotor();
+  public void triggerActivateFeederSwitchSim() {
+    m_feederSwitchActivatedSim = true;
   }
 
-  public void triggerIntakeBrakeDeactivatedSim() {
-    m_intakeBrakeActivatedSim = false;
-  }
-
-  public void triggerFeederBrakeActivatedSim() {
-    m_feederBrakeActivatedSim = true;
-    stopFeederMotor();
+  public void triggerDeactivateFeederSwitchSim() {
+    m_feederSwitchActivatedSim = false;
   }
 
 }

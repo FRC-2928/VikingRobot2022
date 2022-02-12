@@ -32,7 +32,7 @@ public class TriggerShootBall extends CommandBase {
       m_intake.startFeederMotor(0.8);
       m_counter = 0;
     } else {
-      m_counter = 9;
+      m_counter = 99;
     }
   }
 
@@ -46,6 +46,7 @@ public class TriggerShootBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.setFeederBrakeEnabled();
     m_intake.startFeederMotor(0.2);
     m_intake.startIntakeMotor(0.2);
   }
