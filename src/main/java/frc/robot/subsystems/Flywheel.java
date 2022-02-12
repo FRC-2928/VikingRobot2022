@@ -39,7 +39,8 @@ public class Flywheel extends SubsystemBase {
   FlywheelSim m_flywheelSim = new FlywheelSim(FlywheelConstants.kFlywheelLinearSystem);
 
   ShuffleboardLayout m_flywheelLayout;
-  NetworkTableEntry m_flywheelEntry;
+  NetworkTableEntry m_flywheelSpeedEntry;
+  NetworkTableEntry m_flywheelVoltageEntry;
   private ShuffleboardLayout m_commandsLayout;
 
 
@@ -102,8 +103,8 @@ public class Flywheel extends SubsystemBase {
             .getLayout("Flywheels", BuiltInLayouts.kList)
             .withSize(2, 2)
             .withPosition(0, 0);
-          m_flywheelEntry = m_flywheelLayout.add("Flywheel Speed", getVelocity()).getEntry();
-          m_flywheelEntry = m_flywheelLayout.add
+          m_flywheelSpeedEntry = m_flywheelLayout.add("Flywheel Motor Speed", getVelocity()).getEntry();
+          m_flywheelVoltageEntry = m_flywheelLayout.add
             ("Sim Motor Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
           
     m_commandsLayout = Shuffleboard.getTab("Flywheel")
@@ -127,6 +128,9 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
     SmartDashboard.putNumber("Flywheel Sim Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage());
+
+    m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
+    
   }
 
   public void resetEncoders(){
@@ -142,11 +146,11 @@ public class Flywheel extends SubsystemBase {
     //turn change in ticks per sec to change in ticks per 100 ms
     velocity /= 10;
 
-    //if(RobotBase.isReal()){
+    if(RobotBase.isReal()){
       m_flywheelTalon.set(ControlMode.Velocity, velocity);
-    //} else {
-    //  m_flywheelMotorSim.setIntegratedSensorVelocity((int)velocity);
-    //}
+    } else {
+      m_flywheelMotorSim.setBusVoltage(velocity); //((int)velocity);
+    }
     
   }
 
@@ -223,6 +227,8 @@ public class Flywheel extends SubsystemBase {
 
     //set the encoder values from the sim motor's output
     m_flywheelMotorSim.setIntegratedSensorRawPosition((int)m_flywheelSim.getOutput(0));
+
+    m_flywheelVoltageEntry.setNumber(m_flywheelMotorSim.getMotorOutputLeadVoltage());
 
   }
 
