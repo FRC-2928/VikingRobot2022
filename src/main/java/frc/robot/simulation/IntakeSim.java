@@ -13,10 +13,8 @@ import frc.robot.Constants.IntakeConstants;
 /** Add your docs here. */
 public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
 
-    private boolean m_intakeSwitchActivatedSim = false;
-    private boolean m_feederSwitchActivatedSim = false;
-    private boolean m_intakeBrakeActivatedSim = false;
-    private boolean m_feederBrakeActivatedSim = false;
+    private boolean m_intakeSwitchClosed = false;
+    private boolean m_feederSwitchClosed = false;
     private boolean m_rampOpenSim = false;
     private int m_cycles = 0;
 
@@ -32,22 +30,29 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
 
     // ------------- Intake --------------------------
 
-    public void triggerActivateIntakeSwitchSim() {
-        m_intakeSwitchActivatedSim = true;
+    public void triggerCloseIntakeSwitchSim() {
+        m_intakeSwitchClosed = true;
         m_cycles = 0;
     }
     
-      public void triggerDeactiveIntakeSwitchSim() {
-        m_intakeSwitchActivatedSim = false;
+      public void triggerOpenIntakeSwitchSim() {
+        m_intakeSwitchClosed = false;
     }
 
+    public boolean isIntakeSwitchClosed() {
+        return m_intakeSwitchClosed;
+    }
     // ------------- Feeder --------------------------
-    public void triggerActivateFeederSwitchSim() {
-        m_feederSwitchActivatedSim = true;
+    public void triggerCloseFeederSwitchSim() {
+        m_feederSwitchClosed = true;
     }
 
-    public void triggerDeactivateFeederSwitchSim() {
-        m_feederSwitchActivatedSim = false;
+    public void triggerOpenFeederSwitchSim() {
+        m_feederSwitchClosed = false;
+    }
+
+    public boolean isFeederSwitchClosed() {
+        return m_feederSwitchClosed;
     }
 
 }

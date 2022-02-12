@@ -14,19 +14,15 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.RobotMap;
-import frc.robot.Constants.TurretConstants;
 import frc.robot.simulation.IntakeSim;
 
 import java.util.Map;
@@ -64,7 +60,7 @@ public class Intake extends SubsystemBase {
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
-  private boolean m_isFeederClear;
+  // private boolean m_isFeederClear;
   private boolean m_rampStable = true;
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -80,19 +76,15 @@ public class Intake extends SubsystemBase {
   TalonSRXSimCollection m_intakeMotorSim = m_intakeMotor.getSimCollection();
   TalonSRXSimCollection m_leftFeederMotorSim = m_leftFeederMotor.getSimCollection();
   TalonSRXSimCollection m_rightFeederMotorSim = m_rightFeederMotor.getSimCollection();
-  private boolean m_intakeSwitchActivatedSim = false;
-  private boolean m_feederSwitchActivatedSim = false;
-  private boolean m_intakeBrakeActivatedSim = false;
-  private boolean m_feederBrakeActivatedSim = false;
+  // private boolean m_intakeSwitchActivatedSim = false;
+  // private boolean m_feederSwitchActivatedSim = false;
+  // private boolean m_intakeBrakeActivatedSim = false;
+  // private boolean m_feederBrakeActivatedSim = false;
   private boolean m_rampOpenSim = false;
   private int m_cycles = 0;
   private boolean m_intakeBrakeEnabled, m_feederBrakeEnabled;
 
-  // private final LinearSystem<N1, N1, N1> m_intakeSystem =
-  //   LinearSystemId.identifyVelocitySystem(IntakeConstants.kvVoltSecondsPerMeter, 
-  //                                         IntakeConstants.kaVoltSecondsSquaredPerMeter);
-
-  private final IntakeSim m_intakeSim = new IntakeSim();                                        
+  private final IntakeSim m_intakeSim = new IntakeSim(IntakeConstants.kIntakeSystem);                                        
   
   // -----------------------------------------------------------
   // Initialization
@@ -102,7 +94,7 @@ public class Intake extends SubsystemBase {
     setIntakePIDF();
     resetEncoders();
     setupShuffleboard();
-    m_isFeederClear = false;  
+    // m_isFeederClear = false;  
   }
 
   public void configMotors(){
@@ -300,7 +292,7 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.overrideLimitSwitchesEnable(true);
     m_intakeBrakeEnabled = false;
     if (!RobotBase.isReal()) {
-      triggerDeactiveIntakeSwitchSim();
+      m_intakeSim.triggerOpenIntakeSwitchSim();
     }
   }
 
@@ -326,7 +318,7 @@ public class Intake extends SubsystemBase {
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
     m_feederBrakeEnabled = false;
     if (!RobotBase.isReal()) {
-      triggerDeactivateFeederSwitchSim();
+      m_intakeSim.triggerOpenFeederSwitchSim();
     }
   }
 
@@ -338,10 +330,10 @@ public class Intake extends SubsystemBase {
     m_feederBrakeEnabled = true; 
   }
 
-  public void setFeederCleared(){
-    setFeederBrakeEnabled();
-    m_isFeederClear = true;
-  }
+  // public void setFeederCleared(){
+  //   setFeederBrakeEnabled();
+  //   m_isFeederClear = true;
+  // }
 
   // --------- Ramp ------------------------------
 
@@ -379,15 +371,14 @@ public class Intake extends SubsystemBase {
     return false;
   }
 
+  public boolean hasValidBall() {
+    return true;
+  }
+
   // --------- Intake ------------------------------  
 
   public boolean isIntakeBrakeActivated() {
     return isIntakeSwitchActivated() && isIntakeBrakeEnabled();
-    // // Simulate this return if not running on the real robot
-    // if (RobotBase.isReal()) {
-    //   return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
-    // }
-    // return m_intakeBrakeActivatedSim;
   }
 
   public boolean isIntakeSwitchActivated() {
@@ -395,7 +386,8 @@ public class Intake extends SubsystemBase {
     if (RobotBase.isReal()) {
       return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
     }
-    return m_intakeSwitchActivatedSim;
+    return m_intakeSim.isIntakeSwitchClosed();
+    // return m_intakeSwitchActivatedSim;
   }
 
   public boolean intakeHasBall(){
@@ -427,8 +419,8 @@ public class Intake extends SubsystemBase {
     if (RobotBase.isReal()) {
       return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
     }
-    // return m_intakeSim.isFeederSwitchClosed();
-    return m_feederSwitchActivatedSim; 
+    return m_intakeSim.isFeederSwitchClosed();
+    // return m_feederSwitchActivatedSim; 
   }
 
   public boolean isFeederBrakeDeactivated(){
@@ -473,14 +465,14 @@ public class Intake extends SubsystemBase {
   
   public void simulationPeriodic() {
 
-    if (isIntakeSwitchActivated()) {
+    if (m_intakeSim.isIntakeSwitchClosed()) {
       if (feederHasBall()) {
-        triggerActivateIntakeSwitchSim();
+        m_intakeSim.triggerCloseIntakeSwitchSim();
       }
 
       if (m_cycles > 10) {
-        triggerActivateFeederSwitchSim(); 
-        triggerDeactiveIntakeSwitchSim();         
+        m_intakeSim.triggerCloseFeederSwitchSim(); 
+        m_intakeSim.triggerOpenIntakeSwitchSim();         
       }       
       m_cycles += 1;
     }
@@ -517,22 +509,24 @@ public class Intake extends SubsystemBase {
     m_rightFeederMotorSim.setQuadratureRawPosition((int)m_intakeSim.getOutput(0));
   }  
   
-  public void triggerActivateIntakeSwitchSim() {
-    m_intakeSwitchActivatedSim = true;
+  public void triggerCloseIntakeSwitchSim() {
+    // m_intakeSwitchActivatedSim = true;
+    m_intakeSim.triggerCloseIntakeSwitchSim();
     m_cycles = 0;
   }
 
-  public void triggerDeactiveIntakeSwitchSim() {
-    m_intakeSwitchActivatedSim = false;
-  }
+  // public void triggerDeactiveIntakeSwitchSim() {
+  //   m_intakeSwitchActivatedSim = false;
+  //   m_intakeSim.triggerDeactiveIntakeSwitchSim();
+  // }
 
-  public void triggerActivateFeederSwitchSim() {
-    m_feederSwitchActivatedSim = true;
-  }
+  // public void triggerActivateFeederSwitchSim() {
+  //   m_feederSwitchActivatedSim = true;
+  // }
 
-  public void triggerDeactivateFeederSwitchSim() {
-    m_feederSwitchActivatedSim = false;
-  }
+  // public void triggerDeactivateFeederSwitchSim() {
+  //   m_feederSwitchActivatedSim = false;
+  // }
 
 }
 

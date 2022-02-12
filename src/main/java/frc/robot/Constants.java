@@ -2,6 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
@@ -259,6 +262,10 @@ public final class Constants {
         public static final double ksVolts = 0.6024;
         public static final double kvVoltSecondsPerMeter = 0.21907;
         public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
+
+        public static final LinearSystem<N1, N1, N1> kIntakeSystem =
+            LinearSystemId.identifyVelocitySystem(IntakeConstants.kvVoltSecondsPerMeter, 
+                                          IntakeConstants.kaVoltSecondsSquaredPerMeter);
 
         public static double IntakekP = 0.055;
         public static double IntakekI = 0;

@@ -4,27 +4,56 @@
 
 package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Turret;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootBall extends SequentialCommandGroup {
-
+public class ShootBall extends CommandBase {
+  
   Intake m_intake;
-  Turret m_turret;
+  private int m_counter = 0;
 
-  /** Creates a new ShootBall. */
+  /** Creates a new CheckAndShootBall. */
   public ShootBall(Intake intake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
     m_intake = intake;
+  }
 
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new TriggerShootBall(m_intake), 
-                new WaitCommand(.02), 
-                new SetFeederCleared(m_intake));
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    if (m_intake.readyToShoot()) {
+      // Override all brakes
+      System.out.println("Ready to shoot...");
+      m_intake.setFeederBrakeDisabled();
+      m_intake.setIntakeBrakeDisabled();
+
+      // Start feeder motor at high power
+      m_intake.startFeederMotor(0.8);
+      m_counter = 0;
+    } else {
+      m_counter = 99;
+    }
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    // to check: there is a ball (of right color), ramp is fully closed
+    m_counter =+ 1;
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_intake.setFeederBrakeEnabled();
+    m_intake.startFeederMotor(0.2);
+    m_intake.startIntakeMotor(0.2);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return m_intake.intakeCleared() && m_intake.feederCleared();
   }
 }
