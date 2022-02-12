@@ -161,6 +161,9 @@ public final class Constants {
         public static final double kvVoltSecondsPerMeter = 0.21907;
         public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
 
+        public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem = 
+            LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
+
         //TODO: change to correct values
         public static final Gains kGainsFlywheel = new Gains(0,  0,   0,   0,   0,  1.00);
 

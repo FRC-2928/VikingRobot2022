@@ -166,7 +166,7 @@ public class Intake extends SubsystemBase {
     m_intakeBrakeEnabledEntry = intakeLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
     m_intakeBrakeActivatedEntry = intakeLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
     m_intakeMotorEntry = intakeLayout.add("Motor Speed", m_intakeMotor.getMotorOutputPercent()).getEntry(); 
-    m_intakeHasBallEntry = intakeLayout.add("Has Ball", intakeHasBall()).getEntry();   
+    m_intakeHasBallEntry = intakeLayout.add("Has Ball", intakeHasBall()).getEntry();
   
     // Feeder
     ShuffleboardLayout feederLayout = Shuffleboard.getTab("Intake")
