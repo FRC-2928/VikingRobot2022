@@ -27,6 +27,7 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon;
@@ -35,6 +36,9 @@ import frc.robot.subsystems.Turret;
 import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.DrivetrainCommands.TurnToTarget;
+import frc.robot.commands.FlywheelCommands.DecrementFlywheel;
+import frc.robot.commands.FlywheelCommands.IncrementFlywheel;
+import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
 import frc.robot.commands.IntakeCommands.EjectBall;
 import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
@@ -49,6 +53,7 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
   private final Turret m_turret = new Turret();
   private final Intake m_intake = new Intake();
+  private final Flywheel m_flywheel = new Flywheel();
 
   
   
@@ -105,7 +110,11 @@ public class RobotContainer {
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerActivateIntakeSwitchSim, m_intake));
     m_intake.getCommandsLayout().add(new ShootBall(m_intake)); 
-    m_intake.getCommandsLayout().add(new EjectBall(m_intake)); 
+    m_intake.getCommandsLayout().add(new EjectBall(m_intake));
+
+    m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
+    m_flywheel.getCommandsLayout().add(new IncrementFlywheel(m_flywheel));
+    m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
   }
 
   public void onAutoInit(){

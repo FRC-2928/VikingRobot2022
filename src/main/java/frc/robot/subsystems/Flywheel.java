@@ -4,11 +4,18 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -28,7 +35,12 @@ public class Flywheel extends SubsystemBase {
 
   //simulation
   TalonFXSimCollection m_flywheelMotorSim = m_flywheelTalon.getSimCollection();
-  FlywheelSim m_flywheelSim = new FlywheelSim();
+  
+  FlywheelSim m_flywheelSim = new FlywheelSim(FlywheelConstants.kFlywheelLinearSystem);
+
+  ShuffleboardLayout m_flywheelLayout;
+  NetworkTableEntry m_flywheelEntry;
+  private ShuffleboardLayout m_commandsLayout;
 
 
   // -----------------------------------------------------------
@@ -84,7 +96,25 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void setupShuffleboard() {
-    ShuffleboardTab m_flywheelTab = Shuffleboard.getTab("Flywheel");  
+    ShuffleboardTab m_flywheelTab = Shuffleboard.getTab("Flywheel"); 
+
+    m_flywheelLayout = Shuffleboard.getTab("Flywheel")
+            .getLayout("Flywheels", BuiltInLayouts.kList)
+            .withSize(2, 2)
+            .withPosition(0, 0);
+          m_flywheelEntry = m_flywheelLayout.add("Flywheel Speed", getVelocity()).getEntry();
+          m_flywheelEntry = m_flywheelLayout.add
+            ("Sim Motor Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
+          
+    m_commandsLayout = Shuffleboard.getTab("Flywheel")
+            .getLayout("Commands", BuiltInLayouts.kList)
+            .withSize(2, 2)
+            .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
+            .withPosition(2, 0);
+  }
+
+  public ShuffleboardLayout getCommandsLayout() {
+    return m_commandsLayout;
   }
 
 
@@ -96,6 +126,7 @@ public class Flywheel extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Flywheel Sim Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage());
   }
 
   public void resetEncoders(){
@@ -107,9 +138,16 @@ public class Flywheel extends SubsystemBase {
    * @param velocity change in ticks per sec
    */
   public void setVelocity(double velocity){
+
     //turn change in ticks per sec to change in ticks per 100 ms
     velocity /= 10;
-    m_flywheelTalon.set(ControlMode.Velocity, velocity);
+
+    //if(RobotBase.isReal()){
+      m_flywheelTalon.set(ControlMode.Velocity, velocity);
+    //} else {
+    //  m_flywheelMotorSim.setIntegratedSensorVelocity((int)velocity);
+    //}
+    
   }
 
   public void incrementVelocity(double increment){
@@ -160,16 +198,18 @@ public class Flywheel extends SubsystemBase {
    */
   public double getVelocity(){
     return (m_flywheelTalon.getSelectedSensorVelocity() * 10);
+
+    
   }
 
   public boolean isFlywheelMotorOn(){
-    return(m_flywheelTalon.getMotorOutputPercent() > 10);
+    return(m_flywheelTalon.getMotorOutputPercent() > .1);
   }
 
   // -----------------------------------------------------------
   // Simulation
   // -----------------------------------------------------------
-  
+
   public void simulationPeriodic(){
 
     //set voltage from voltage from robot controller
@@ -185,7 +225,8 @@ public class Flywheel extends SubsystemBase {
     m_flywheelMotorSim.setIntegratedSensorRawPosition((int)m_flywheelSim.getOutput(0));
 
   }
-  
+
+
   
 
 }
