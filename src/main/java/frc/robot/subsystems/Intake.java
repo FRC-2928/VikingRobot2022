@@ -65,7 +65,7 @@ public class Intake extends SubsystemBase {
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
   private boolean m_isFeederClear;
-  private boolean m_rampstable = true;
+  private boolean m_rampStable = true;
 
   // ------- Shuffleboard variables ----------------------------------------
   private ShuffleboardTab m_intakeTab;
@@ -348,15 +348,15 @@ public class Intake extends SubsystemBase {
   }
 
   public void setRampState(boolean state){
-    m_rampstable = state;
+    m_rampStable = state;
   }
 
   public void setRampStable() {
-    m_rampstable = true;
+    m_rampStable = true;
   }
 
   public void setRampUnstable() {
-    m_rampstable = false;
+    m_rampStable = false;
   }
 
   // -----------------------------------------------------------

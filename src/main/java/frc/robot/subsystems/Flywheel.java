@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,15 +14,22 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants.FlywheelConstants;
 import frc.robot.Constants.RobotMap;
+import frc.robot.simulation.FlywheelSim;
 
 public class Flywheel extends SubsystemBase {
 
   private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(RobotMap.kFlywheelTalonFX);
   double m_velocity;
+
+  //simulation
+  TalonFXSimCollection m_flywheelMotorSim = m_flywheelTalon.getSimCollection();
+  FlywheelSim m_flywheelSim = new FlywheelSim();
+
 
   // -----------------------------------------------------------
   // Initialization
@@ -140,7 +148,7 @@ public class Flywheel extends SubsystemBase {
 
   /**
    * 
-   * @return the percent output of the motor (-100 to 100)
+   * @return the percent output of the motor (-1 to 1)
    */
   public double getPower(){
     return(m_flywheelTalon.getMotorOutputPercent());
@@ -157,6 +165,27 @@ public class Flywheel extends SubsystemBase {
   public boolean isFlywheelMotorOn(){
     return(m_flywheelTalon.getMotorOutputPercent() > 10);
   }
+
+  // -----------------------------------------------------------
+  // Simulation
+  // -----------------------------------------------------------
+  
+  public void simulationPeriodic(){
+
+    //set voltage from voltage from robot controller
+    m_flywheelMotorSim.setBusVoltage(RobotController.getInputVoltage());
+
+    //set input to simulator as output voltage from sim motor
+    m_flywheelSim.setInput(m_flywheelMotorSim.getMotorOutputLeadVoltage());
+
+    //update time by 20 ms
+    m_flywheelSim.update(0.02);
+
+    //set the encoder values from the sim motor's output
+    m_flywheelMotorSim.setIntegratedSensorRawPosition((int)m_flywheelSim.getOutput(0));
+
+  }
+  
   
 
 }
