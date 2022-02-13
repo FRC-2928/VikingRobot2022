@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -129,7 +130,7 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
     SmartDashboard.putNumber("Flywheel Sim Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage());
 
-    m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
+    // m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
     
   }
 
@@ -145,13 +146,11 @@ public class Flywheel extends SubsystemBase {
 
     //turn change in ticks per sec to change in ticks per 100 ms
     velocity /= 10;
+    m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
+  }
 
-    if(RobotBase.isReal()){
-      m_flywheelTalon.set(ControlMode.Velocity, velocity);
-    } else {
-      m_flywheelMotorSim.setBusVoltage(velocity); //((int)velocity);
-    }
-    
+  public void setPower(double power) {
+    m_flywheelTalon.set(ControlMode.PercentOutput, power);
   }
 
   public void incrementVelocity(double increment){
@@ -226,10 +225,12 @@ public class Flywheel extends SubsystemBase {
     m_flywheelSim.update(0.02);
 
     //set the encoder values from the sim motor's output
+    // m_flywheelMotorSim.setIntegratedSensorRawPosition(9999);
     m_flywheelMotorSim.setIntegratedSensorRawPosition((int)m_flywheelSim.getOutput(0));
 
-    m_flywheelVoltageEntry.setNumber(m_flywheelMotorSim.getMotorOutputLeadVoltage());
-
+    m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
+    m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
+  
   }
 
 

@@ -10,7 +10,7 @@ import frc.robot.subsystems.Flywheel;
 public class DecrementFlywheel extends CommandBase {
 
   Flywheel m_flywheel;
-  static final double decrement = .05;
+  static final double decrement = .005;
   
   /** Creates a new DecrementFlywheel. */
   public DecrementFlywheel(Flywheel flywheel) {

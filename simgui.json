@@ -12,6 +12,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Drivetrain": "Subsystem",
+      "/LiveWindow/Flywheel": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",
       "/LiveWindow/Transmission": "Subsystem",
       "/LiveWindow/Turret": "Subsystem",
@@ -20,6 +21,9 @@
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/Shuffleboard/Flywheel/Commands/DecrementFlywheel": "Command",
+      "/Shuffleboard/Flywheel/Commands/IncrementFlywheel": "Command",
+      "/Shuffleboard/Flywheel/Commands/ToggleFlywheel": "Command",
       "/Shuffleboard/Intake/Commands/EjectBall": "Command",
       "/Shuffleboard/Intake/Commands/InstantCommand": "Command",
       "/Shuffleboard/Intake/Commands/ShootBall": "Command",
@@ -29,7 +33,17 @@
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },
     "windows": {
-      "/Shuffleboard/Intake/Commands/EjectBall": {
+      "/Shuffleboard/Flywheel/Commands/DecrementFlywheel": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Flywheel/Commands/IncrementFlywheel": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Flywheel/Commands/ToggleFlywheel": {
         "window": {
           "visible": true
         }

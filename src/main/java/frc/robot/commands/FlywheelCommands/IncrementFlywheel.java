@@ -9,7 +9,7 @@ import frc.robot.subsystems.Flywheel;
 
 public class IncrementFlywheel extends CommandBase {
 
-  static final double increment = .05;
+  static final double increment = .005;
   Flywheel m_flywheel;
 
   /** Creates a new IncrementFlywheel. */

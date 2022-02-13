@@ -199,6 +199,9 @@ public class RobotContainer {
 
     m_driverOI.getTurnTurretLeftButton().whenHeld(new MoveTurret(m_turret, -1));
     m_driverOI.getTurnTurretRightButton().whenHeld(new MoveTurret(m_turret, 1));
+
+    m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
+    m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
   }
 
   
