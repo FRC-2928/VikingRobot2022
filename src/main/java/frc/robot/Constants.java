@@ -159,6 +159,8 @@ public final class Constants {
 
         public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem = 
             LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
+        // public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem2 = 
+        //     LinearSystemId.createFlywheelSystem(motor, jKgMetersSquared, G)
 
         //TODO: change to correct values
         
@@ -181,6 +183,9 @@ public final class Constants {
         //velocity in ticks per sec
         public static final double kMaxVelocity = 80000;
         public static final double kIdealVelocity = 60000;
+
+        public static final double kFlywheelMass = 1;
+        public static final double kFlywheelRadius = 1;
     }
 
     

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -23,6 +24,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants.FlywheelConstants;
@@ -38,6 +40,12 @@ public class Flywheel extends SubsystemBase {
   TalonFXSimCollection m_flywheelMotorSim = m_flywheelTalon.getSimCollection();
   
   FlywheelSim m_flywheelSim = new FlywheelSim(FlywheelConstants.kFlywheelLinearSystem);
+
+  //for srx use sim motor
+  FlywheelSim m_flywheelSimMotor = new FlywheelSim(DCMotor.getFalcon500(1), 
+                                                    FlywheelConstants.kFlywheelRadius, 
+                                                    FlywheelConstants.kFlywheelMass, 
+                                                    FlywheelConstants.kGearRatio);
 
   ShuffleboardLayout m_flywheelLayout;
   NetworkTableEntry m_flywheelSpeedEntry;
@@ -71,6 +79,7 @@ public class Flywheel extends SubsystemBase {
     m_flywheelTalon.configPeakOutputReverse(-1);
 
     m_flywheelTalon.configOpenloopRamp(0.1);
+  
 
     //Setting deadband(area required to start moving the motor) to 1%
     m_flywheelTalon.configNeutralDeadband(0.01);

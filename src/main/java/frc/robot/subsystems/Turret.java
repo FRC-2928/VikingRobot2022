@@ -74,6 +74,11 @@ public class Turret extends SubsystemBase {
 
     //  m_turretMotor.configForwardLimitSwitchSource(type, normalOpenOrClose);
     //  m_turretMotor.configReverseLimitSwitchSource(type, normalOpenOrClose);
+
+    m_turretMotor.configForwardSoftLimitThreshold(getDegreesToEncoderTicks(360/8));
+    m_turretMotor.configReverseSoftLimitThreshold(getDegreesToEncoderTicks(-360/8));
+    m_turretMotor.configForwardSoftLimitEnable(true, 0);
+    m_turretMotor.configReverseSoftLimitEnable(true, 0);
   }
 
   public void setTurretPIDF() {
