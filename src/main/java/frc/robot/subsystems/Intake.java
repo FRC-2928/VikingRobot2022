@@ -24,6 +24,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.simulation.IntakeSim;
+import frc.robot.types.BallColor;
 
 import java.util.Map;
 
@@ -37,14 +38,15 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatch;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
+
+  private BallColor m_allianceColor;
+  private BallColor m_ballColor = BallColor.UNKNOWN;
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
 
@@ -60,7 +62,6 @@ public class Intake extends SubsystemBase {
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
-  // private boolean m_isFeederClear;
   private boolean m_rampStable = true;
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -70,16 +71,12 @@ public class Intake extends SubsystemBase {
   NetworkTableEntry m_intakeBrakeActivatedEntry, m_feederBrakeActivatedEntry;
   NetworkTableEntry m_intakeHasBallEntry, m_feederHasBallEntry;
   NetworkTableEntry m_intakeMotorEntry, m_feederMotorEntry;
-  NetworkTableEntry m_rampEntry;
+  NetworkTableEntry m_rampEntry, m_ballEntry;
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_intakeMotorSim = m_intakeMotor.getSimCollection();
   TalonSRXSimCollection m_leftFeederMotorSim = m_leftFeederMotor.getSimCollection();
   TalonSRXSimCollection m_rightFeederMotorSim = m_rightFeederMotor.getSimCollection();
-  // private boolean m_intakeSwitchActivatedSim = false;
-  // private boolean m_feederSwitchActivatedSim = false;
-  // private boolean m_intakeBrakeActivatedSim = false;
-  // private boolean m_feederBrakeActivatedSim = false;
   private boolean m_rampOpenSim = false;
   private int m_cycles = 0;
   private boolean m_intakeBrakeEnabled, m_feederBrakeEnabled;
@@ -89,12 +86,12 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Intake() {
+  public Intake(BallColor ballColor) {
     configMotors();
     setIntakePIDF();
     resetEncoders();
     setupShuffleboard();
-    // m_isFeederClear = false;  
+    m_allianceColor = ballColor;
   }
 
   public void configMotors(){
@@ -103,9 +100,9 @@ public class Intake extends SubsystemBase {
 
     //configure limit switches for intake motor and leading feeder motor
     m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-      LimitSwitchNormal.NormallyOpen, 0);
+                                                 LimitSwitchNormal.NormallyOpen, 0);
     m_rightFeederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-      LimitSwitchNormal.NormallyOpen, 0);
+                                                      LimitSwitchNormal.NormallyOpen, 0);
     
     for(TalonSRX srx : new TalonSRX[] {m_intakeMotor, m_rightFeederMotor, m_leftFeederMotor}) {
     
@@ -161,7 +158,7 @@ public class Intake extends SubsystemBase {
     // Intake
     ShuffleboardLayout intakeLayout = Shuffleboard.getTab("Intake")
       .getLayout("Intake", BuiltInLayouts.kList)
-      .withSize(1, 3)
+      .withSize(2, 5)
       .withPosition(5, 0); 
     m_intakeBrakeEnabledEntry = intakeLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
     m_intakeBrakeActivatedEntry = intakeLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
@@ -171,8 +168,8 @@ public class Intake extends SubsystemBase {
     // Feeder
     ShuffleboardLayout feederLayout = Shuffleboard.getTab("Intake")
       .getLayout("Feeder", BuiltInLayouts.kList)
-      .withSize(1, 3)
-      .withPosition(6, 0); 
+      .withSize(2, 5)
+      .withPosition(7, 0); 
     m_feederBrakeEnabledEntry = feederLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
     m_feederBrakeActivatedEntry = feederLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
     m_feederMotorEntry = feederLayout.add("Motor Speed", m_rightFeederMotor.getMotorOutputPercent()).getEntry();  
@@ -181,16 +178,17 @@ public class Intake extends SubsystemBase {
     // Ramp
     ShuffleboardLayout rampLayout = Shuffleboard.getTab("Intake")
       .getLayout("Ramp", BuiltInLayouts.kList)
-      .withSize(1, 1)
-      .withPosition(8, 0); 
-    m_rampEntry = rampLayout.add("Ramp Open", isRampOpen()).getEntry();  
+      .withSize(2, 3)
+      .withPosition(10, 0); 
+    m_rampEntry = rampLayout.add("Ramp Open?", isRampOpen()).getEntry();  
+    m_ballEntry = rampLayout.add("Valid Ball?", hasValidBall()).getEntry();
 
     // Commands
     m_commandsLayout = Shuffleboard.getTab("Intake")
       .getLayout("Commands", BuiltInLayouts.kList)
-      .withSize(2, 3)
+      .withSize(3, 5)
       .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
-      .withPosition(2, 0);  
+      .withPosition(1, 0);  
   }
 
 
@@ -215,22 +213,21 @@ public class Intake extends SubsystemBase {
     m_intakeBrakeEnabledEntry.setBoolean(isIntakeBrakeEnabled());
 
     m_rampEntry.setBoolean(isRampOpen());
+    m_ballEntry.setBoolean(hasValidBall());
 
-
+    // Ball color detection
     Color detectedColor = m_colorSensor.getColor();
 
-    /**
-     * Run the color match algorithm on our detected color
-     */
-    String colorString;
+    // Run the color match algorithm on our detected color
+    // String colorString;
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kBlueTarget) {
-      colorString = "Blue";
+      m_ballColor = BallColor.BLUE;
     } else if (match.color == kRedTarget) {
-      colorString = "Red";
+      m_ballColor = BallColor.RED;
     } else {
-      colorString = "Unknown";
+      m_ballColor = BallColor.UNKNOWN;
     }
 
     /**
@@ -240,7 +237,7 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString);
+    // SmartDashboard.putNumber("Detected Color", m_ballColor);
     SmartDashboard.putNumber("Intake Motor Voltage", m_intakeMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("Intake Motor Percent", m_intakeMotor.getMotorOutputPercent());
     SmartDashboard.putNumber("Feeder Motor Voltage", m_rightFeederMotor.getMotorOutputVoltage());
@@ -365,7 +362,7 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
 
   public boolean readyToShoot() {
-    if (feederHasBall() && isRampClosed()) {
+    if (feederHasBall() && isRampClosed() && hasValidBall()) {
       return true;
     } 
     return false;
@@ -373,6 +370,10 @@ public class Intake extends SubsystemBase {
 
   public boolean hasValidBall() {
     return true;
+    // if (m_allianceColor == m_ballColor) {
+    //   return true;
+    // }
+    // return false;
   }
 
   // --------- Intake ------------------------------  
@@ -387,7 +388,6 @@ public class Intake extends SubsystemBase {
       return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
     }
     return m_intakeSim.isIntakeSwitchClosed();
-    // return m_intakeSwitchActivatedSim;
   }
 
   public boolean intakeHasBall(){
@@ -420,7 +420,6 @@ public class Intake extends SubsystemBase {
       return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
     }
     return m_intakeSim.isFeederSwitchClosed();
-    // return m_feederSwitchActivatedSim; 
   }
 
   public boolean isFeederBrakeDeactivated(){
@@ -469,11 +468,14 @@ public class Intake extends SubsystemBase {
       if (feederHasBall()) {
         m_intakeSim.triggerCloseIntakeSwitchSim();
       }
-
-      if (m_cycles > 10) {
-        m_intakeSim.triggerCloseFeederSwitchSim(); 
-        m_intakeSim.triggerOpenIntakeSwitchSim();         
-      }       
+      else 
+      {
+        if (m_cycles > 10) {
+          m_intakeSim.triggerCloseFeederSwitchSim(); 
+          m_intakeSim.triggerOpenIntakeSwitchSim();         
+        }  
+      }
+           
       m_cycles += 1;
     }
 

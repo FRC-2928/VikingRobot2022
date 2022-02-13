@@ -33,6 +33,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
 import frc.robot.subsystems.Turret;
+import frc.robot.types.BallColor;
 import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.DrivetrainCommands.TurnToTarget;
@@ -52,10 +53,10 @@ public class RobotContainer {
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
   private final Turret m_turret = new Turret();
-  private final Intake m_intake = new Intake();
+  private final Intake m_intake;
   private final Flywheel m_flywheel = new Flywheel();
 
-  
+  private BallColor m_ballColor;
   
   
   private final Pigeon m_pigeon = new Pigeon();
@@ -85,7 +86,8 @@ public class RobotContainer {
     m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
     m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
     
-    
+    m_ballColor = BallColor.BLUE;
+    m_intake = new Intake(m_ballColor);
     
     SmartDashboard.putData(m_autoChooser);
 
