@@ -23,10 +23,9 @@ public class FlywheelSim extends LinearSystemSim<N1, N1, N1> {
         super(linearSystem);
     }
 
-    public FlywheelSim(DCMotor motor, double mass, double radius){
+    public FlywheelSim(DCMotor motor, double radius, double mass, double gearRatio){
         //moment of inertia is .5m*r^2 ...?
-        super(LinearSystemId.createFlywheelSystem(motor, .5 * mass * radius * radius, 
-                                                    FlywheelConstants.kGearRatio));
+        super(LinearSystemId.createFlywheelSystem(motor, .5 * mass * radius * radius, gearRatio));
     }
 
 }
