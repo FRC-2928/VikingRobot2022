@@ -91,10 +91,10 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void setFlywheelPIDF() {
-    m_flywheelTalon.config_kP(0, FlywheelConstants.kGainsFlywheel.kP, 0);
-    m_flywheelTalon.config_kI(0, FlywheelConstants.kGainsFlywheel.kI, 0);
-    m_flywheelTalon.config_kD(0, FlywheelConstants.kGainsFlywheel.kD, 0);
-    m_flywheelTalon.config_kF(0, FlywheelConstants.kGainsFlywheel.kF, 0);
+    m_flywheelTalon.config_kP(0, FlywheelConstants.kGainsVelocity.kP, 0);
+    m_flywheelTalon.config_kI(0, FlywheelConstants.kGainsVelocity.kI, 0);
+    m_flywheelTalon.config_kD(0, FlywheelConstants.kGainsVelocity.kD, 0);
+    m_flywheelTalon.config_kF(0, FlywheelConstants.kGainsVelocity.kF, 0);
   }
 
   public void setupShuffleboard() {
@@ -128,9 +128,9 @@ public class Flywheel extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Flywheel Sim Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage());
 
-    // m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
+    m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
+    m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
     
   }
 
@@ -145,8 +145,10 @@ public class Flywheel extends SubsystemBase {
   public void setVelocity(double velocity){
 
     //turn change in ticks per sec to change in ticks per 100 ms
-    velocity /= 10;
-    m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
+    m_flywheelTalon.set(ControlMode.Velocity, velocity/10);
+
+    // TODO may need to add FeedForward using SimpleMotorFeedforward
+    // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
   }
 
   public void setPower(double power) {
@@ -156,18 +158,18 @@ public class Flywheel extends SubsystemBase {
   public void incrementVelocity(double increment){
     if(getVelocity() < FlywheelConstants.kMaxVelocity){
       m_velocity += increment;
-      setVelocity(m_velocity);
+      setPower(m_velocity);
     } else {
-      setVelocity(FlywheelConstants.kIdealVelocity);
+      setPower(FlywheelConstants.kIdealVelocity);
     }
   }
 
   public void decrementVelocity(double decrement){
     if(m_velocity <= 0){
-      setVelocity(0);
+      setPower(0);
     } else{
       m_velocity -= decrement;
-      setVelocity(m_velocity);
+      setPower(m_velocity);
     }
   }
 
@@ -206,7 +208,7 @@ public class Flywheel extends SubsystemBase {
   }
 
   public boolean isFlywheelMotorOn(){
-    return(m_flywheelTalon.getMotorOutputPercent() > .1);
+    return(m_flywheelTalon.getMotorOutputPercent() > 0);
   }
 
   // -----------------------------------------------------------
@@ -225,11 +227,10 @@ public class Flywheel extends SubsystemBase {
     m_flywheelSim.update(0.02);
 
     //set the encoder values from the sim motor's output
-    // m_flywheelMotorSim.setIntegratedSensorRawPosition(9999);
     m_flywheelMotorSim.setIntegratedSensorRawPosition((int)m_flywheelSim.getOutput(0));
 
-    m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
-    m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
+    // m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
+    // m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
   
   }
 

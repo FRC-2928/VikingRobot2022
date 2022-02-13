@@ -375,7 +375,8 @@ public class Drivetrain extends SubsystemBase {
         m_rightFFEntry.setDouble(rightFeedForward);
         m_leftFFEntry.setDouble(leftFeedForward);
         
-        // Convert meters per second to rotations per second
+        // Convert meters per second to encoder ticks per second
+        // TODO use metersToEncoderTicks(double meters)
         var gearState = m_gearStateSupplier.get();
         double leftVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(leftMetersPerSecond), gearState);
         double rightVelocityTicksPerSec = wheelRotationsToEncoderTicks(metersToWheelRotations(rightMetersPerSecond), gearState);

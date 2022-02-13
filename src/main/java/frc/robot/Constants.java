@@ -122,7 +122,18 @@ public final class Constants {
         // The WPILib feedforward has kS (static friction), kV (velocity), and kA (acceleration) terms 
         // whereas the Talon SRX / Spark MAX kF is only a kV (velocity) feedforward.
         //                                                  kp,  ki, kd,  kf, iz,  peak output
-        public static final Gains kGainsProfiled = new Gains(0.16,  0,   0,   0,   0,  1.00);    
+        public static final Gains kGainsProfiled = new Gains(0.16,  0,   0,   0,   0,  1.00);   
+
+        /**
+         * PID Gains may have to be adjusted based on the responsiveness of control loop.
+         * kF: 1023 represents output value to Talon at 100%, 20660 represents Velocity units at 100% output
+         * Not all set of Gains are used in this project and may be removed as desired.
+         * 
+         * 	                                    			  kP   kI   kD   kF               Iz    PeakOut */
+        public final static Gains kGainsDistance = new Gains( 0.1, 0.0,  0.0, 0.0,            100,  0.50 );
+        public final static Gains kGainsTurning = new Gains( 0.10, 0.0,  0.0, 0.0,            200,  1.00 );
+        public final static Gains kGainsVelocity = new Gains( 0.1, 0.001, 5, 1023.0/20660.0,  300,  1.00);
+        public final static Gains kGainsMotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/20660.0,  400,  1.00 );
 
         //public static final double kDistanceToleranceMeters = 0.1;
         //public static final double kVelocityToleranceMeters = 0.1;
@@ -140,21 +151,6 @@ public final class Constants {
             public static final double kRamseteB = 2;
             public static final double kRamseteZeta = 0.7;
     }
-
-    public static final class PIDConstants{
-       
-        //Shooter
-        // public static final double kFlywheelkP = 0.05;
-        // public static final double kFlywheelkF = (1023.0 * 0.75) / 16000.0;
-
-        // public static final double kHoodkP = 0.5;
-        // public static final double kHoodkD = 10;
-        // public static final double kHoodkF = 0.25;
-
-        // public static double kPTurret = 0.06;
-        // public static double kDTurret = 0.5;
-        // public static double kFTurret = 0.4;
-    }
     
     public static final class FlywheelConstants {
         public static final double ksVolts = 0.6024;
@@ -165,7 +161,13 @@ public final class Constants {
             LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
 
         //TODO: change to correct values
-        public static final Gains kGainsFlywheel = new Gains(0,  0,   0,   0,   0,  1.00);
+        
+        /**
+         * PID Gains may have to be adjusted based on the responsiveness of control loop.
+         * kF: 1023 represents output value to Talon at 100%, 20660 represents Velocity units at 100% output
+         * 
+         * 	                                    			  kP   	 kI    kD      kF          Iz    PeakOut */
+        public final static Gains kGainsVelocity  = new Gains( 0.1, 0.001, 5, 1023.0/20660.0,  300,  1.00);
 
         public static final double kGearRatio = 1;
 
@@ -181,34 +183,19 @@ public final class Constants {
         public static final double kIdealVelocity = 60000;
     }
 
-    public static final class HoodConstants{
-        // public static final double kP = 0.5;
-        // public static final double kD = 10;
-        // public static final double kF = 0.25;
-        // public static final double kMaxOutput = 1;
-        // public static final double kMinOutput = -1;
-
-
-        // public static final double kSetpointWall = 40;
-        // public static final double kSetpointInitiationLine = 50;
-        // public static final double kSetpointCloseTrench = 60;
-        // public static final double kSetpointFarTrench = 60;
-
-        // public static final double kHoodLowerLimit = 30;
-        // public static final double kHoodUpperLimit = 70;
-
-        // public static final double kHoodErrorThreshold = 1;
-		// public static double kMaxRPM = 5700;
-		// public static double kMaxVel = 2000;
-		// public static double kMinVel = 0;
-		// public static double kMaxAcc = 1500;
-		// public static double kAllowedError;
-	
-    }
+    
 
     public static final class TurretConstants {
-        //                                                  kp,  ki, kd,  kf, iz,  peak output
-        public static final Gains kGainsTurret = new Gains(0,  0,   0,   0,   0,  1.00);
+        /**
+         * PID Gains may have to be adjusted based on the responsiveness of control loop.
+         * kF: 1023 represents output value to TalonSRX at 100%, 6800 represents Velocity units at 100% output
+         * Not all set of Gains are used in this project and may be removed as desired.
+         * 
+         * 	                                    			  kP   kI   kD   kF               Iz    PeakOut */
+        public final static Gains kGainsTurret = new Gains( 0.1, 0.0,  0.0, 0.0,            100,  0.50 );
+        // public final static Gains kGainsTurning = new Gains( 2.0, 0.0,  4.0, 0.0,            200,  1.00 );
+        // public final static Gains kGainsVelocity = new Gains( 0.1, 0.0, 20.0, 1023.0/6800.0,  300,  0.75 );
+	    public final static Gains kGainsMotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 
         public static final double kTurretGearRatio = 9.08;
         public static final double kTurretDegreesPerRotation = 360;
