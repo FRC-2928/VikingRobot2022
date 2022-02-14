@@ -16,7 +16,6 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
     private boolean m_intakeSwitchClosed = false;
     private boolean m_feederSwitchClosed = false;
     private boolean m_rampOpenSim = false;
-    private int m_cycles = 0;
 
     public IntakeSim (LinearSystem<N1, N1, N1> plant)  {
         super(plant);
@@ -32,7 +31,6 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
 
     public void triggerCloseIntakeSwitchSim() {
         m_intakeSwitchClosed = true;
-        m_cycles = 0;
     }
     
       public void triggerOpenIntakeSwitchSim() {

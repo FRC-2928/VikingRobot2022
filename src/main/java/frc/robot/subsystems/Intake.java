@@ -5,9 +5,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.system.LinearSystem;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -78,7 +75,6 @@ public class Intake extends SubsystemBase {
   TalonSRXSimCollection m_leftFeederMotorSim = m_leftFeederMotor.getSimCollection();
   TalonSRXSimCollection m_rightFeederMotorSim = m_rightFeederMotor.getSimCollection();
   private boolean m_rampOpenSim = false;
-  private int m_cycles = 0;
   private boolean m_intakeBrakeEnabled, m_feederBrakeEnabled;
 
   private final IntakeSim m_intakeSim = new IntakeSim(IntakeConstants.kIntakeSystem);                                        
@@ -199,6 +195,11 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
+    // sets the intake brake enabled if the feeder has a ball.
+    if (feederHasBall()) {
+      setIntakeBrakeEnabled();
+    }
+
     // Shuffleboard output
     m_intakeMotorEntry.setNumber(m_intakeMotor.getMotorOutputPercent());
     m_feederMotorEntry.setNumber(m_rightFeederMotor.getMotorOutputPercent());
@@ -238,10 +239,10 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
     // SmartDashboard.putNumber("Detected Color", m_ballColor);
-    SmartDashboard.putNumber("Intake Motor Voltage", m_intakeMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Intake Motor Percent", m_intakeMotor.getMotorOutputPercent());
-    SmartDashboard.putNumber("Feeder Motor Voltage", m_rightFeederMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Feeder Motor Percent", m_rightFeederMotor.getMotorOutputPercent());
+    // SmartDashboard.putNumber("Intake Motor Voltage", m_intakeMotor.getMotorOutputVoltage());
+    // SmartDashboard.putNumber("Intake Motor Percent", m_intakeMotor.getMotorOutputPercent());
+    // SmartDashboard.putNumber("Feeder Motor Voltage", m_rightFeederMotor.getMotorOutputVoltage());
+    // SmartDashboard.putNumber("Feeder Motor Percent", m_rightFeederMotor.getMotorOutputPercent());
     
   }
 
@@ -326,11 +327,6 @@ public class Intake extends SubsystemBase {
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
     m_feederBrakeEnabled = true; 
   }
-
-  // public void setFeederCleared(){
-  //   setFeederBrakeEnabled();
-  //   m_isFeederClear = true;
-  // }
 
   // --------- Ramp ------------------------------
 
@@ -469,19 +465,14 @@ public class Intake extends SubsystemBase {
         m_intakeSim.triggerCloseIntakeSwitchSim();
       }
       else 
-      {
-        if (m_cycles > 10) {
-          m_intakeSim.triggerCloseFeederSwitchSim(); 
-          m_intakeSim.triggerOpenIntakeSwitchSim();         
-        }  
-      }
-           
-      m_cycles += 1;
+      { m_intakeSim.triggerCloseFeederSwitchSim(); 
+        m_intakeSim.triggerOpenIntakeSwitchSim();         
+      }          
     }
 
-    if (feederHasBall()) {
-      setIntakeBrakeEnabled();
-    }
+    // if (feederHasBall()) {
+    //   setIntakeBrakeEnabled();
+    // }
 
     /* Pass the robot battery voltage to the simulated Talon SRXs */
     // If the brake is activated we simulate the fact that the motor has stopped.
@@ -512,23 +503,8 @@ public class Intake extends SubsystemBase {
   }  
   
   public void triggerCloseIntakeSwitchSim() {
-    // m_intakeSwitchActivatedSim = true;
     m_intakeSim.triggerCloseIntakeSwitchSim();
-    m_cycles = 0;
   }
-
-  // public void triggerDeactiveIntakeSwitchSim() {
-  //   m_intakeSwitchActivatedSim = false;
-  //   m_intakeSim.triggerDeactiveIntakeSwitchSim();
-  // }
-
-  // public void triggerActivateFeederSwitchSim() {
-  //   m_feederSwitchActivatedSim = true;
-  // }
-
-  // public void triggerDeactivateFeederSwitchSim() {
-  //   m_feederSwitchActivatedSim = false;
-  // }
 
 }
 

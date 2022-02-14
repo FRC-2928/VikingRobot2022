@@ -54,8 +54,6 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import frc.robot.subsystems.Pigeon;
 
 public class Drivetrain extends SubsystemBase {
-    // private WPI_TalonFX m_leftLeader, m_rightLeader;
-    // private WPI_TalonFX m_leftFollower, m_rightFollower;
 
     private final WPI_TalonFX m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
     private final WPI_TalonFX m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
@@ -119,14 +117,6 @@ public class Drivetrain extends SubsystemBase {
 
         m_gearStateSupplier = gearStateSupplier;
 
-        // m_pigeon = new Pigeon();
-        zeroGyro();
-
-        // m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
-        // m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
-        // m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
-        // m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
-
         // Motors
         configmotors();
 
@@ -147,8 +137,9 @@ public class Drivetrain extends SubsystemBase {
     
         Rotation2d initialHeading = new Rotation2d(m_yaw);
 
-        // Zero the encoders
+        // Zero the encoders and gyro
         resetEncoders();
+        zeroGyro();
 
         // Start with default Pose2d(0, 0, 0)
         m_odometry = new DifferentialDriveOdometry(initialHeading);
