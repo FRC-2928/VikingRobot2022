@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -21,7 +22,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.RobotMap;
 import frc.robot.simulation.IntakeSim;
-import frc.robot.types.BallColor;
 
 import java.util.Map;
 
@@ -42,8 +42,8 @@ import com.revrobotics.ColorMatch;
 
 public class Intake extends SubsystemBase {
 
-  private BallColor m_allianceColor;
-  private BallColor m_ballColor = BallColor.UNKNOWN;
+  private Alliance m_alliance;
+  private Alliance m_ballColor = Alliance.Blue;
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
 
@@ -68,7 +68,8 @@ public class Intake extends SubsystemBase {
   NetworkTableEntry m_intakeBrakeActivatedEntry, m_feederBrakeActivatedEntry;
   NetworkTableEntry m_intakeHasBallEntry, m_feederHasBallEntry;
   NetworkTableEntry m_intakeMotorEntry, m_feederMotorEntry;
-  NetworkTableEntry m_rampEntry, m_ballEntry;
+  NetworkTableEntry m_rampEntry; 
+  NetworkTableEntry m_allianceEntry, m_ballColorEntry, m_ballValidEntry;
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_intakeMotorSim = m_intakeMotor.getSimCollection();
@@ -82,12 +83,14 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Intake(BallColor ballColor) {
+  public Intake(Alliance alliance) {
+    m_alliance = alliance;
+    // SmartDashboard.putString("Alliance", m_alliance.name());
+    // SmartDashboard.putNumber("Alliance Ordinal", m_ballColor.ordinal());
     configMotors();
     setIntakePIDF();
     resetEncoders();
     setupShuffleboard();
-    m_allianceColor = ballColor;
   }
 
   public void configMotors(){
@@ -174,10 +177,18 @@ public class Intake extends SubsystemBase {
     // Ramp
     ShuffleboardLayout rampLayout = Shuffleboard.getTab("Intake")
       .getLayout("Ramp", BuiltInLayouts.kList)
-      .withSize(2, 3)
+      .withSize(2, 2)
       .withPosition(10, 0); 
     m_rampEntry = rampLayout.add("Ramp Open?", isRampOpen()).getEntry();  
-    m_ballEntry = rampLayout.add("Valid Ball?", hasValidBall()).getEntry();
+
+    // Ball 
+    ShuffleboardLayout ballLayout = Shuffleboard.getTab("Intake")
+      .getLayout("Ball", BuiltInLayouts.kList)
+      .withSize(2, 4)
+      .withPosition(10, 5); 
+    m_allianceEntry = ballLayout.add("Alliance", m_alliance.name()).getEntry();
+    m_ballColorEntry = ballLayout.add("Ball Color", m_ballColor.name()).getEntry();  
+    m_ballValidEntry = ballLayout.add("Valid Ball?", false).getEntry();
 
     // Commands
     m_commandsLayout = Shuffleboard.getTab("Intake")
@@ -200,6 +211,9 @@ public class Intake extends SubsystemBase {
       setIntakeBrakeEnabled();
     }
 
+    // Get the color of the ball that is in the feeder
+    m_ballColor = getBallColor();
+
     // Shuffleboard output
     m_intakeMotorEntry.setNumber(m_intakeMotor.getMotorOutputPercent());
     m_feederMotorEntry.setNumber(m_rightFeederMotor.getMotorOutputPercent());
@@ -214,8 +228,16 @@ public class Intake extends SubsystemBase {
     m_intakeBrakeEnabledEntry.setBoolean(isIntakeBrakeEnabled());
 
     m_rampEntry.setBoolean(isRampOpen());
-    m_ballEntry.setBoolean(hasValidBall());
+    m_ballValidEntry.setBoolean(hasValidBall());
+    m_ballColorEntry.setString(m_ballColor.name());
+    
+  }
 
+  public ShuffleboardLayout getCommandsLayout() {
+    return m_commandsLayout;
+  }
+
+  public Alliance getBallColor() {
     // Ball color detection
     Color detectedColor = m_colorSensor.getColor();
 
@@ -223,31 +245,27 @@ public class Intake extends SubsystemBase {
     // String colorString;
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-    if (match.color == kBlueTarget) {
-      m_ballColor = BallColor.BLUE;
-    } else if (match.color == kRedTarget) {
-      m_ballColor = BallColor.RED;
+    Alliance ballColor;
+    if (RobotBase.isReal()) {
+      if (match.color == kBlueTarget) {
+        ballColor = Alliance.Blue;
+      } else if (match.color == kRedTarget) {
+        ballColor = Alliance.Red;
+      } else {
+        ballColor = Alliance.Invalid;
+      }
     } else {
-      m_ballColor = BallColor.UNKNOWN;
+      ballColor = m_intakeSim.getBallColor();
     }
-
+  
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
      * sensor.
      */
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("Confidence", match.confidence);
-    // SmartDashboard.putNumber("Detected Color", m_ballColor);
-    // SmartDashboard.putNumber("Intake Motor Voltage", m_intakeMotor.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Intake Motor Percent", m_intakeMotor.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Feeder Motor Voltage", m_rightFeederMotor.getMotorOutputVoltage());
-    // SmartDashboard.putNumber("Feeder Motor Percent", m_rightFeederMotor.getMotorOutputPercent());
-    
-  }
+    SmartDashboard.putNumber("Detected Color Confidence", match.confidence);
+    SmartDashboard.putString("Detected Color", ballColor.name());
 
-  public ShuffleboardLayout getCommandsLayout() {
-    return m_commandsLayout;
+    return ballColor;
   }
 
   // --------- Intake Motor ------------------------------
@@ -365,11 +383,8 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean hasValidBall() {
-    return true;
-    // if (m_allianceColor == m_ballColor) {
-    //   return true;
-    // }
-    // return false;
+    // return true;
+    return (m_alliance.ordinal() == m_ballColor.ordinal());
   }
 
   // --------- Intake ------------------------------  
@@ -387,7 +402,8 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean intakeHasBall(){
-    return feederHasBall() && isIntakeBrakeActivated();
+    // return feederHasBall() && isIntakeBrakeActivated();
+    return isIntakeBrakeActivated();
   }
 
   public boolean intakeCleared() {

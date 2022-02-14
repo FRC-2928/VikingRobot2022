@@ -7,6 +7,7 @@ package frc.robot.simulation;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import frc.robot.Constants.IntakeConstants;
 
@@ -16,6 +17,7 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
     private boolean m_intakeSwitchClosed = false;
     private boolean m_feederSwitchClosed = false;
     private boolean m_rampOpenSim = false;
+    private Alliance m_ballColor = Alliance.Invalid;
 
     public IntakeSim (LinearSystem<N1, N1, N1> plant)  {
         super(plant);
@@ -40,6 +42,7 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
     public boolean isIntakeSwitchClosed() {
         return m_intakeSwitchClosed;
     }
+
     // ------------- Feeder --------------------------
     public void triggerCloseFeederSwitchSim() {
         m_feederSwitchClosed = true;
@@ -51,6 +54,16 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
 
     public boolean isFeederSwitchClosed() {
         return m_feederSwitchClosed;
+    }
+
+    // ------------- Ball --------------------------
+    public Alliance getBallColor() {
+        m_ballColor = Alliance.Red;
+        return m_ballColor;
+    }
+
+    public void setBallColor(Alliance ballColor) {
+        m_ballColor = ballColor;
     }
 
 }

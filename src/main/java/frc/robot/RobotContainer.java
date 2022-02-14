@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,7 +34,6 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
 import frc.robot.subsystems.Turret;
-import frc.robot.types.BallColor;
 import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.DrivetrainCommands.TurnToTarget;
@@ -55,9 +55,6 @@ public class RobotContainer {
   private final Turret m_turret = new Turret();
   private final Intake m_intake;
   private final Flywheel m_flywheel = new Flywheel();
-
-  private BallColor m_ballColor;
-  
   
   private final Pigeon m_pigeon = new Pigeon();
   
@@ -66,12 +63,7 @@ public class RobotContainer {
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   
-
-  
-
   private final SendableChooser<Command> m_autoChooser;
-
-  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -86,15 +78,12 @@ public class RobotContainer {
     m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
     m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
     
-    m_ballColor = BallColor.BLUE;
-    m_intake = new Intake(m_ballColor);
+    m_intake = new Intake(DriverStation.getAlliance());
     
     SmartDashboard.putData(m_autoChooser);
 
     m_driverOI = new DriverOI(m_driverController);
     
-
-
     // Configure the button bindings
     configureButtonBindings();
 
@@ -106,7 +95,7 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
 
-    m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret)); 
+    // m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret)); 
     
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
