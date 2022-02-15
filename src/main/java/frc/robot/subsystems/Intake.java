@@ -97,13 +97,6 @@ public class Intake extends SubsystemBase {
 
   public void configMotors(){
 
-    m_leftFeederMotor.follow(m_rightFeederMotor, FollowerType.PercentOutput);
-
-    //configure limit switches for intake motor and leading feeder motor
-    m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-                                                 LimitSwitchNormal.NormallyOpen, 0);
-    m_rightFeederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-                                                      LimitSwitchNormal.NormallyOpen, 0);
     
     for(TalonSRX srx : new TalonSRX[] {m_intakeMotor, m_rightFeederMotor, m_leftFeederMotor}) {
     
@@ -140,6 +133,18 @@ public class Intake extends SubsystemBase {
       srx.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
 
     }
+
+    
+    m_leftFeederMotor.follow(m_rightFeederMotor, FollowerType.PercentOutput);
+    m_leftFeederMotor.setInverted(true);
+
+    //configure limit switches for intake motor and leading feeder motor
+    m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+                                                 LimitSwitchNormal.NormallyClosed, 0);
+    m_rightFeederMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+                                                      LimitSwitchNormal.NormallyClosed, 0);
+    setFeederBrakeEnabled();
+    
   }
 
   public void setIntakePIDF() {
@@ -324,14 +329,14 @@ public class Intake extends SubsystemBase {
    * @param output the output of the motor, between -1 and 1
    */
   public void startFeederMotor(double output){
-    m_rightFeederMotor.set(ControlMode.PercentOutput, output);
+    m_rightFeederMotor.set(ControlMode.PercentOutput, -output);
     setFeederBrakeEnabled();
   }
 
   /**
    * ignore feeder limit switch
    */
-  public void setFeederBrakeDisabled(){
+  public void setFeederBrakeEnabled(){
     //overriding the brake (true) means the brake is disabled
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
     m_feederBrakeEnabled = false;
@@ -343,7 +348,7 @@ public class Intake extends SubsystemBase {
   /**
    * listen to feeder limit switch
    */
-  public void setFeederBrakeEnabled(){
+  public void setFeederBrakeDisabled(){
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
     m_feederBrakeEnabled = true; 
   }
@@ -435,13 +440,13 @@ public class Intake extends SubsystemBase {
   // --------- Feeder ------------------------------
 
   public boolean isFeederBrakeActivated(){
-    return isFeederSwitchActivated() && isFeederBrakeEnabled();
+    return isFeederSwitchActivated();
   }
 
   public boolean isFeederSwitchActivated() {
     // Simulate this return if not running on the real robot
     if (RobotBase.isReal()) {
-      return m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed();
+      return m_rightFeederMotor.getSensorCollection().isRevLimitSwitchClosed();
     }
     return m_intakeSim.isFeederSwitchClosed();
   }
@@ -460,11 +465,12 @@ public class Intake extends SubsystemBase {
 
   public boolean isFeederMotorOn(){
     //not percent, range between -1 and 1
-    return (m_rightFeederMotor.getMotorOutputPercent() > .1);
+    return (Math.abs(m_rightFeederMotor.getMotorOutputPercent()) > .1);
   }  
 
   public boolean isFeederBrakeEnabled() {
     return m_feederBrakeEnabled;
+    //rightFeederMotor.getSensorCollection().isRevLimitSwitchClosed();
   }
 
   // --------- Ramp ------------------------------
