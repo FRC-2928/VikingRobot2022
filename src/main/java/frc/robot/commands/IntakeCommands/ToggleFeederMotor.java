@@ -31,7 +31,7 @@ public class ToggleFeederMotor extends InstantCommand {
     if(m_intake.isFeederMotorOn()){
       m_intake.stopFeederMotor();
     } else {
-      m_intake.startFeederMotor(.2);
+      m_intake.startFeederMotor(.3);
     }
   }
 }
