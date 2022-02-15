@@ -4,25 +4,23 @@
 
 package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CloseRamp extends SequentialCommandGroup {
-  /** Creates a new CloseRamp. */
+public class CloseRamp extends InstantCommand {
+  Intake m_intake;
   public CloseRamp(Intake intake) {
-    
-    
-    addCommands(
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
+    m_intake = intake;
+  }
 
-      new TriggerCloseRamp(intake),
-      
-      new WaitCommand(0.01),
-      
-      new SetRampStable(intake));
-
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    m_intake.closeRamp();
   }
 }

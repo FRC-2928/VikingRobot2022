@@ -46,6 +46,8 @@ public class Intake extends SubsystemBase {
   private Alliance m_ballColor = Alliance.Blue;
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
+  Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidOpen);
+  Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidClosed);
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -54,8 +56,8 @@ public class Intake extends SubsystemBase {
   private final Color kRedTarget = new Color(0.561, 0.232, 0.114);
   
  
-  private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(RobotMap.kRightRampMotor);
-  private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(RobotMap.kLeftRampMotor);
+  private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(RobotMap.kRightFeederMotor);
+  private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(RobotMap.kLeftFeederMotor);
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
@@ -124,7 +126,7 @@ public class Intake extends SubsystemBase {
       srx.configNeutralDeadband(0.01);
 
       //Set to brake mode, will brake the motor when no power is sent
-      srx.setNeutralMode(NeutralMode.Coast);
+      srx.setNeutralMode(NeutralMode.Brake);
 
       /** 
        * Setting input side current limit (amps)
@@ -193,7 +195,7 @@ public class Intake extends SubsystemBase {
     // Commands
     m_commandsLayout = Shuffleboard.getTab("Intake")
       .getLayout("Commands", BuiltInLayouts.kList)
-      .withSize(3, 5)
+      .withSize(3, 6)
       .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
       .withPosition(1, 0);  
   }
@@ -351,11 +353,21 @@ public class Intake extends SubsystemBase {
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
   public void openRamp(){
     m_rampSolenoid.set(true);
+
+    //for double solenoids on sweetpants
+    m_rampSolenoidOpen.set(true);
+    m_rampSolenoidClosed.set(false);
+
     m_rampOpenSim = true;
   }
 
   public void closeRamp(){
     m_rampSolenoid.set(false);
+
+    //for double solenoids on sweetpants
+    m_rampSolenoidOpen.set(false);
+    m_rampSolenoidClosed.set(true);
+
     m_rampOpenSim = false;
   }
 

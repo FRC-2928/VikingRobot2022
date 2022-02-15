@@ -30,8 +30,8 @@ public final class Constants {
         public static final int kDrivetrainRightBackTalonFX = 0;
 
         //Feeder
-        public static int kLeftRampMotor = 10;
-		public static int kRightRampMotor = 11;
+        public static int kLeftFeederMotor = 5;
+		public static int kRightFeederMotor = 9;
 
         public static final int kIRSensorBottom = 9;
         public static final int kIRSensorMiddle = 8;
@@ -58,6 +58,9 @@ public final class Constants {
         public static final int kDrivetrainShiftSolenoidHigh = 1;
         public static final int kDrivetrainShiftSolenoidLow = 0;
         public static final int kRampSolenoid = 4;
+        public static final int kRampSolenoidOpen = 2;
+        public static final int kRampSolenoidClosed = 3;
+
         // public static final int kIntakeBaseSolenoid = 5;
         // public static final int kRatchetSolenoid = 1;
         

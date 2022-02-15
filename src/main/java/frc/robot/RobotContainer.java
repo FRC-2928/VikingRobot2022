@@ -40,7 +40,9 @@ import frc.robot.commands.DrivetrainCommands.TurnToTarget;
 import frc.robot.commands.FlywheelCommands.DecrementFlywheel;
 import frc.robot.commands.FlywheelCommands.IncrementFlywheel;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
+import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
+import frc.robot.commands.IntakeCommands.OpenRamp;
 import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
@@ -102,6 +104,9 @@ public class RobotContainer {
     m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
     m_intake.getCommandsLayout().add(new ShootBall(m_intake)); 
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
+    m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
+    m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
+
 
     m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
     m_flywheel.getCommandsLayout().add(new IncrementFlywheel(m_flywheel));
