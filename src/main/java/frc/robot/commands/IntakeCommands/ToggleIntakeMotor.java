@@ -6,6 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
+import frc.robot.Constants.IntakeConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -32,7 +33,7 @@ public class ToggleIntakeMotor extends InstantCommand {
       m_intake.stopIntakeMotor();
       System.out.println("Intake motor stopped...");
     } else {
-      m_intake.startIntakeMotor(.2);
+      m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);
       System.out.println("Intake motor started...");
     }
   }

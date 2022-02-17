@@ -6,6 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.Constants.IntakeConstants;
 
 public class ShootBall extends CommandBase {
   
@@ -29,7 +30,7 @@ public class ShootBall extends CommandBase {
       m_intake.setIntakeBrakeDisabled();
 
       // Start feeder motor at high power
-      m_intake.startFeederMotor(0.8);
+      m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
       m_counter = 0;
     } else {
       m_counter = 99;
@@ -47,8 +48,8 @@ public class ShootBall extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_intake.setFeederBrakeEnabled();
-    m_intake.startFeederMotor(0.2);
-    m_intake.startIntakeMotor(0.2);
+    m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
+    m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);
   }
 
   // Returns true when the command should end.

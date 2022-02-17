@@ -6,6 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
+import frc.robot.Constants.IntakeConstants;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -31,7 +32,7 @@ public class ToggleFeederMotor extends InstantCommand {
     if(m_intake.isFeederMotorOn()){
       m_intake.stopFeederMotor();
     } else {
-      m_intake.startFeederMotor(.3);
+      m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     }
   }
 }

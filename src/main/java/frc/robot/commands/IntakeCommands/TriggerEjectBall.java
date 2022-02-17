@@ -5,6 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -25,6 +26,6 @@ public class TriggerEjectBall extends InstantCommand {
   public void initialize() {
     m_intake.stopIntakeMotor();
     m_intake.setFeederBrakeDisabled();
-    m_intake.startFeederMotor(.2);
+    m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
   }
 }
