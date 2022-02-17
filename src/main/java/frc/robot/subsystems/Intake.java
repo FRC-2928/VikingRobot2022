@@ -139,12 +139,12 @@ public class Intake extends SubsystemBase {
 
     
     m_leftFeederMotor.follow(m_rightFeederMotor, FollowerType.PercentOutput);
-    m_leftFeederMotor.setInverted(true);
+    m_rightFeederMotor.setInverted(true);
 
     //configure limit switches for intake motor and leading feeder motor
     m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
                                                  LimitSwitchNormal.NormallyClosed, 0);
-    m_rightFeederMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+    m_rightFeederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
                                                       LimitSwitchNormal.NormallyClosed, 0);
     setFeederBrakeEnabled();
     
@@ -342,7 +342,7 @@ public class Intake extends SubsystemBase {
    * @param output the output of the motor, between -1 and 1
    */
   public void startFeederMotor(double output){
-    m_rightFeederMotor.set(ControlMode.PercentOutput, -output);
+    m_rightFeederMotor.set(ControlMode.PercentOutput, output);
   }
 
   /**
@@ -458,7 +458,7 @@ public class Intake extends SubsystemBase {
   public boolean isFeederSwitchActivated() {
     // Simulate this return if not running on the real robot
     if (RobotBase.isReal()) {
-      return !(m_rightFeederMotor.getSensorCollection().isRevLimitSwitchClosed());
+      return !(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
     }
     return m_intakeSim.isFeederSwitchClosed();
   }
