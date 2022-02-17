@@ -336,7 +336,7 @@ public class Intake extends SubsystemBase {
   /**
    * ignore feeder limit switch
    */
-  public void setFeederBrakeEnabled(){
+  public void setFeederBrakeDisabled(){
     //overriding the brake (true) means the brake is disabled
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
     m_feederBrakeEnabled = false;
@@ -348,7 +348,7 @@ public class Intake extends SubsystemBase {
   /**
    * listen to feeder limit switch
    */
-  public void setFeederBrakeDisabled(){
+  public void setFeederBrakeEnabled(){
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
     m_feederBrakeEnabled = true; 
   }

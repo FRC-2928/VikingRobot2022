@@ -152,13 +152,6 @@ public class Drivetrain extends SubsystemBase {
 
     public void configmotors() {
 
-        //Setting followers, followers don't automatically followtLeader's inverts so you must set the invert type to FollotLeader
-        m_leftFollower.follow(m_leftLeader, FollowerType.PercentOutput);
-        m_leftFollower.setInverted(InvertType.FollowMaster);
-        m_rightFollower.follow(m_rightLeader, FollowerType.PercentOutput);
-        m_rightFollower.setInverted(InvertType.FollowMaster);
-
-        m_rightLeader.setInverted(InvertType.InvertMotorOutput);
 
         // Configure the motors
         for(TalonFX fx : new TalonFX[] {m_leftLeader, m_leftFollower, m_rightLeader, m_rightFollower}){
@@ -194,6 +187,14 @@ public class Drivetrain extends SubsystemBase {
             //Either using the integrated Falcon sensor or an external one, will change if needed
             fx.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
         }
+        
+        //Setting followers, followers don't automatically followtLeader's inverts so you must set the invert type to FollotLeader
+        m_leftFollower.follow(m_leftLeader, FollowerType.PercentOutput);
+        m_leftFollower.setInverted(InvertType.FollowMaster);
+        m_rightFollower.follow(m_rightLeader, FollowerType.PercentOutput);
+        m_rightFollower.setInverted(InvertType.FollowMaster);
+
+        m_rightLeader.setInverted(InvertType.InvertMotorOutput);
     }
 
     public void setWheelPIDF() {
