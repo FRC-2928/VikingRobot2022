@@ -93,6 +93,9 @@ public class Intake extends SubsystemBase {
     setIntakePIDF();
     resetEncoders();
     setupShuffleboard();
+
+    m_colorMatcher.addColorMatch(kBlueTarget);
+    m_colorMatcher.addColorMatch(kRedTarget);
   }
 
   public void configMotors(){
@@ -221,6 +224,7 @@ public class Intake extends SubsystemBase {
     // Get the color of the ball that is in the feeder
     m_ballColor = getBallColor();
 
+
     // Shuffleboard output
     m_intakeMotorEntry.setNumber(m_intakeMotor.getMotorOutputPercent());
     m_feederMotorEntry.setNumber(m_rightFeederMotor.getMotorOutputPercent());
@@ -252,9 +256,13 @@ public class Intake extends SubsystemBase {
     // String colorString;
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
+    double IR = m_colorSensor.getIR();
+
     Alliance ballColor;
     if (RobotBase.isReal()) {
-      if (match.color == kBlueTarget) {
+      if (IR < 5){
+        ballColor = Alliance.Invalid;
+      } else if (match.color == kBlueTarget) {
         ballColor = Alliance.Blue;
       } else if (match.color == kRedTarget) {
         ballColor = Alliance.Red;
@@ -265,12 +273,17 @@ public class Intake extends SubsystemBase {
       ballColor = m_intakeSim.getBallColor();
     }
   
+    
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
      * sensor.
      */
     SmartDashboard.putNumber("Detected Color Confidence", match.confidence);
     SmartDashboard.putString("Detected Color", ballColor.name());
+    SmartDashboard.putNumber("Detected Red", detectedColor.red);
+    SmartDashboard.putNumber("Detected Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
+    
 
     return ballColor;
   }
@@ -392,10 +405,10 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
 
   public boolean readyToShoot() {
-    //if (feederHasBall() && isRampClosed() && hasValidBall()) {
+    if (isRampClosed() && hasValidBall()) {
       return true;
-    //} 
-    //return false;
+    } 
+    return false;
   }
 
   public boolean hasValidBall() {
