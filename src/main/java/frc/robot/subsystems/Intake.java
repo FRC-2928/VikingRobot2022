@@ -458,7 +458,7 @@ public class Intake extends SubsystemBase {
   public boolean isFeederSwitchActivated() {
     // Simulate this return if not running on the real robot
     if (RobotBase.isReal()) {
-      return m_rightFeederMotor.getSensorCollection().isRevLimitSwitchClosed();
+      return !(m_rightFeederMotor.getSensorCollection().isRevLimitSwitchClosed());
     }
     return m_intakeSim.isFeederSwitchClosed();
   }
