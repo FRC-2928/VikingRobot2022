@@ -51,7 +51,7 @@ public final class Constants {
         public static int kControlPanelSparkMax = 4;
 
         //Intake
-        public static final int kIntakeMotor = 5; //placeholder
+        public static final int kIntakeMotor = 10; //placeholder
 
         //Solenoids
         // public static final int kDrivetrainShiftSolenoid = 6; 

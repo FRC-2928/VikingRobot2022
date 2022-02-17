@@ -330,27 +330,26 @@ public class Intake extends SubsystemBase {
    */
   public void startFeederMotor(double output){
     m_rightFeederMotor.set(ControlMode.PercentOutput, -output);
-    setFeederBrakeEnabled();
-  }
-
-  /**
-   * ignore feeder limit switch
-   */
-  public void setFeederBrakeDisabled(){
-    //overriding the brake (true) means the brake is disabled
-    m_rightFeederMotor.overrideLimitSwitchesEnable(true);
-    m_feederBrakeEnabled = false;
-    if (!RobotBase.isReal()) {
-      m_intakeSim.triggerOpenFeederSwitchSim();
-    }
   }
 
   /**
    * listen to feeder limit switch
    */
   public void setFeederBrakeEnabled(){
+    //overriding the brake (true) means the brake is disabled
+    m_rightFeederMotor.overrideLimitSwitchesEnable(true);
+    m_feederBrakeEnabled = true;
+    if (!RobotBase.isReal()) {
+      m_intakeSim.triggerOpenFeederSwitchSim();
+    }
+  }
+
+  /**
+   * ignore feeder limit switch
+   */
+  public void setFeederBrakeDisabled(){
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
-    m_feederBrakeEnabled = true; 
+    m_feederBrakeEnabled = false;
   }
 
   // --------- Ramp ------------------------------
@@ -393,10 +392,10 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
 
   public boolean readyToShoot() {
-    if (feederHasBall() && isRampClosed() && hasValidBall()) {
+    //if (feederHasBall() && isRampClosed() && hasValidBall()) {
       return true;
-    } 
-    return false;
+    //} 
+    //return false;
   }
 
   public boolean hasValidBall() {

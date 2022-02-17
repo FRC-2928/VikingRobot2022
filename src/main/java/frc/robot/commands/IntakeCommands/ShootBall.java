@@ -11,7 +11,6 @@ import frc.robot.Constants.IntakeConstants;
 public class ShootBall extends CommandBase {
   
   Intake m_intake;
-  private int m_counter = 0;
 
   /** Creates a new CheckAndShootBall. */
   public ShootBall(Intake intake) {
@@ -27,21 +26,19 @@ public class ShootBall extends CommandBase {
       // Override all brakes
       System.out.println("Ready to shoot...");
       m_intake.setFeederBrakeDisabled();
-      m_intake.setIntakeBrakeDisabled();
+      //m_intake.setIntakeBrakeDisabled();
 
       // Start feeder motor at high power
       m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
-      m_counter = 0;
-    } else {
-      m_counter = 99;
-    }
+      
+    } 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // to check: there is a ball (of right color), ramp is fully closed
-    m_counter =+ 1;
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -24,7 +24,7 @@ public class TriggerEjectBall extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.stopIntakeMotor();
+    //m_intake.stopIntakeMotor();
     m_intake.setFeederBrakeDisabled();
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
   }
