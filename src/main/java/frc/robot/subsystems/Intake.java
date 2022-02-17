@@ -208,6 +208,11 @@ public class Intake extends SubsystemBase {
       .withPosition(1, 0);  
   }
 
+  public void startMotors(){
+    startFeederMotor(IntakeConstants.kFeederSpeed);
+    startIntakeMotor(IntakeConstants.kIntakeSpeed);
+  }
+
 
   // -----------------------------------------------------------
   // Control Input
@@ -223,6 +228,8 @@ public class Intake extends SubsystemBase {
 
     // Get the color of the ball that is in the feeder
     m_ballColor = getBallColor();
+
+    
 
 
     // Shuffleboard output

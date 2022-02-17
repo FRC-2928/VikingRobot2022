@@ -97,7 +97,9 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
 
-    // m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret)); 
+    //m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret)); 
+    //m_intake.setDefaultCommand(new RunCommand(() -> m_intake.startMotors(), m_intake));
+    m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
     
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
