@@ -109,7 +109,7 @@ public class DriverOI {
         return new JoystickButton(m_controller, XboxController.Button.kY.value);
     }
 
-    public Button getTurnToTargetButton() {
+    public Button getTurnTurretToTargetButton() {
         return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
     }
 

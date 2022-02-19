@@ -48,6 +48,7 @@ import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
 import frc.robot.commands.TurretCommands.MoveTurret;
+import frc.robot.commands.TurretCommands.TurnTurretToTarget;
 
 public class RobotContainer {
 
@@ -190,7 +191,7 @@ public class RobotContainer {
 
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
 
-    m_driverOI.getTurnToTargetButton().whileHeld(new TurnToTarget(m_drivetrain, m_turret));
+    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
 

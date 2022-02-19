@@ -15,6 +15,7 @@ public class MoveTurret extends CommandBase {
   /** Creates a new MoveTurret. */
   /**
    * moves the turret at half power in the desired direction
+   * left direction is clockwise, right is counter
    * @param turret
    * @param direction negative value for left, positive for right
    */
@@ -35,9 +36,9 @@ public class MoveTurret extends CommandBase {
   public void execute() {
 
     if(m_direction > 0){
-      m_turret.setPower(.2);
+      m_turret.setPower(.3);
     } else {
-      m_turret.setPower(-.2);
+      m_turret.setPower(-.3);
     }
     
   }

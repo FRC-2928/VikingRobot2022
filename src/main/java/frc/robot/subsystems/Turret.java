@@ -71,13 +71,13 @@ public class Turret extends SubsystemBase {
      m_turretMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
 
       //Either using the integrated Falcon sensor or an external one, will change if needed
-     m_turretMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
+     m_turretMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
 
     //  m_turretMotor.configForwardLimitSwitchSource(type, normalOpenOrClose);
     //  m_turretMotor.configReverseLimitSwitchSource(type, normalOpenOrClose);
 
-    m_turretMotor.configForwardSoftLimitThreshold(getDegreesToEncoderTicks(360/4));
-    m_turretMotor.configReverseSoftLimitThreshold(getDegreesToEncoderTicks(-360/4));
+    m_turretMotor.configForwardSoftLimitThreshold(6700);
+    m_turretMotor.configReverseSoftLimitThreshold(-6700);
     //m_turretMotor.configForwardSoftLimitEnable(true, 0);
     //m_turretMotor.configReverseSoftLimitEnable(true, 0);
   }
@@ -112,6 +112,8 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("Target Area", m_turretLimelight.getArea());
     SmartDashboard.putNumber("Encoder Ticks", m_turretMotor.getSelectedSensorPosition());
     SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
+
+    m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
   }
 
   public void resetEncoders(){
