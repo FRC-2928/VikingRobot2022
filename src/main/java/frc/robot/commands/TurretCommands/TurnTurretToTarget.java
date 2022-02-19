@@ -26,7 +26,7 @@ public class TurnTurretToTarget extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          turret.setTurretDegrees(output);
+          turret.setPower(output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret);

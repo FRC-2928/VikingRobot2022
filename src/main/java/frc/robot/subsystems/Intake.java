@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Solenoid;
+// import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -46,9 +46,10 @@ public class Intake extends SubsystemBase {
   private Alliance m_alliance;
   private Alliance m_ballColor = Alliance.Blue;
 
-  Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
-  Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidOpen);
-  Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidClosed);
+  // Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
+  // Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidOpen);
+  // Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidClosed);
+
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -405,21 +406,21 @@ public class Intake extends SubsystemBase {
 
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
   public void openRamp(){
-    m_rampSolenoid.set(true);
+    // m_rampSolenoid.set(true);
 
-    //for double solenoids on sweetpants
-    m_rampSolenoidOpen.set(true);
-    m_rampSolenoidClosed.set(false);
+    // //for double solenoids on sweetpants
+    // m_rampSolenoidOpen.set(true);
+    // m_rampSolenoidClosed.set(false);
 
     m_rampOpenSim = true;
   }
 
   public void closeRamp(){
-    m_rampSolenoid.set(false);
+    // m_rampSolenoid.set(false);
 
-    //for double solenoids on sweetpants
-    m_rampSolenoidOpen.set(false);
-    m_rampSolenoidClosed.set(true);
+    // //for double solenoids on sweetpants
+    // m_rampSolenoidOpen.set(false);
+    // m_rampSolenoidClosed.set(true);
 
     m_rampOpenSim = false;
   }
@@ -529,9 +530,9 @@ public class Intake extends SubsystemBase {
   //TODO: maybe switch true to false depending on which solenoid state is the open ramp
   public boolean isRampOpen(){
     // Simulate this return if not running on the real robot
-    if (RobotBase.isReal()) {
-      return (m_rampSolenoid.get());
-    }  
+    // if (RobotBase.isReal()) {
+    //   return (m_rampSolenoid.get());
+    // }  
     return m_rampOpenSim;
   }
 
@@ -554,10 +555,6 @@ public class Intake extends SubsystemBase {
         m_intakeSim.triggerOpenIntakeSwitchSim();         
       }          
     }
-
-    // if (feederHasBall()) {
-    //   setIntakeBrakeEnabled();
-    // }
 
     /* Pass the robot battery voltage to the simulated Talon SRXs */
     // If the brake is activated we simulate the fact that the motor has stopped.

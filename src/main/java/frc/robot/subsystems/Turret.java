@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +20,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Turret extends SubsystemBase {
@@ -29,6 +31,9 @@ public class Turret extends SubsystemBase {
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretTalonSRX);
   private NetworkTableEntry m_targetHOEntry;
   private NetworkTableEntry m_turretTicksEntry;
+
+  // ------ Simulation classes to help us simulate our robot ----------------
+  TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
 
   // -----------------------------------------------------------
   // Initialization
@@ -178,4 +183,49 @@ public class Turret extends SubsystemBase {
     return m_turretMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
+  // -----------------------------------------------------------
+    // Simulation
+    // -----------------------------------------------------------
+    public void simulationPeriodic() {
+      /* Pass the robot battery voltage to the simulated Talon FXs */
+      m_turretMotorSim.setBusVoltage(RobotController.getInputVoltage());
+     
+        
+      // m_drivetrainSimulator.setInputs(m_leftDriveSim.getMotorOutputLeadVoltage(),
+      //                                 -m_rightDriveSim.getMotorOutputLeadVoltage());
+  
+      /*
+       * Advance the model by 20 ms. Note that if you are running this
+       * subsystem in a separate thread or have changed the nominal
+       * timestep of TimedRobot, this value needs to match it.
+       */
+      // m_drivetrainSimulator.update(0.02);
+  
+      // /*
+      //  * Update all of the sensors.
+      //  *
+      //  * Since WPILib's simulation class is assuming +V is forward,
+      //  * but -V is forward for the right motor, we need to negate the
+      //  * position reported by the simulation class. Basically, we
+      //  * negated the input, so we need to negate the output.
+      //  */
+      // m_leftDriveSim.setIntegratedSensorRawPosition(
+      //                 (int)metersToEncoderTicks(
+      //                     m_drivetrainSimulator.getLeftPositionMeters()
+      //                 ));
+      // m_leftDriveSim.setIntegratedSensorVelocity(
+      //                 (int)metersToEncoderTicks(
+      //                     m_drivetrainSimulator.getLeftVelocityMetersPerSecond() / 10
+      //                 ));
+      // m_rightDriveSim.setIntegratedSensorRawPosition(
+      //                 (int)metersToEncoderTicks(
+      //                     -m_drivetrainSimulator.getRightPositionMeters()
+      //                 ));
+      // m_rightDriveSim.setIntegratedSensorVelocity(
+      //                 (int)metersToEncoderTicks(
+      //                     -m_drivetrainSimulator.getRightVelocityMetersPerSecond() / 10
+      //                 ));
+
+      // m_pigeonSim.setRawHeading(m_drivetrainSimulator.getHeading().getDegrees());
+    }
 }
