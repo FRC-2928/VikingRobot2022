@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -62,6 +63,9 @@ public class Intake extends SubsystemBase {
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
 
   private boolean m_rampStable = true;
+  private Timer m_timer = new Timer();
+  private double m_duration = 0;
+  private boolean m_ejectInProgress = false;
 
   // ------- Shuffleboard variables ----------------------------------------
   private ShuffleboardTab m_intakeTab;
@@ -229,9 +233,7 @@ public class Intake extends SubsystemBase {
     // Get the color of the ball that is in the feeder
     m_ballColor = getBallColor();
     
-
-
-
+    // ejectBall();
 
     // Shuffleboard output
     m_intakeMotorEntry.setNumber(m_intakeMotor.getMotorOutputPercent());
@@ -250,6 +252,32 @@ public class Intake extends SubsystemBase {
     m_ballValidEntry.setBoolean(hasValidBall());
     m_ballColorEntry.setString(m_ballColor.name());
     
+  }
+
+  public void ejectBall() {
+    if (feederHasBall() && hasInvalidBall() && m_ejectInProgress == false) {
+      m_ejectInProgress = true;
+      openRamp();
+      // Set the timer to wait until the ramp is open
+      m_duration = 0.2;
+      m_timer.reset();
+      m_timer.start();
+    }
+  
+    if (m_timer.hasElapsed(m_duration) && m_ejectInProgress) {
+      if (isRampOpen() && isFeederBrakeEnabled()) {
+        setFeederBrakeDisabled();
+        startFeederMotor(IntakeConstants.kFeederSpeed);
+        // Reset the timer to wait for the ball to leave
+        m_duration = 1.0;
+        m_timer.reset();
+        m_timer.start();
+      } else {
+        closeRamp();
+        setFeederBrakeEnabled();
+        m_ejectInProgress = false;
+      }
+    }
   }
 
   public ShuffleboardLayout getCommandsLayout() {
@@ -420,8 +448,11 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean hasValidBall() {
-    // return true;
     return (m_alliance.ordinal() == m_ballColor.ordinal());
+  }
+
+  public boolean hasInvalidBall() {
+    return !hasValidBall();
   }
 
   // --------- Intake ------------------------------  

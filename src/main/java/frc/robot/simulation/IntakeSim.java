@@ -58,7 +58,7 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
 
     // ------------- Ball --------------------------
     public Alliance getBallColor() {
-        m_ballColor = Alliance.Red;
+        m_ballColor = Alliance.Blue;
         return m_ballColor;
     }
 
