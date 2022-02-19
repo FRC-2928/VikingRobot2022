@@ -28,6 +28,7 @@ public class Turret extends SubsystemBase {
   private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretTalonSRX);
   private NetworkTableEntry m_targetHOEntry;
+  private NetworkTableEntry m_turretTicksEntry;
 
   // -----------------------------------------------------------
   // Initialization
@@ -59,7 +60,7 @@ public class Turret extends SubsystemBase {
      m_turretMotor.configNeutralDeadband(0.01);
 
       //Set to brake mode, will brake the motor when no power is sent
-     m_turretMotor.setNeutralMode(NeutralMode.Coast);
+     m_turretMotor.setNeutralMode(NeutralMode.Brake);
 
       /** 
        * Setting input side current limit (amps)
@@ -75,10 +76,10 @@ public class Turret extends SubsystemBase {
     //  m_turretMotor.configForwardLimitSwitchSource(type, normalOpenOrClose);
     //  m_turretMotor.configReverseLimitSwitchSource(type, normalOpenOrClose);
 
-    m_turretMotor.configForwardSoftLimitThreshold(getDegreesToEncoderTicks(360/8));
-    m_turretMotor.configReverseSoftLimitThreshold(getDegreesToEncoderTicks(-360/8));
-    m_turretMotor.configForwardSoftLimitEnable(true, 0);
-    m_turretMotor.configReverseSoftLimitEnable(true, 0);
+    m_turretMotor.configForwardSoftLimitThreshold(getDegreesToEncoderTicks(360/4));
+    m_turretMotor.configReverseSoftLimitThreshold(getDegreesToEncoderTicks(-360/4));
+    //m_turretMotor.configForwardSoftLimitEnable(true, 0);
+    //m_turretMotor.configReverseSoftLimitEnable(true, 0);
   }
 
   public void setTurretPIDF() {
@@ -94,6 +95,7 @@ public class Turret extends SubsystemBase {
             .withSize(2,1)
             .withPosition(3, 0)
             .getEntry(); 
+    m_turretTicksEntry = m_turretTab.add("turret ticks", m_turretMotor.getSelectedSensorPosition()).getEntry();
   }
 
   // -----------------------------------------------------------
@@ -108,6 +110,8 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("Target Y", m_turretLimelight.getVerticalOffset());
     SmartDashboard.putNumber("Target Skew", m_turretLimelight.getSkew());
     SmartDashboard.putNumber("Target Area", m_turretLimelight.getArea());
+    SmartDashboard.putNumber("Encoder Ticks", m_turretMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
   }
 
   public void resetEncoders(){

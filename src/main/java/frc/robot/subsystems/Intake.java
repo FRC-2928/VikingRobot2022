@@ -228,8 +228,9 @@ public class Intake extends SubsystemBase {
 
     // Get the color of the ball that is in the feeder
     m_ballColor = getBallColor();
-
     
+
+
 
 
     // Shuffleboard output

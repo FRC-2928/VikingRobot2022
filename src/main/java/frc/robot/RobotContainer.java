@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -195,8 +196,9 @@ public class RobotContainer {
 
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
 
-    m_driverOI.getTurnTurretLeftButton().whenHeld(new MoveTurret(m_turret, -1));
-    m_driverOI.getTurnTurretRightButton().whenHeld(new MoveTurret(m_turret, 1));
+    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
+
+    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
 
     m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));

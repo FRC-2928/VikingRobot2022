@@ -27,7 +27,7 @@ public final class Constants {
         public static final int kDrivetrainLeftFrontTalonFX = 14;
         public static final int kDrivetrainLeftBackTalonFX = 15;
         public static final int kDrivetrainRightFrontTalonFX = 1;
-        public static final int kDrivetrainRightBackTalonFX = 0;
+        public static final int kDrivetrainRightBackTalonFX = 11; //should be 0
 
         //Feeder
         public static int kLeftFeederMotor = 5;
@@ -38,11 +38,11 @@ public final class Constants {
         public static final int kIRSensorTop = 7;
 
         //Shooter
-        public static final int kFlywheelTalonFX = 3;
+        public static final int kFlywheelTalonFX = 0;
         public static int kHoodSparkMax = 6;
 
         //Turret
-        public static final int kTurretTalonSRX = 9;
+        public static final int kTurretTalonSRX = 15;
 
         //Climber
         public static final int kClimberMotor = 12; 
