@@ -148,6 +148,9 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putData("Field", m_field2d);
 
         setupShuffleboard();
+
+        // TODO Testing only
+        disableMotorSafety();
     }        
 
     public void configmotors() {
@@ -264,8 +267,12 @@ public class Drivetrain extends SubsystemBase {
     // -----------------------------------------------------------
     @Override
     public void periodic() {
-        // double leftWheelRotations, rightWheelRotations;
 
+        // publishTelemetry();   
+        
+    }
+
+    public void publishTelemetry() {
         double leftPosition = getLeftDistanceMeters();
         double rightPosition = getRightDistanceMeters();
 
@@ -288,13 +295,9 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Wheel Position", rightPosition);
         m_leftWheelPositionEntry.setDouble(leftPosition);
         m_rightWheelPositionEntry.setDouble(rightPosition);
-        //SmartDashboard.putNumber("Rotations Left Wheel", m_leftWheelRotations);
-        //SmartDashboard.putNumber("Rotations Right Wheel", m_rightWheelRotations);
         SmartDashboard.putNumber("Left Wheel Speed", m_leftVelocity);
         SmartDashboard.putNumber("Right Wheel Speed", m_rightVelocity);
         SmartDashboard.putNumber("Robot yaw", getRotation().getDegrees());
-        //SmartDashboard.putNumber("Drivetrain Left encoder", leftEncoderCount);
-        //SmartDashboard.putNumber("Drivetrain Right encoder", rightEncoderCount);
     }
 
     // Meters to encoder ticks

@@ -93,18 +93,17 @@ public class RobotContainer {
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
-    m_drivetrain.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-        new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
-            m_drivetrain));
+    // m_drivetrain.setDefaultCommand(
+    //     // A split-stick arcade command, with forward/backward controlled by the left
+    //     // hand, and turning controlled by the right.
+    //     new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
+    //         m_drivetrain));
 
-    //m_turret.setDefaultCommand(new RunCommand(() -> m_turret.targetHorizontalOffset(), m_turret)); 
-    //m_intake.setDefaultCommand(new RunCommand(() -> m_intake.startMotors(), m_intake));
-    m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
+    // m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
     
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
+    m_intake.getCommandsLayout().add(new PrintCommand("Toggle feeder button")); 
     m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
     m_intake.getCommandsLayout().add(new ShootBall(m_intake)); 
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
@@ -183,7 +182,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     configureDrivetrainButtons();
-
+    configureTurretButtons();
   }
 
   public void configureDrivetrainButtons() {
@@ -191,21 +190,22 @@ public class RobotContainer {
 
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
 
-    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
-
-    m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
+    // m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
+    m_driverOI.getToggleIntakeMotorButton().whenPressed(new PrintCommand("Toggle feeder motor"));
 
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
-
-    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
-
-    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
 
     m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
   }
 
-  
+  // Turret Buttons
+  public void configureTurretButtons() {
+    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
+    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
+
+    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
+  }
 
   //added 1/19/21 STILL NOT TESTED, should reset the encoders in theory
   // public void configureResetEncoders() {

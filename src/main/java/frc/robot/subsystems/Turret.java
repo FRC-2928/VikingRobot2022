@@ -80,11 +80,14 @@ public class Turret extends SubsystemBase {
 
     //  m_turretMotor.configForwardLimitSwitchSource(type, normalOpenOrClose);
     //  m_turretMotor.configReverseLimitSwitchSource(type, normalOpenOrClose);
+    m_turretMotor.setInverted(true);
+    m_turretMotor.setSensorPhase(true);
 
     m_turretMotor.configForwardSoftLimitThreshold(5500);
     m_turretMotor.configReverseSoftLimitThreshold(-5500);
     m_turretMotor.configForwardSoftLimitEnable(true, 0);
     m_turretMotor.configReverseSoftLimitEnable(true, 0);
+    m_turretMotor.overrideSoftLimitsEnable(true);
   }
 
   public void setTurretPIDF() {
@@ -110,6 +113,12 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
+    // publishTelemetry();
+  }
+
+  public void publishTelemetry() {
+    
     SmartDashboard.putBoolean("Target found", m_turretLimelight.isTargetFound());
     SmartDashboard.putNumber("Target X", m_turretLimelight.getHorizontalOffset());
     SmartDashboard.putNumber("Target Y", m_turretLimelight.getVerticalOffset());
@@ -117,8 +126,6 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("Target Area", m_turretLimelight.getArea());
     SmartDashboard.putNumber("Encoder Ticks", m_turretMotor.getSelectedSensorPosition());
     SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
-
-    m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
   }
 
   public void resetEncoders(){
@@ -141,6 +148,7 @@ public class Turret extends SubsystemBase {
    * @param power the power value between -1 and 1
    */
   public void setPower(double power){
+    SmartDashboard.setDefaultNumber("Turret Power", power);
     m_turretMotor.set(ControlMode.PercentOutput, power);
   }
 
@@ -150,6 +158,10 @@ public class Turret extends SubsystemBase {
    */
   public void setSensorTicks(double ticks){
     m_turretMotor.setSelectedSensorPosition(ticks);
+  }
+
+  public void setTurretBrakeEnabled(){
+    m_turretMotor.overrideLimitSwitchesEnable(false);
   }
 
   // -----------------------------------------------------------

@@ -233,9 +233,14 @@ public class Intake extends SubsystemBase {
 
     // Get the color of the ball that is in the feeder
     m_ballColor = getBallColor();
+
+    // publishTelemetry();
     
     // ejectBall();
+    
+  }
 
+  public void publishTelemetry() {
     // Shuffleboard output
     m_intakeMotorEntry.setNumber(m_intakeMotor.getMotorOutputPercent());
     m_feederMotorEntry.setNumber(m_rightFeederMotor.getMotorOutputPercent());
@@ -252,7 +257,6 @@ public class Intake extends SubsystemBase {
     m_rampEntry.setBoolean(isRampOpen());
     m_ballValidEntry.setBoolean(hasValidBall());
     m_ballColorEntry.setString(m_ballColor.name());
-    
   }
 
   public void ejectBall() {

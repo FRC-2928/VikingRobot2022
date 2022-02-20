@@ -133,14 +133,17 @@ public class Flywheel extends SubsystemBase {
   // Control Input
   // -----------------------------------------------------------
   @Override
-  public void periodic() {
+  public void periodic() {   
+    // publishTelemetry();
+  }
+
+  public void publishTelemetry() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
 
     m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
     m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
-    
   }
 
   public void resetEncoders(){
