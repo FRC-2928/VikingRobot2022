@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
-// import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -47,8 +47,8 @@ public class Intake extends SubsystemBase {
   private Alliance m_ballColor = Alliance.Blue;
 
   // Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
-  // Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidOpen);
-  // Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidClosed);
+  Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidOpen);
+  Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidClosed);
 
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -412,9 +412,9 @@ public class Intake extends SubsystemBase {
   public void openRamp(){
     // m_rampSolenoid.set(true);
 
-    // //for double solenoids on sweetpants
-    // m_rampSolenoidOpen.set(true);
-    // m_rampSolenoidClosed.set(false);
+    //for double solenoids on sweetpants
+    m_rampSolenoidOpen.set(true);
+    m_rampSolenoidClosed.set(false);
 
     m_rampOpenSim = true;
   }
@@ -422,9 +422,9 @@ public class Intake extends SubsystemBase {
   public void closeRamp(){
     // m_rampSolenoid.set(false);
 
-    // //for double solenoids on sweetpants
-    // m_rampSolenoidOpen.set(false);
-    // m_rampSolenoidClosed.set(true);
+    //for double solenoids on sweetpants
+    m_rampSolenoidOpen.set(false);
+    m_rampSolenoidClosed.set(true);
 
     m_rampOpenSim = false;
   }

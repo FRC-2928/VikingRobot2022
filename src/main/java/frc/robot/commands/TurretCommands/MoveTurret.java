@@ -35,10 +35,12 @@ public class MoveTurret extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Moving turret...");
+    
     if(m_direction > 0){
+      System.out.println("Moving turret left...");
       m_turret.setPower(.3);
     } else {
+      System.out.println("Moving turret right...");
       m_turret.setPower(-.3);
     }
     

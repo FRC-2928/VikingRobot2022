@@ -100,10 +100,17 @@ public class Turret extends SubsystemBase {
   public void setupShuffleboard() {
     ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
     m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", targetHorizontalOffset())
-            .withSize(2,1)
-            .withPosition(3, 0)
-            .getEntry(); 
-    m_turretTicksEntry = m_turretTab.add("turret ticks", m_turretMotor.getSelectedSensorPosition()).getEntry();
+      .withSize(3,1)
+      .withPosition(3, 0)
+      .getEntry(); 
+    m_turretTicksEntry = m_turretTab.add("turret ticks", m_turretMotor.getSelectedSensorPosition())
+      .withSize(2,1)
+      .withPosition(5, 0)
+      .getEntry();
+    m_turretTicksEntry = m_turretTab.add("turret ticks", m_turretMotor.getSelectedSensorPosition())
+      .withSize(2,1)
+      .withPosition(5, 0)
+      .getEntry();  
   }
 
   // -----------------------------------------------------------
@@ -114,6 +121,7 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
+    m_targetHOEntry.setNumber(targetHorizontalOffset());
     // publishTelemetry();
   }
 
@@ -187,7 +195,7 @@ public class Turret extends SubsystemBase {
 
   public double targetHorizontalOffset() {
     double offset = m_turretLimelight.getHorizontalOffset();
-    SmartDashboard.putNumber("Horizontal Offset", offset);
+    // SmartDashboard.putNumber("Horizontal Offset", offset);
     return offset;
   }
 

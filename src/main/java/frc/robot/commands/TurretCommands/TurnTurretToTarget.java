@@ -18,7 +18,7 @@ public class TurnTurretToTarget extends PIDCommand {
   public TurnTurretToTarget(Turret turret) {
     super(
         // The controller that the command will use
-        new PIDController(0.02, 0, 0),
+        new PIDController(0.01, 0, 0),
         // This should return the measurement
         () -> turret.targetHorizontalOffset(),
         // This should return the setpoint (can also be a constant)
@@ -26,7 +26,7 @@ public class TurnTurretToTarget extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          turret.setPower(output);
+          turret.setPower(-output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret);
