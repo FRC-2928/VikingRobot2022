@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.RobotMap;
+import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-  private final WPI_TalonSRX m_climberMotor = new WPI_TalonSRX(RobotMap.kClimberMotor);
+  private final WPI_TalonSRX m_climberMotor = new WPI_TalonSRX(Constants.CANBusIDs.kClimberMotor);
 
   // -----------------------------------------------------------
   // Initialization
