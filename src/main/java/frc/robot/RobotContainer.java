@@ -100,6 +100,7 @@ public class RobotContainer {
     //         m_drivetrain));
 
     // m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
+    m_turret.setDefaultCommand(new TurnToTarget(m_drivetrain, m_turret));
     
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 

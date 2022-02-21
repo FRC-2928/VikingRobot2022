@@ -148,9 +148,6 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putData("Field", m_field2d);
 
         setupShuffleboard();
-
-        // TODO Testing only
-        disableMotorSafety();
     }        
 
     public void configmotors() {

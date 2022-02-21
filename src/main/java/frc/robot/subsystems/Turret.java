@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -100,7 +101,8 @@ public class Turret extends SubsystemBase {
   public void setupShuffleboard() {
     ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
     m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", targetHorizontalOffset())
-      .withSize(3,1)
+      .withSize(3,3)
+      .withWidget(BuiltInWidgets.kGraph)
       .withPosition(1, 0)
       .getEntry(); 
     m_turretTicksEntry = m_turretTab.add("Turret Ticks", m_turretMotor.getSelectedSensorPosition())
@@ -108,7 +110,8 @@ public class Turret extends SubsystemBase {
       .withPosition(5, 0)
       .getEntry();
     m_turretPowerEntry = m_turretTab.add("Motor Power", m_turretMotor.getMotorOutputPercent())
-      .withSize(2,1)
+      .withSize(3,3)
+      .withWidget(BuiltInWidgets.kGraph)
       .withPosition(5, 3)
       .getEntry();  
   }
