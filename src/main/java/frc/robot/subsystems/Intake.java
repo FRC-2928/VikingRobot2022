@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.RobotMap;
+import frc.robot.Constants;
 import frc.robot.simulation.IntakeSim;
 
 import java.util.Map;
@@ -46,9 +46,9 @@ public class Intake extends SubsystemBase {
   private Alliance m_alliance;
   private Alliance m_ballColor = Alliance.Blue;
 
-  // Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoid);
-  Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidOpen);
-  Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.kRampSolenoidClosed);
+  // Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.CANBusIDs.kRampSolenoid);
+  Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidOpen);
+  Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidClosed);
 
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -58,10 +58,10 @@ public class Intake extends SubsystemBase {
   private final Color kRedTarget = new Color(0.561, 0.232, 0.114);
   
  
-  private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(RobotMap.kRightFeederMotor);
-  private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(RobotMap.kLeftFeederMotor);
+  private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kRightFeederMotor);
+  private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kLeftFeederMotor);
   
-  private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.RobotMap.kIntakeMotor);
+  private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.CANBusIDs.kIntakeMotor);
 
   private boolean m_rampStable = true;
   private Timer m_timer = new Timer();

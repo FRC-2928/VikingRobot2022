@@ -28,12 +28,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants.FlywheelConstants;
-import frc.robot.Constants.RobotMap;
+import frc.robot.Constants;
 import frc.robot.simulation.FlywheelSim;
 
 public class Flywheel extends SubsystemBase {
 
-  private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(RobotMap.kFlywheelTalonFX);
+  private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(Constants.CANBusIDs.kFlywheelTalonFX);
   double m_velocity;
 
   //simulation
