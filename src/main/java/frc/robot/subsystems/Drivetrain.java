@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.RobotMap;
+import frc.robot.Constants;
 
 // Imports for Simulation
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
@@ -55,12 +55,12 @@ import frc.robot.subsystems.Pigeon;
 
 public class Drivetrain extends SubsystemBase {
 
-    private final WPI_TalonFX m_leftLeader = new WPI_TalonFX(RobotMap.kDrivetrainLeftBackTalonFX);
-    private final WPI_TalonFX m_rightLeader = new WPI_TalonFX(RobotMap.kDrivetrainRightBackTalonFX);
-    private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(RobotMap.kDrivetrainLeftFrontTalonFX);
-    private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(RobotMap.kDrivetrainRightFrontTalonFX);
+    private final WPI_TalonFX m_leftLeader = new WPI_TalonFX(Constants.CANBusIDs.kDrivetrainLeftBackTalonFX);
+    private final WPI_TalonFX m_rightLeader = new WPI_TalonFX(Constants.CANBusIDs.kDrivetrainRightBackTalonFX);
+    private final WPI_TalonFX m_leftFollower = new WPI_TalonFX(Constants.CANBusIDs.kDrivetrainLeftFrontTalonFX);
+    private final WPI_TalonFX m_rightFollower = new WPI_TalonFX(Constants.CANBusIDs.kDrivetrainRightFrontTalonFX);
 
-    private WPI_PigeonIMU m_pigeon = new WPI_PigeonIMU(RobotMap.kPigeonIMU);
+    private WPI_PigeonIMU m_pigeon = new WPI_PigeonIMU(Constants.CANBusIDs.kPigeonIMU);
 
     private double m_yaw;
 

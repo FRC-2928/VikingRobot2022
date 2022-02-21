@@ -21,40 +21,79 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
  */
 public final class Constants {
 
-    public static final class RobotMap{
-        
-        //Drivetrain
-        public static final int kDrivetrainLeftFrontTalonFX = 14;
-        public static final int kDrivetrainLeftBackTalonFX = 15;
-        public static final int kDrivetrainRightFrontTalonFX = 1;
+    public static final class CANBusIDs {
+        // Drivetrain, right side
         public static final int kDrivetrainRightBackTalonFX = 0;
+        public static final int kDrivetrainRightFrontTalonFX = 1;
+
+        //Sensors
+        public static final int kPigeonIMU = 3;
 
         //Feeder
         public static final int kLeftFeederMotor = 5;
-		public static final int kRightFeederMotor = 9;
-
-        //Shooter
-        public static final int kFlywheelTalonFX = 23;
-
-        //Turret
-        public static final int kTurretTalonSRX = 19;
-
-        //Climber
-        public static final int kClimberMotor = 12; 
+        public static final int kRightFeederMotor = 9;
 
         //Intake
         public static final int kIntakeMotor = 10; //placeholder
 
+        //Climber
+        public static final int kClimberMotor = 12; 
+
+        // Drivetrain, left side
+        public static final int kDrivetrainLeftFrontTalonFX = 14;
+        public static final int kDrivetrainLeftBackTalonFX = 15;
+
+        //Turret
+        public static final int kTurretTalonSRX = 19;
+
+        //Shooter
+        public static final int kFlywheelTalonFX = 23;
+    }
+
+    public static final class PneumaticIDs {
         //Solenoids
-        // public static final int kDrivetrainShiftSolenoid = 6; 
-        public static final int kDrivetrainShiftSolenoidHigh = 1;
         public static final int kDrivetrainShiftSolenoidLow = 0;
-        public static final int kRampSolenoid = 4;
+        public static final int kDrivetrainShiftSolenoidHigh = 1;
         public static final int kRampSolenoidOpen = 2;
         public static final int kRampSolenoidClosed = 3;
+        public static final int kRampSolenoid = 4;
 
-        //Sensors
-        public static final int kPigeonIMU = 3;
+        // public static final int kDrivetrainShiftSolenoid = 6; 
+    }
+
+    public static final class RobotMap {
+        // //Drivetrain
+        // public static final int kDrivetrainLeftFrontTalonFX = 14;
+        // public static final int kDrivetrainLeftBackTalonFX = 15;
+        // public static final int kDrivetrainRightFrontTalonFX = 1;
+        // public static final int kDrivetrainRightBackTalonFX = 0;
+
+        // //Feeder
+        // public static final int kLeftFeederMotor = 5;
+		// public static final int kRightFeederMotor = 9;
+
+        // //Shooter
+        // public static final int kFlywheelTalonFX = 23;
+
+        // //Turret
+        // public static final int kTurretTalonSRX = 19;
+
+        // //Climber
+        // public static final int kClimberMotor = 12; 
+
+        // //Intake
+        // public static final int kIntakeMotor = 10; //placeholder
+
+        // //Solenoids
+        // // public static final int kDrivetrainShiftSolenoid = 6; 
+        // public static final int kDrivetrainShiftSolenoidHigh = 1;
+        // public static final int kDrivetrainShiftSolenoidLow = 0;
+        // public static final int kRampSolenoid = 4;
+        // public static final int kRampSolenoidOpen = 2;
+        // public static final int kRampSolenoidClosed = 3;
+
+        // //Sensors
+        // public static final int kPigeonIMU = 3;
 		
     }
 

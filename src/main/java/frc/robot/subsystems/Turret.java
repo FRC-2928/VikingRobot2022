@@ -28,7 +28,7 @@ public class Turret extends SubsystemBase {
 
   private final Limelight m_turretLimelight = new Limelight();
   private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
-  private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretTalonSRX);
+  private final TalonSRX m_turretMotor  = new TalonSRX(Constants.CANBusIDs.kTurretTalonSRX);
   private NetworkTableEntry m_targetHOEntry;
   private NetworkTableEntry m_turretTicksEntry;
 
