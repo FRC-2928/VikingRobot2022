@@ -30,7 +30,7 @@ public class Turret extends SubsystemBase {
   private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.RobotMap.kTurretTalonSRX);
   private NetworkTableEntry m_targetHOEntry;
-  private NetworkTableEntry m_turretTicksEntry;
+  private NetworkTableEntry m_turretTicksEntry, m_turretPowerEntry;
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
@@ -101,15 +101,15 @@ public class Turret extends SubsystemBase {
     ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
     m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", targetHorizontalOffset())
       .withSize(3,1)
-      .withPosition(3, 0)
+      .withPosition(1, 0)
       .getEntry(); 
-    m_turretTicksEntry = m_turretTab.add("turret ticks", m_turretMotor.getSelectedSensorPosition())
+    m_turretTicksEntry = m_turretTab.add("Turret Ticks", m_turretMotor.getSelectedSensorPosition())
       .withSize(2,1)
       .withPosition(5, 0)
       .getEntry();
-    m_turretTicksEntry = m_turretTab.add("turret ticks", m_turretMotor.getSelectedSensorPosition())
+    m_turretPowerEntry = m_turretTab.add("Motor Power", m_turretMotor.getMotorOutputPercent())
       .withSize(2,1)
-      .withPosition(5, 0)
+      .withPosition(5, 3)
       .getEntry();  
   }
 
@@ -122,6 +122,7 @@ public class Turret extends SubsystemBase {
     // This method will be called once per scheduler run
     m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
     m_targetHOEntry.setNumber(targetHorizontalOffset());
+    m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
     // publishTelemetry();
   }
 
@@ -132,7 +133,6 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("Target Y", m_turretLimelight.getVerticalOffset());
     SmartDashboard.putNumber("Target Skew", m_turretLimelight.getSkew());
     SmartDashboard.putNumber("Target Area", m_turretLimelight.getArea());
-    SmartDashboard.putNumber("Encoder Ticks", m_turretMotor.getSelectedSensorPosition());
     SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
   }
 
@@ -156,7 +156,7 @@ public class Turret extends SubsystemBase {
    * @param power the power value between -1 and 1
    */
   public void setPower(double power){
-    SmartDashboard.setDefaultNumber("Turret Power", power);
+    // SmartDashboard.putNumber("Turret Power", power);
     m_turretMotor.set(ControlMode.PercentOutput, power);
   }
 
