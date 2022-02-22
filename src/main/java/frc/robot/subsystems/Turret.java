@@ -14,6 +14,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.simulation.TurretSim;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -34,6 +35,7 @@ public class Turret extends SubsystemBase {
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
+  TurretSim m_turretSim = new TurretSim(TurretConstants.kTurretLinearSystem);
 
   // -----------------------------------------------------------
   // Initialization
@@ -156,7 +158,6 @@ public class Turret extends SubsystemBase {
    * @param power the power value between -1 and 1
    */
   public void setPower(double power){
-    // SmartDashboard.putNumber("Turret Power", power);
     m_turretMotor.set(ControlMode.PercentOutput, power);
   }
 
@@ -209,17 +210,16 @@ public class Turret extends SubsystemBase {
     public void simulationPeriodic() {
       /* Pass the robot battery voltage to the simulated Talon FXs */
       m_turretMotorSim.setBusVoltage(RobotController.getInputVoltage());
-     
-        
-      // m_drivetrainSimulator.setInputs(m_leftDriveSim.getMotorOutputLeadVoltage(),
-      //                                 -m_rightDriveSim.getMotorOutputLeadVoltage());
-  
+      // System.out.println("Input Voltage " + m_turretMotorSim.getMotorOutputLeadVoltage());
+
+      m_turretSim.setInput(m_turretMotorSim.getMotorOutputLeadVoltage());  
+      
       /*
        * Advance the model by 20 ms. Note that if you are running this
        * subsystem in a separate thread or have changed the nominal
        * timestep of TimedRobot, this value needs to match it.
        */
-      // m_drivetrainSimulator.update(0.02);
+      m_turretSim.update(0.02);
   
       // /*
       //  * Update all of the sensors.
@@ -229,23 +229,7 @@ public class Turret extends SubsystemBase {
       //  * position reported by the simulation class. Basically, we
       //  * negated the input, so we need to negate the output.
       //  */
-      // m_leftDriveSim.setIntegratedSensorRawPosition(
-      //                 (int)metersToEncoderTicks(
-      //                     m_drivetrainSimulator.getLeftPositionMeters()
-      //                 ));
-      // m_leftDriveSim.setIntegratedSensorVelocity(
-      //                 (int)metersToEncoderTicks(
-      //                     m_drivetrainSimulator.getLeftVelocityMetersPerSecond() / 10
-      //                 ));
-      // m_rightDriveSim.setIntegratedSensorRawPosition(
-      //                 (int)metersToEncoderTicks(
-      //                     -m_drivetrainSimulator.getRightPositionMeters()
-      //                 ));
-      // m_rightDriveSim.setIntegratedSensorVelocity(
-      //                 (int)metersToEncoderTicks(
-      //                     -m_drivetrainSimulator.getRightVelocityMetersPerSecond() / 10
-      //                 ));
-
-      // m_pigeonSim.setRawHeading(m_drivetrainSimulator.getHeading().getDegrees());
+      m_turretMotorSim.setQuadratureRawPosition((int)m_turretSim.getOutput(0)*10);
+      
     }
 }

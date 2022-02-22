@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -249,6 +250,12 @@ public final class Constants {
         public static final int kEncoderCPR = 4096;
         public static final double kGearRatio = (50/9);
 
+        public static final double ksVolts = 0.06024;
+        public static final double kvVoltSecondsPerMeter = 0.005;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.000096252;
+
+        public static final LinearSystem<N2, N1, N1> kTurretLinearSystem = 
+            LinearSystemId.identifyPositionSystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
         
     }
 
