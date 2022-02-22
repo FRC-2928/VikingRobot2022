@@ -36,13 +36,10 @@ public class OperatorOI {
 
     // ---------------- Shooting ----------------------------
 
-      public Button getShootingButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-      }  
-
-      public Button getEjectingButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
-      }
+    
+    public Button getPrintButton() {
+      return new JoystickButton(m_controller, XboxController.Button.kA.value);
+    }
     
     // public Button getAutoShootingButton() {
     //     return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
@@ -101,4 +98,5 @@ public class OperatorOI {
     // public DoubleSupplier getRotateSupplier() {
     //     return () -> m_controller.getRightX();
     // }
+
 }

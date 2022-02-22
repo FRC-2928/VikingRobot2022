@@ -38,10 +38,10 @@ public class MoveTurret extends CommandBase {
     
     if(m_direction > 0){
       System.out.println("Moving turret left...");
-      m_turret.setPower(.3);
+      m_turret.setPower(.2);
     } else {
       System.out.println("Moving turret right...");
-      m_turret.setPower(-.3);
+      m_turret.setPower(-.2);
     }
     
   }

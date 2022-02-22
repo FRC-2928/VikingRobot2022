@@ -149,7 +149,7 @@ public class Drivetrain extends SubsystemBase {
 
         setupShuffleboard();
 
-        // TODO Testing only
+        // TODO just for testing
         disableMotorSafety();
     }        
 

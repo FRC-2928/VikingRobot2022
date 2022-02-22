@@ -38,7 +38,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
+// import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatch;
 
 public class Intake extends SubsystemBase {
@@ -52,7 +52,7 @@ public class Intake extends SubsystemBase {
 
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+  // private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
   private final ColorMatch m_colorMatcher = new ColorMatch();
   private final Color kBlueTarget = new Color(0.143, 0.427, 0.429);
   private final Color kRedTarget = new Color(0.561, 0.232, 0.114);
@@ -227,12 +227,12 @@ public class Intake extends SubsystemBase {
   public void periodic() {
 
     // sets the intake brake enabled if the feeder has a ball.
-    if (feederHasBall()) {
-      setIntakeBrakeEnabled();
-    }
+    // if (feederHasBall()) {
+    //   setIntakeBrakeEnabled();
+    // }
 
     // Get the color of the ball that is in the feeder
-    m_ballColor = getBallColor();
+    // m_ballColor = getBallColor();
 
     // publishTelemetry();
     
@@ -289,45 +289,44 @@ public class Intake extends SubsystemBase {
     return m_commandsLayout;
   }
 
-  public Alliance getBallColor() {
+  // public Alliance getBallColor() {
     // Ball color detection
-    Color detectedColor = m_colorSensor.getColor();
+    // Color detectedColor = m_colorSensor.getColor();
 
     // Run the color match algorithm on our detected color
-    // String colorString;
-    ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+    // ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-    double IR = m_colorSensor.getIR();
+    // double IR = m_colorSensor.getIR();
 
-    Alliance ballColor;
-    if (RobotBase.isReal()) {
-      if (IR < 5){
-        ballColor = Alliance.Invalid;
-      } else if (match.color == kBlueTarget) {
-        ballColor = Alliance.Blue;
-      } else if (match.color == kRedTarget) {
-        ballColor = Alliance.Red;
-      } else {
-        ballColor = Alliance.Invalid;
-      }
-    } else {
-      ballColor = m_intakeSim.getBallColor();
-    }
+    // Alliance ballColor;
+    // if (RobotBase.isReal()) {
+    //   if (IR < 5){
+    //     ballColor = Alliance.Invalid;
+    //   } else if (match.color == kBlueTarget) {
+    //     ballColor = Alliance.Blue;
+    //   } else if (match.color == kRedTarget) {
+    //     ballColor = Alliance.Red;
+    //   } else {
+    //     ballColor = Alliance.Invalid;
+    //   }
+    // } else {
+    //   ballColor = m_intakeSim.getBallColor();
+    // }
   
     
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
      * sensor.
      */
-    SmartDashboard.putNumber("Detected Color Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", ballColor.name());
-    SmartDashboard.putNumber("Detected Red", detectedColor.red);
-    SmartDashboard.putNumber("Detected Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
+    // SmartDashboard.putNumber("Detected Color Confidence", match.confidence);
+    // SmartDashboard.putString("Detected Color", ballColor.name());
+    // SmartDashboard.putNumber("Detected Red", detectedColor.red);
+    // SmartDashboard.putNumber("Detected Blue", detectedColor.blue);
+    // SmartDashboard.putNumber("IR", IR);
     
 
-    return ballColor;
-  }
+  //   return ballColor;
+  // }
 
   // --------- Intake Motor ------------------------------
   public void stopIntakeMotor(){

@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +34,7 @@ public class Turret extends SubsystemBase {
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.CANBusIDs.kTurretTalonSRX);
   private NetworkTableEntry m_targetHOEntry;
   private NetworkTableEntry m_turretTicksEntry, m_turretPowerEntry;
+  LinearFilter m_filter = LinearFilter.movingAverage(5);
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
@@ -85,8 +88,8 @@ public class Turret extends SubsystemBase {
     m_turretMotor.setInverted(true);
     m_turretMotor.setSensorPhase(true);
 
-    m_turretMotor.configForwardSoftLimitThreshold(5500);
-    m_turretMotor.configReverseSoftLimitThreshold(-5500);
+    m_turretMotor.configForwardSoftLimitThreshold(2750);
+    m_turretMotor.configReverseSoftLimitThreshold(-2750);
     m_turretMotor.configForwardSoftLimitEnable(true, 0);
     m_turretMotor.configReverseSoftLimitEnable(true, 0);
     m_turretMotor.overrideSoftLimitsEnable(true);
@@ -102,7 +105,8 @@ public class Turret extends SubsystemBase {
   public void setupShuffleboard() {
     ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
     m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", targetHorizontalOffset())
-      .withSize(3,1)
+      .withSize(3,3)
+      .withWidget(BuiltInWidgets.kGraph)
       .withPosition(1, 0)
       .getEntry(); 
     m_turretTicksEntry = m_turretTab.add("Turret Ticks", m_turretMotor.getSelectedSensorPosition())
@@ -110,7 +114,8 @@ public class Turret extends SubsystemBase {
       .withPosition(5, 0)
       .getEntry();
     m_turretPowerEntry = m_turretTab.add("Motor Power", m_turretMotor.getMotorOutputPercent())
-      .withSize(2,1)
+      .withSize(3,3)
+      .withWidget(BuiltInWidgets.kGraph)
       .withPosition(5, 3)
       .getEntry();  
   }
@@ -158,6 +163,7 @@ public class Turret extends SubsystemBase {
    * @param power the power value between -1 and 1
    */
   public void setPower(double power){
+    SmartDashboard.putNumber("Turret Power", power);
     m_turretMotor.set(ControlMode.PercentOutput, power);
   }
 
@@ -196,8 +202,7 @@ public class Turret extends SubsystemBase {
 
   public double targetHorizontalOffset() {
     double offset = m_turretLimelight.getHorizontalOffset();
-    // SmartDashboard.putNumber("Horizontal Offset", offset);
-    return offset;
+    return m_filter.calculate(offset);
   }
 
   public boolean isLimitSwitchClosed(){
