@@ -161,7 +161,7 @@ public class Turret extends SubsystemBase {
    * @param power the power value between -1 and 1
    */
   public void setPower(double power){
-    // SmartDashboard.putNumber("Turret Power", power);
+    SmartDashboard.putNumber("Turret Power", power);
     m_turretMotor.set(ControlMode.PercentOutput, power);
   }
 

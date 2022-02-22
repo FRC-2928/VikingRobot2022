@@ -28,6 +28,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
+import frc.robot.oi.OperatorOI;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
@@ -63,6 +64,7 @@ public class RobotContainer {
   private final Pigeon m_pigeon = new Pigeon();
   
   private final DriverOI m_driverOI;
+  private final OperatorOI m_operatorOI;
   
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -87,6 +89,7 @@ public class RobotContainer {
     SmartDashboard.putData(m_autoChooser);
 
     m_driverOI = new DriverOI(m_driverController);
+    m_operatorOI = new OperatorOI(m_operatorController);
     
     // Configure the button bindings
     configureButtonBindings();
@@ -100,7 +103,7 @@ public class RobotContainer {
     //         m_drivetrain));
 
     // m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
-    m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
+    // m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
     
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
@@ -192,7 +195,8 @@ public class RobotContainer {
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
 
     // m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
-    m_driverOI.getToggleIntakeMotorButton().whenPressed(new PrintCommand("Toggle feeder motor"));
+    m_driverOI.getToggleIntakeMotorButton().whenPressed(new PrintCommand("Print from Driver"));
+    m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
 
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
 
@@ -225,6 +229,10 @@ public class RobotContainer {
 
   public Drivetrain getDrivetrain() {
     return m_drivetrain;
+  }
+
+  public boolean getButtonA() {
+    return m_driverController.getAButton();
   }
     
   }
