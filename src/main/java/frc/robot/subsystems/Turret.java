@@ -17,6 +17,9 @@ import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.simulation.TurretSim;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
+import org.photonvision.SimVisionSystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -39,6 +42,29 @@ public class Turret extends SubsystemBase {
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
   TurretSim m_turretSim = new TurretSim(TurretConstants.kTurretLinearSystem);
+
+  // Simulated Vision System.
+  // Configure these to match your PhotonVision Camera,
+  // pipeline, and LED setup.
+  double camDiagFOV = 170.0; // degrees - assume wide-angle camera
+  double camPitch = Units.radiansToDegrees(0.5); // degrees
+  double camHeightOffGround = 1.0; // meters
+  double maxLEDRange = 20; // meters
+  int camResolutionWidth = 640; // pixels
+  int camResolutionHeight = 480; // pixels
+  double minTargetArea = 10; // square pixels
+
+  SimVisionSystem simVision =
+          new SimVisionSystem(
+                  "photonvision",
+                  camDiagFOV,
+                  camPitch,
+                  new Transform2d(),
+                  camHeightOffGround,
+                  maxLEDRange,
+                  camResolutionWidth,
+                  camResolutionHeight,
+                  minTargetArea);
 
   // -----------------------------------------------------------
   // Initialization

@@ -38,6 +38,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+
 import com.revrobotics.ColorMatch;
 
 public class Intake extends SubsystemBase {
@@ -84,7 +85,7 @@ public class Intake extends SubsystemBase {
   private boolean m_rampOpenSim = false;
   private boolean m_intakeBrakeEnabled, m_feederBrakeEnabled;
 
-  private final IntakeSim m_intakeSim = new IntakeSim(IntakeConstants.kIntakeSystem);                                        
+  private final IntakeSim m_intakeSim = new IntakeSim(IntakeConstants.kIntakeSystem); 
   
   // -----------------------------------------------------------
   // Initialization

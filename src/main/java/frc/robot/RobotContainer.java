@@ -13,17 +13,12 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
@@ -51,47 +46,60 @@ import frc.robot.commands.TurretCommands.TurnTurretToTarget;
 
 public class RobotContainer {
 
-  // The robot's subsystems
-
+  // The Robot's Subsystems
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
   private final Turret m_turret = new Turret();
-  private final Intake m_intake;
+  private final Intake m_intake = new Intake(DriverStation.getAlliance());
   private final Flywheel m_flywheel = new Flywheel();
-  
   private final Pigeon m_pigeon = new Pigeon();
-  
-  private final DriverOI m_driverOI;
-  private final OperatorOI m_operatorOI;
-  
+
+  // XBox Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final DriverOI m_driverOI = new DriverOI(m_driverController);
+  private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
   
-  private final SendableChooser<Command> m_autoChooser;
+  // Shuffleboard 
+  private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_autoChooser = new SendableChooser<>();
-    m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
-    m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
-    m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));
-    m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
-    m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
-    m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
-    m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
+    // Default option is set in configureDrivetrain()
+    SmartDashboard.putData(m_autoChooser);  
     
-    m_intake = new Intake(DriverStation.getAlliance());
+    // Configure default commands, button bindings, and shuffleboard
+    configureSubsystems();
     
-    SmartDashboard.putData(m_autoChooser);
+  }
 
-    m_driverOI = new DriverOI(m_driverController);
-    m_operatorOI = new OperatorOI(m_operatorController);
-    
-    // Configure the button bindings
-    configureButtonBindings();
+  public void onAutoInit(){
+    new InstantCommand(m_pigeon::resetGyro);
+    // new TrackTargetCommand(m_turret, m_drivetrain, m_turretLimelight).schedule();
+  }
 
+  public void onTeleopInit() {  
+  }
+
+
+  /**
+   * Configure all subsystems with their default command, button commands,
+   * and Shuffleboard output
+   */
+  private void configureSubsystems() {
+    configureDrivetrain();
+    configureTurret();
+    configureIntake();
+    configureFlywheel();
+    configureClimber();
+  }
+
+  /**
+   * Configure Drivetrain
+   */
+  public void configureDrivetrain() {
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     // m_drivetrain.setDefaultCommand(
@@ -100,9 +108,50 @@ public class RobotContainer {
     //     new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
     //         m_drivetrain));
 
-    // m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
-    // m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
+    // Configure button commands
+    m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
+    m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
+    m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
+    //   m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
+
+    // Configure Shuffleboard commands
+    m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
+    m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
+    m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));
+    m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
+    m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
+    m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
+    m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
+  }
+
+  /**
+   * Configure Turret
+   */
+  public void configureTurret() {
     
+    // Configure default commands
+    // m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
+
+    // Configure button commands
+    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
+    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
+    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
+
+    // Configure Shuffleboard commands    
+  }
+
+  /**
+   * Configure Intake
+   */
+  public void configureIntake() {
+    // Configure default commands
+    // m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
+
+    // Configure button commands
+    m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
+    m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
+
+    // Configure Shuffleboard commands
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new PrintCommand("Toggle feeder button")); 
@@ -111,21 +160,37 @@ public class RobotContainer {
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
     m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
     m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
+  }
 
+  /**
+   * Configure Flywheel
+   */
+  public void configureFlywheel() {
 
+    // Configure default commands
+
+    // Configure button commands
+    m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
+    m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
+
+    // Configure Shuffleboard commands
     m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
     m_flywheel.getCommandsLayout().add(new IncrementFlywheel(m_flywheel));
     m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
-  }
-
-  public void onAutoInit(){
-    new InstantCommand(m_pigeon::resetGyro);
-    // new TrackTargetCommand(m_turret, m_drivetrain, m_turretLimelight).schedule();
-  }
-
-  public void onTeleopInit() {
     
   }
+
+  /**
+   * Configure Climber
+   */
+  public void configureClimber() {
+    // Configure default commands
+
+    // Configure button commands
+
+    // Configure Shuffleboard commands
+  }
+
 
   public Trajectory calibrateTrajectory() {
     
@@ -176,47 +241,6 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-
-    configureDrivetrainButtons();
-    configureTurretButtons();
-  }
-
-  public void configureDrivetrainButtons() {
-    m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
-
-    m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
-
-    // m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
-    m_driverOI.getToggleIntakeMotorButton().whenPressed(new PrintCommand("Print from Driver"));
-    m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
-
-    m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
-
-    m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
-    m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
-  }
-
-  // Turret Buttons
-  public void configureTurretButtons() {
-    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
-    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
-
-    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
-  }
-
-  //added 1/19/21 STILL NOT TESTED, should reset the encoders in theory
-  // public void configureResetEncoders() {
-  //   m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
-
-  // }
-
-  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
@@ -229,8 +253,8 @@ public class RobotContainer {
     return m_drivetrain;
   }
 
-  public boolean getButtonA() {
-    return m_driverController.getAButton();
-  }
+  // public boolean getButtonA() {
+  //   return m_driverController.getAButton();
+  // }
     
   }
