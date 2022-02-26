@@ -45,7 +45,7 @@ public class Turret extends SubsystemBase {
   private NetworkTableEntry m_targetHOEntry;
   private NetworkTableEntry m_turretTicksEntry, m_turretPowerEntry;
   private NetworkTableEntry m_turretOffsetEntry, m_targetOffsetEntry;
-  private NetworkTableEntry m_targetLockedEntry, m_targetFoundEntry;
+  private NetworkTableEntry m_targetLockedEntry, m_targetFoundEntry, m_estimatedTargetRotationEntry;
   LinearFilter m_filter = LinearFilter.movingAverage(5);
   private final Field2d m_field2d = new Field2d();
   private Pose2d m_turretPose;
@@ -170,6 +170,10 @@ public class Turret extends SubsystemBase {
       .withSize(2,1)
       .withPosition(5, 5)
       .getEntry(); 
+    m_estimatedTargetRotationEntry = m_turretTab.add("Estimated Offset", getEstimatedTargetRotation().getDegrees())
+      .withSize(2,1)
+      .withPosition(7, 5)
+      .getEntry();   
       
     ShuffleboardLayout targetLayout = Shuffleboard.getTab("Turret")
       .getLayout("Target", BuiltInLayouts.kList)
@@ -208,6 +212,7 @@ public class Turret extends SubsystemBase {
     m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
     m_turretOffsetEntry.setNumber(getTurretToHeadingOffset().getDegrees());
     m_targetOffsetEntry.setNumber(getTargetToHeadingOffset().getDegrees());
+    m_estimatedTargetRotationEntry.setNumber(getEstimatedTargetRotation().getDegrees());
 
     m_targetLockedEntry.setBoolean(getTargetLocked());
     m_targetFoundEntry.setBoolean(getTargetFound());
@@ -271,6 +276,10 @@ public class Turret extends SubsystemBase {
     return m_turretPose;
   }
 
+  public Rotation2d getEstimatedTargetRotation() {
+    return m_estimatedTargetRotation;
+  }
+  
   public double encoderTicksToDegrees(double encoderTicks) {
     return encoderTicks / TurretConstants.kTurretTicksPerDegree;
   }
@@ -342,7 +351,4 @@ public class Turret extends SubsystemBase {
       
     }
 
-    public Rotation2d getEstimatedTargetRotation() {
-      return m_estimatedTargetRotation;
-    }
 }
