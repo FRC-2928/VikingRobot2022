@@ -7,9 +7,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,6 +45,7 @@ public class Turret extends SubsystemBase {
   private NetworkTableEntry m_targetHOEntry;
   private NetworkTableEntry m_turretTicksEntry, m_turretPowerEntry;
   private NetworkTableEntry m_turretOffsetEntry, m_targetOffsetEntry;
+  private NetworkTableEntry m_targetLockedEntry, m_targetFoundEntry;
   LinearFilter m_filter = LinearFilter.movingAverage(5);
   private final Field2d m_field2d = new Field2d();
   private Pose2d m_turretPose;
@@ -145,25 +148,32 @@ public class Turret extends SubsystemBase {
       .withWidget(BuiltInWidgets.kGraph)
       .withPosition(1, 0)
       .getEntry(); 
-    m_turretTicksEntry = m_turretTab.add("Turret Ticks", m_turretMotor.getSelectedSensorPosition())
-      .withSize(2,1)
-      .withPosition(5, 0)
-      .getEntry();
     m_turretPowerEntry = m_turretTab.add("Motor Power", m_turretMotor.getMotorOutputPercent())
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
-      .withPosition(5, 3)
+      .withPosition(5, 0)
       .getEntry();
-    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToHeadingOffset())
+    m_turretTicksEntry = m_turretTab.add("Turret Ticks", m_turretMotor.getSelectedSensorPosition())
       .withSize(2,1)
-      .withPosition(7, 0)
+      .withPosition(1, 5)
+      .getEntry();  
+    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToHeadingOffset().getDegrees())
+      .withSize(2,1)
+      .withPosition(3, 5)
       .getEntry(); 
-    m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToHeadingOffset())
+    m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToHeadingOffset().getDegrees())
       .withSize(2,1)
-      .withPosition(7, 2)
+      .withPosition(5, 5)
       .getEntry(); 
       
-      SmartDashboard.putData("Target Pose", m_field2d);  
+    ShuffleboardLayout targetLayout = Shuffleboard.getTab("Turret")
+      .getLayout("Target", BuiltInLayouts.kList)
+      .withSize(2, 5)
+      .withPosition(9, 0);  
+    m_targetLockedEntry = targetLayout.add("Locked", getTargetLocked()).getEntry();
+    m_targetFoundEntry = targetLayout.add("Found", getTargetFound()).getEntry();
+
+    // SmartDashboard.putData("Target Pose", m_field2d);  
   }
 
   // -----------------------------------------------------------
@@ -182,16 +192,19 @@ public class Turret extends SubsystemBase {
     m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
     m_turretOffsetEntry.setNumber(getTurretToHeadingOffset().getDegrees());
     m_targetOffsetEntry.setNumber(getTargetToHeadingOffset().getDegrees());
+
+    m_targetLockedEntry.setBoolean(getTargetLocked());
+    m_targetFoundEntry.setBoolean(getTargetFound());
     
     // Using this to display the angle of the target from the robot heading
-    m_field2d.setRobotPose(getTargetPose());
+    // m_field2d.setRobotPose(getTargetPose());
 
-    SmartDashboard.putBoolean("Target found", m_turretLimelight.isTargetFound());
+    // SmartDashboard.putBoolean("Target found", m_turretLimelight.isTargetFound());
     SmartDashboard.putNumber("Target X", m_turretLimelight.getHorizontalOffset());
     SmartDashboard.putNumber("Target Y", m_turretLimelight.getVerticalOffset());
     SmartDashboard.putNumber("Target Skew", m_turretLimelight.getSkew());
     SmartDashboard.putNumber("Target Area", m_turretLimelight.getArea());
-    SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
+    // SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
   }
 
   public void resetEncoders(){
@@ -243,18 +256,10 @@ public class Turret extends SubsystemBase {
   }
 
   public double encoderTicksToDegrees(double encoderTicks) {
-    // Convert encoder ticks to turret rotations
-    // double turretRotations = encoderTicks / (TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio);
-    // Convert turret rotations to degrees
-    // return turretRotations * 360;
     return encoderTicks / TurretConstants.kTurretTicksPerDegree;
   }
 
   public double getDegreesToEncoderTicks(double degrees) {
-    // Convert degrees to turret rotations
-    // double turretRotations = degrees / 360;
-    // Convert turret rotations to encoder ticks
-    // return turretRotations * TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio;
     return degrees * TurretConstants.kTurretTicksPerDegree;
   }
 
@@ -270,6 +275,17 @@ public class Turret extends SubsystemBase {
   public Rotation2d getTurretToHeadingOffset() {
     double offset = m_drivetrain.getRotation().getDegrees() - getTurretDegrees();
     return (Rotation2d.fromDegrees(offset));
+  }
+
+  public boolean getTargetFound() {
+    return m_turretLimelight.isTargetFound();
+  }
+
+  public boolean getTargetLocked() {
+    if (getTargetFound()) {
+      return Math.abs(targetHorizontalOffset()) < 2;
+    }
+    return false;
   }
 
   public Rotation2d getTargetToHeadingOffset() {

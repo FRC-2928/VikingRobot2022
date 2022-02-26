@@ -46,9 +46,9 @@ public class Intake extends SubsystemBase {
   private Alliance m_alliance;
   private Alliance m_ballColor = Alliance.Blue;
 
-  // Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.CANBusIDs.kRampSolenoid);
-  Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidOpen);
-  Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidClosed);
+  Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoid);
+  // Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidOpen);
+  // Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidClosed);
 
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -409,21 +409,21 @@ public class Intake extends SubsystemBase {
 
   //TODO: maybe switch false and true depending on which solenoid state is the open ramp
   public void openRamp(){
-    // m_rampSolenoid.set(true);
+    m_rampSolenoid.set(true);
 
     //for double solenoids on sweetpants
-    m_rampSolenoidOpen.set(true);
-    m_rampSolenoidClosed.set(false);
+    // m_rampSolenoidOpen.set(true);
+    // m_rampSolenoidClosed.set(false);
 
     m_rampOpenSim = true;
   }
 
   public void closeRamp(){
-    // m_rampSolenoid.set(false);
+    m_rampSolenoid.set(false);
 
     //for double solenoids on sweetpants
-    m_rampSolenoidOpen.set(false);
-    m_rampSolenoidClosed.set(true);
+    // m_rampSolenoidOpen.set(false);
+    // m_rampSolenoidClosed.set(true);
 
     m_rampOpenSim = false;
   }

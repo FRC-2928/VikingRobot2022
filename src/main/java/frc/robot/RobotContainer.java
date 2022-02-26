@@ -104,11 +104,11 @@ public class RobotContainer {
   public void configureDrivetrain() {
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
-    // m_drivetrain.setDefaultCommand(
-    //     // A split-stick arcade command, with forward/backward controlled by the left
-    //     // hand, and turning controlled by the right.
-    //     new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
-    //         m_drivetrain));
+    m_drivetrain.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
+            m_drivetrain));
 
     // Configure button commands
     m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
