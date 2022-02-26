@@ -77,6 +77,11 @@ public class Turret extends SubsystemBase {
                   camResolutionHeight,
                   minTargetArea);
 
+  // instance variables for handling targeting.
+  private double m_lastHeadingDegrees = 0.0;
+  private Rotation2d m_targetHeadingOffset = Rotation2d.fromDegrees(0.0);
+  private Rotation2d m_estimatedTargetRotation = Rotation2d.fromDegrees(0.0);
+
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
@@ -182,7 +187,18 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run    
+    // This method will be called once per scheduler run 
+    
+    // get the offset from the target heading to the robot heading,
+    // but only if we have found the target.
+    if(getTargetFound()) {
+      m_lastHeadingDegrees = m_drivetrain.getRotation().getDegrees();
+      m_targetHeadingOffset = getTargetToHeadingOffset();
+    }
+
+    // calculate the estimated target rotation.
+    m_estimatedTargetRotation = Rotation2d.fromDegrees(m_lastHeadingDegrees - m_drivetrain.getRotation().getDegrees()).rotateBy(m_targetHeadingOffset);
+
     publishTelemetry();
   }
 
@@ -324,5 +340,9 @@ public class Turret extends SubsystemBase {
       //  */
       m_turretMotorSim.setQuadratureRawPosition((int)m_turretSim.getOutput(0)*10);
       
+    }
+
+    public Rotation2d getEstimatedTargetRotation() {
+      return m_estimatedTargetRotation;
     }
 }
