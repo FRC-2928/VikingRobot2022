@@ -21,7 +21,7 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
 
   private final WPI_TalonSRX m_climberMotor = new WPI_TalonSRX(Constants.CANBusIDs.kClimberMotor);
-  Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kClimberSolenoid);
+  Solenoid m_climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kClimberSolenoid);
 
   // -----------------------------------------------------------
   // Initialization
@@ -30,7 +30,6 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     configMotors();
-    resetEncoders();
     setupShuffleboard();
     setClimberPIDF();
   }
@@ -91,9 +90,6 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void resetEncoders(){
-    m_climberMotor.setSelectedSensorPosition(0);
-  }
 
   /**
    * 
@@ -102,24 +98,19 @@ public class Climber extends SubsystemBase {
   public void setPower(double power){
     m_climberMotor.set(ControlMode.PercentOutput, power);
   }
+  
+  public void tiltForward(){
+    m_climberSolenoid.set(true);
+  }
+
+  public void tiltBack(){
+    m_climberSolenoid.set(false);
+  }
 
 
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
 
-  public double getPositionMeters(){
-    double ticks = m_climberMotor.getSelectedSensorPosition();
-    return (ticksToMeters(ticks));
-  }
-
-  //TODO: add whatever other step is in here, depending on mechanics....
-  public double MetersToTicks(double meters){
-    return ((meters * ClimberConstants.kEncoderCPR) * ClimberConstants.kGearRatio);
-  }
-
-  public double ticksToMeters(double ticks){
-    return ((ticks / ClimberConstants.kEncoderCPR) / ClimberConstants.kGearRatio);
-  }
   
 }

@@ -25,12 +25,15 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
 import frc.robot.oi.OperatorOI;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Transmission;
 import frc.robot.subsystems.Turret;
+import frc.robot.commands.ClimberCommands.ExtendClimberBars;
+import frc.robot.commands.ClimberCommands.RetractClimberBars;
 import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.FlywheelCommands.DecrementFlywheel;
@@ -54,6 +57,7 @@ public class RobotContainer {
   private final Turret m_turret = new Turret(m_drivetrain);
   private final Intake m_intake = new Intake(DriverStation.getAlliance());
   private final Flywheel m_flywheel = new Flywheel();
+  private final Climber m_climber = new Climber();
   
 
   // XBox Controllers
@@ -193,8 +197,10 @@ public class RobotContainer {
     // Configure default commands
 
     // Configure button commands
-
-    // Configure Shuffleboard commands
+    m_operatorOI.getExtendClimber().whileHeld(new ExtendClimberBars(m_climber));
+    m_operatorOI.getRetractClimber().whileHeld(new RetractClimberBars(m_climber));
+    m_operatorOI.getTiltForward().whenPressed(new InstantCommand(m_climber::tiltForward,m_climber));
+    m_operatorOI.getTiltBack().whenPressed(new InstantCommand(m_climber::tiltBack,m_climber));
   }
 
 

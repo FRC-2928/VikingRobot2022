@@ -34,6 +34,21 @@ public class OperatorOI {
     //     return new JoystickButton(m_controller, XboxController.Axis.kRightTrigger.value);
     // }
 
+    public Button getExtendClimber() {
+        return new JoystickButton(m_controller, XboxController.Axis.kRightTrigger.value);
+    }
+
+    public Button getRetractClimber() {
+        return new JoystickButton(m_controller, XboxController.Axis.kLeftTrigger.value);
+    }
+
+    public Button getTiltForward() {
+        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+    }
+
+    public Button getTiltBack() {
+        return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+    }
     // ---------------- Shooting ----------------------------
 
     
