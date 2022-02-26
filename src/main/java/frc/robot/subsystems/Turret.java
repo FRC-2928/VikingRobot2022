@@ -233,13 +233,13 @@ public class Turret extends SubsystemBase {
 
   public void setTurretDegrees(double angleDegrees) {
     double encoderTicks = getDegreesToEncoderTicks(angleDegrees);
-    m_turretMotor.set(ControlMode.MotionMagic, encoderTicks);
+    m_turretMotor.set(ControlMode.Position, encoderTicks);
 
-      SmartDashboard.putBoolean("target found", m_turretLimelightData.getTargetFound());
-      SmartDashboard.putNumber("skew", m_turretLimelightData.getSkew());
-      SmartDashboard.putNumber("horizontal offset", m_turretLimelightData.getHorizontalOffset());
-      SmartDashboard.putNumber("vertical offset", m_turretLimelightData.getVerticalOffset());      
-    
+      // SmartDashboard.putBoolean("target found", m_turretLimelightData.getTargetFound());
+      // SmartDashboard.putNumber("skew", m_turretLimelightData.getSkew());
+      // SmartDashboard.putNumber("horizontal offset", m_turretLimelightData.getHorizontalOffset());
+      // SmartDashboard.putNumber("vertical offset", m_turretLimelightData.getVerticalOffset());      
+      SmartDashboard.putNumber("turret heading offset", angleDegrees);      
   }
 
   /**
