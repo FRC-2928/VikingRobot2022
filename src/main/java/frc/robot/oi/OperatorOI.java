@@ -99,4 +99,8 @@ public class OperatorOI {
     //     return () -> m_controller.getRightX();
     // }
 
+    public DoubleSupplier getRotateTurretSupplier() {
+        return () -> m_controller.getRightX();
+    }
+
 }

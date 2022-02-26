@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Limelight;
@@ -17,9 +18,13 @@ import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.simulation.TurretSim;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import org.photonvision.SimVisionSystem;
+
+import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -39,6 +44,8 @@ public class Turret extends SubsystemBase {
   private NetworkTableEntry m_turretTicksEntry, m_turretPowerEntry;
   private NetworkTableEntry m_turretOffsetEntry, m_targetOffsetEntry;
   LinearFilter m_filter = LinearFilter.movingAverage(5);
+  private final Field2d m_field2d = new Field2d();
+  private Pose2d m_turretPose;
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
@@ -76,6 +83,7 @@ public class Turret extends SubsystemBase {
     setTurretPIDF();
     resetEncoders();
     setupShuffleboard();
+    m_turretPose = new Pose2d(0,0,getTargetToHeadingOffset());
   }
 
   public void configMotors(){
@@ -153,7 +161,9 @@ public class Turret extends SubsystemBase {
     m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToHeadingOffset())
       .withSize(2,1)
       .withPosition(7, 2)
-      .getEntry();       
+      .getEntry(); 
+      
+      SmartDashboard.putData("Target Pose", m_field2d);  
   }
 
   // -----------------------------------------------------------
@@ -162,17 +172,20 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
-    m_targetHOEntry.setNumber(targetHorizontalOffset());
-    m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
-    m_turretOffsetEntry.setNumber(getTurretToHeadingOffset());
-    m_targetOffsetEntry.setNumber(getTargetToHeadingOffset());
-    // publishTelemetry();
+    // This method will be called once per scheduler run    
+    publishTelemetry();
   }
 
   public void publishTelemetry() {
+    m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
+    m_targetHOEntry.setNumber(targetHorizontalOffset());
+    m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
+    m_turretOffsetEntry.setNumber(getTurretToHeadingOffset().getDegrees());
+    m_targetOffsetEntry.setNumber(getTargetToHeadingOffset().getDegrees());
     
+    // Using this to display the angle of the target from the robot heading
+    m_field2d.setRobotPose(getTargetPose());
+
     SmartDashboard.putBoolean("Target found", m_turretLimelight.isTargetFound());
     SmartDashboard.putNumber("Target X", m_turretLimelight.getHorizontalOffset());
     SmartDashboard.putNumber("Target Y", m_turretLimelight.getVerticalOffset());
@@ -183,6 +196,10 @@ public class Turret extends SubsystemBase {
 
   public void resetEncoders(){
     m_turretMotor.setSelectedSensorPosition(0);
+  }
+
+  public void rotateTurret(DoubleSupplier rotate){
+    setPower(rotate.getAsDouble());
   }
 
   public void setTurretDegrees(double angleDegrees) {
@@ -220,6 +237,11 @@ public class Turret extends SubsystemBase {
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
+  public Pose2d getTargetPose() {
+    m_turretPose = new Pose2d(0,0, getTargetToHeadingOffset());
+    return m_turretPose;
+  }
+
   public double encoderTicksToDegrees(double encoderTicks) {
     // Convert encoder ticks to turret rotations
     // double turretRotations = encoderTicks / (TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio);
@@ -245,14 +267,14 @@ public class Turret extends SubsystemBase {
     return m_filter.calculate(offset);
   }
 
-  public double getTurretToHeadingOffset() {
+  public Rotation2d getTurretToHeadingOffset() {
     double offset = m_drivetrain.getRotation().getDegrees() - getTurretDegrees();
-    return offset;
+    return (Rotation2d.fromDegrees(offset));
   }
 
-  public double getTargetToHeadingOffset() {
-    double offset = getTurretToHeadingOffset() + targetHorizontalOffset();
-    return offset;
+  public Rotation2d getTargetToHeadingOffset() {
+    double offset = getTurretToHeadingOffset().getDegrees() + targetHorizontalOffset();
+    return (Rotation2d.fromDegrees(offset));
   }
 
   public boolean isLimitSwitchClosed(){
