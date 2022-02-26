@@ -79,7 +79,7 @@ public class Turret extends SubsystemBase {
 
   // instance variables for handling targeting.
   private double m_lastHeadingDegrees = 0.0;
-  private Rotation2d m_targetHeadingOffset = Rotation2d.fromDegrees(0.0);
+  private double m_targetHeadingOffset = 0.0;
   private Rotation2d m_estimatedTargetRotation = Rotation2d.fromDegrees(0.0);
 
   // -----------------------------------------------------------
@@ -193,11 +193,11 @@ public class Turret extends SubsystemBase {
     // but only if we have found the target.
     if(getTargetFound()) {
       m_lastHeadingDegrees = m_drivetrain.getRotation().getDegrees();
-      m_targetHeadingOffset = getTargetToHeadingOffset();
+      m_targetHeadingOffset = getTargetToHeadingOffset().getDegrees();
     }
 
     // calculate the estimated target rotation.
-    m_estimatedTargetRotation = Rotation2d.fromDegrees(m_lastHeadingDegrees - m_drivetrain.getRotation().getDegrees()).rotateBy(m_targetHeadingOffset);
+    m_estimatedTargetRotation = Rotation2d.fromDegrees((m_targetHeadingOffset + m_lastHeadingDegrees) - m_drivetrain.getRotation().getDegrees());
 
     publishTelemetry();
   }
