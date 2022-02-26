@@ -31,12 +31,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
-
+  private final Drivetrain m_drivetrain;
   private final Limelight m_turretLimelight = new Limelight();
   private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.CANBusIDs.kTurretTalonSRX);
   private NetworkTableEntry m_targetHOEntry;
   private NetworkTableEntry m_turretTicksEntry, m_turretPowerEntry;
+  private NetworkTableEntry m_turretOffsetEntry, m_targetOffsetEntry;
   LinearFilter m_filter = LinearFilter.movingAverage(5);
 
   // ------ Simulation classes to help us simulate our robot ----------------
@@ -69,7 +70,8 @@ public class Turret extends SubsystemBase {
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Turret() {
+  public Turret(Drivetrain drivetrain) {
+    m_drivetrain = drivetrain;
     configMotors();
     setTurretPIDF();
     resetEncoders();
@@ -143,7 +145,15 @@ public class Turret extends SubsystemBase {
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
       .withPosition(5, 3)
-      .getEntry();  
+      .getEntry();
+    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToHeadingOffset())
+      .withSize(2,1)
+      .withPosition(7, 0)
+      .getEntry(); 
+    m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToHeadingOffset())
+      .withSize(2,1)
+      .withPosition(7, 2)
+      .getEntry();       
   }
 
   // -----------------------------------------------------------
@@ -156,6 +166,8 @@ public class Turret extends SubsystemBase {
     m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
     m_targetHOEntry.setNumber(targetHorizontalOffset());
     m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
+    m_turretOffsetEntry.setNumber(getTurretToHeadingOffset());
+    m_targetOffsetEntry.setNumber(getTargetToHeadingOffset());
     // publishTelemetry();
   }
 
@@ -210,16 +222,18 @@ public class Turret extends SubsystemBase {
   // -----------------------------------------------------------
   public double encoderTicksToDegrees(double encoderTicks) {
     // Convert encoder ticks to turret rotations
-    double turretRotations = encoderTicks / (TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio);
+    // double turretRotations = encoderTicks / (TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio);
     // Convert turret rotations to degrees
-    return turretRotations * 360;
+    // return turretRotations * 360;
+    return encoderTicks / TurretConstants.kTurretTicksPerDegree;
   }
 
   public double getDegreesToEncoderTicks(double degrees) {
     // Convert degrees to turret rotations
-    double turretRotations = degrees / 360;
+    // double turretRotations = degrees / 360;
     // Convert turret rotations to encoder ticks
-    return turretRotations * TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio;
+    // return turretRotations * TurretConstants.kEncoderCPR * TurretConstants.kTurretGearRatio;
+    return degrees * TurretConstants.kTurretTicksPerDegree;
   }
 
   public double getTurretDegrees() {
@@ -229,6 +243,16 @@ public class Turret extends SubsystemBase {
   public double targetHorizontalOffset() {
     double offset = m_turretLimelight.getHorizontalOffset();
     return m_filter.calculate(offset);
+  }
+
+  public double getTurretToHeadingOffset() {
+    double offset = m_drivetrain.getRotation().getDegrees() - getTurretDegrees();
+    return offset;
+  }
+
+  public double getTargetToHeadingOffset() {
+    double offset = getTurretToHeadingOffset() + targetHorizontalOffset();
+    return offset;
   }
 
   public boolean isLimitSwitchClosed(){

@@ -101,10 +101,6 @@ public final class Constants {
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
-        // public static final int kUp = 0;
-        // public static final int kMid = 90;
-        // public static final int kDown = 180;
-        // public static final int kMidTwo = 270;
     }
 
     public static final class DrivetrainConstants{
@@ -244,8 +240,7 @@ public final class Constants {
         //TODO: set to actual desired value
         public static final double kTurretMaxTicks = 1;
 
-        // public static final double kTurretClimbPosition = 0; //Placeholders
-        // public static final double kTurretControlPanelPosition = -90; //Placeholders
+        public static final double kTurretTicksPerDegree = 61; // Need to confirm
         
         public static final int kEncoderCPR = 4096;
         public static final double kGearRatio = (50/9);

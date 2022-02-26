@@ -49,10 +49,11 @@ public class RobotContainer {
   // The Robot's Subsystems
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
-  private final Turret m_turret = new Turret();
+  private final Pigeon m_pigeon = new Pigeon();
+  private final Turret m_turret = new Turret(m_drivetrain);
   private final Intake m_intake = new Intake(DriverStation.getAlliance());
   private final Flywheel m_flywheel = new Flywheel();
-  private final Pigeon m_pigeon = new Pigeon();
+  
 
   // XBox Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -137,6 +138,7 @@ public class RobotContainer {
     m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
     m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
+    // m_driverOI.getToggleIntakeMotorButton().whenPressed(new PrintCommand("Print from Driver"));
     // Configure Shuffleboard commands    
   }
 
