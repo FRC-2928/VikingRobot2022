@@ -23,6 +23,8 @@ public class Climber extends SubsystemBase {
   private final WPI_TalonSRX m_climberMotor = new WPI_TalonSRX(Constants.CANBusIDs.kClimberMotor);
   Solenoid m_climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kClimberSolenoid);
 
+  ShuffleboardTab m_climberTab;
+  
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
@@ -78,7 +80,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void setupShuffleboard() {
-    ShuffleboardTab m_climberTab = Shuffleboard.getTab("Climber");  
+    m_climberTab = Shuffleboard.getTab("Climber");  
   }
 
   // -----------------------------------------------------------

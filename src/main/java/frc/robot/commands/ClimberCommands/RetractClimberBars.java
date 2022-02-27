@@ -5,6 +5,7 @@
 package frc.robot.commands.ClimberCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 
 public class RetractClimberBars extends CommandBase {
@@ -23,12 +24,14 @@ public class RetractClimberBars extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.setPower(-0.3);
+    m_climber.setPower( - Constants.ClimberConstants.kClimberPower);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_climber.setPower(0.0);
+  }
 
   // Returns true when the command should end.
   @Override

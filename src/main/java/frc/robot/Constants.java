@@ -240,6 +240,8 @@ public final class Constants {
 
         public static final double kEncoderCPR = 4096;
 
+        public static final double kClimberPower = 0.3;
+
         // public static final double kStowedPositionSetpoint = 0.025; // Meters - Test this before use
         // public static final double kDeployedPositionSetpoint = 1.016; // Meters
         // public static final double kClimberPower = 0.4; // Power Percent
