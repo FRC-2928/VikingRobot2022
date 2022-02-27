@@ -58,7 +58,7 @@ public class Climber extends SubsystemBase {
     m_climberMotor.configNeutralDeadband(0.01);
 
     //Set to brake mode, will brake the motor when no power is sent
-    m_climberMotor.setNeutralMode(NeutralMode.Coast);
+    m_climberMotor.setNeutralMode(NeutralMode.Brake);
 
     /** 
      * Setting input side current limit (amps)
@@ -69,7 +69,7 @@ public class Climber extends SubsystemBase {
     m_climberMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
 
     //Either using the integrated Falcon sensor or an external one, will change if needed
-    m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
+    // m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
   }
 
   public void setClimberPIDF() {

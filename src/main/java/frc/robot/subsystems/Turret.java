@@ -35,6 +35,8 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
@@ -131,6 +133,9 @@ public class Turret extends SubsystemBase {
 
     //  m_turretMotor.configForwardLimitSwitchSource(type, normalOpenOrClose);
     //  m_turretMotor.configReverseLimitSwitchSource(type, normalOpenOrClose);
+    m_turretMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+                                                 LimitSwitchNormal.NormallyClosed, 0);
+
     m_turretMotor.setInverted(true);
     m_turretMotor.setSensorPhase(true);
 

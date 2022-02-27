@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -60,6 +61,8 @@ public class Intake extends SubsystemBase {
  
   private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kRightFeederMotor);
   private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kLeftFeederMotor);
+  private final DigitalInput m_leftIntakeSensor = new DigitalInput(IntakeConstants.kLeftIntakeSensor);
+  private final DigitalInput m_rightIntakeSensor = new DigitalInput(IntakeConstants.kRightIntakeSensor);
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.CANBusIDs.kIntakeMotor);
 
@@ -147,10 +150,9 @@ public class Intake extends SubsystemBase {
     m_rightFeederMotor.setInverted(true);
 
     //configure limit switches for intake motor and leading feeder motor
-    m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-                                                 LimitSwitchNormal.NormallyClosed, 0);
     m_rightFeederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
                                                       LimitSwitchNormal.NormallyClosed, 0);
+  
     setFeederBrakeEnabled();
     
   }
@@ -226,15 +228,19 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
-    // sets the intake brake enabled if the feeder has a ball.
-    if (feederHasBall()) {
-      setIntakeBrakeEnabled();
+    if (isIntakeSensorTripped()) {
+      stopIntakeMotor();
     }
+
+    // sets the intake brake enabled if the feeder has a ball.
+    // if (feederHasBall()) {
+    //   setIntakeBrakeEnabled();
+    // }
 
     // Get the color of the ball that is in the feeder
     m_ballColor = getBallColor();
 
-    // publishTelemetry();
+    publishTelemetry();
     
     // ejectBall();
     
@@ -462,7 +468,8 @@ public class Intake extends SubsystemBase {
   // --------- Intake ------------------------------  
 
   public boolean isIntakeBrakeActivated() {
-    return isIntakeSwitchActivated() && isIntakeBrakeEnabled();
+    // return isIntakeSwitchActivated() && isIntakeBrakeEnabled();
+    return isIntakeSensorTripped();
   }
 
   public boolean isIntakeSwitchActivated() {
@@ -474,7 +481,6 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean intakeHasBall(){
-    // return feederHasBall() && isIntakeBrakeActivated();
     return isIntakeBrakeActivated();
   }
 
@@ -492,6 +498,19 @@ public class Intake extends SubsystemBase {
     return m_intakeBrakeEnabled;
   }
 
+  public boolean isLeftIntakeSensorTripped(){
+    return m_leftIntakeSensor.get();
+  }
+
+  public boolean isRightIntakeSensorTripped(){
+    return m_rightIntakeSensor.get();
+  }
+
+  public boolean isIntakeSensorTripped() {
+    return isLeftIntakeSensorTripped() || isRightIntakeSensorTripped();
+  }
+
+
   // --------- Feeder ------------------------------
 
   public boolean isFeederBrakeActivated(){
@@ -502,6 +521,7 @@ public class Intake extends SubsystemBase {
     // Simulate this return if not running on the real robot
     if (RobotBase.isReal()) {
       return !(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
+      // return !(m_rightFeederMotor.getSensorCollection().isRevLimitSwitchClosed());
     }
     return m_intakeSim.isFeederSwitchClosed();
   }
@@ -525,7 +545,6 @@ public class Intake extends SubsystemBase {
 
   public boolean isFeederBrakeEnabled() {
     return m_feederBrakeEnabled;
-    //rightFeederMotor.getSensorCollection().isRevLimitSwitchClosed();
   }
 
   // --------- Ramp ------------------------------

@@ -31,7 +31,7 @@ public final class Constants {
         public static final int kFlywheelTalonFX = 2;
 
         //Sensors
-        public static final int kPigeonIMU = 3;
+        public static final int kPigeonIMU = 0;
 
         //Intake
         public static final int kIntakeMotor = 4;
@@ -43,8 +43,8 @@ public final class Constants {
         public static final int kTurretTalonSRX = 9;
 
         //Feeder
-        public static final int kLeftFeederMotor = 10;
-        public static final int kRightFeederMotor = 11;
+        public static final int kLeftFeederMotor = 11;
+        public static final int kRightFeederMotor = 10;
 
         // Drivetrain, left side
         public static final int kDrivetrainLeftFrontTalonFX = 14;
@@ -226,9 +226,9 @@ public final class Constants {
         public static final double kIndexFastForwardPower = 0.8;
         public static final double kIndexPower = 0.5;
         public static final double kIndexReversePower = -0.8;
-        public static final double kHopperFastForwardPower = 0.7;
-        public static final double kHopperPower = 0.55;
-        public static final double kHopperReversePower = -0.8;
+        // public static final double kHopperFastForwardPower = 0.7;
+        // public static final double kHopperPower = 0.55;
+        // public static final double kHopperReversePower = -0.8;
     }
 
     public static final class ClimberConstants {
@@ -272,6 +272,9 @@ public final class Constants {
         public static double kIntakeSpeed = .3;
         public static double kFeederSpeed = .3;
         public static double kFeederHighSpeed = .8;
+
+        public static int kLeftIntakeSensor = 8;
+        public static int kRightIntakeSensor = 9;
     }
 
     public static final class LimelightConstants{

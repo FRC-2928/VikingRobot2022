@@ -164,8 +164,8 @@ public class RobotContainer {
     // Configure Shuffleboard commands
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
-    m_intake.getCommandsLayout().add(new PrintCommand("Toggle feeder button")); 
-    m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
+    // m_intake.getCommandsLayout().add(new PrintCommand("Toggle feeder button")); 
+    // m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
     m_intake.getCommandsLayout().add(new ShootBall(m_intake)); 
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
     m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
