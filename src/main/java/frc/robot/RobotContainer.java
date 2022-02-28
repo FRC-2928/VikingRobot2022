@@ -53,7 +53,7 @@ public class RobotContainer {
   // The Robot's Subsystems
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
-  private final Pigeon m_pigeon = new Pigeon();
+  // private final Pigeon m_pigeon = new Pigeon();
   private final Turret m_turret = new Turret(m_drivetrain);
   private final Intake m_intake = new Intake(DriverStation.getAlliance());
   private final Flywheel m_flywheel = new Flywheel();
@@ -82,7 +82,7 @@ public class RobotContainer {
   }
 
   public void onAutoInit(){
-    new InstantCommand(m_pigeon::resetGyro);
+    new InstantCommand(m_drivetrain::zeroGyro);
     // new TrackTargetCommand(m_turret, m_drivetrain, m_turretLimelight).schedule();
   }
 
