@@ -228,7 +228,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if (isIntakeSensorTripped()) {
+    if (isIntakeSensorTripped() && feederHasBall()) {
       stopIntakeMotor();
     } else {
       startIntakeMotor(Constants.IntakeConstants.kIntakeSpeed);
