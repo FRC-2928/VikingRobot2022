@@ -230,6 +230,8 @@ public class Intake extends SubsystemBase {
 
     if (isIntakeSensorTripped()) {
       stopIntakeMotor();
+    } else {
+      startIntakeMotor(Constants.IntakeConstants.kIntakeSpeed);
     }
 
     // sets the intake brake enabled if the feeder has a ball.
@@ -499,11 +501,11 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean isLeftIntakeSensorTripped(){
-    return m_leftIntakeSensor.get();
+    return !m_leftIntakeSensor.get();
   }
 
   public boolean isRightIntakeSensorTripped(){
-    return m_rightIntakeSensor.get();
+    return !m_rightIntakeSensor.get();
   }
 
   public boolean isIntakeSensorTripped() {
