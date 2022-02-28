@@ -68,6 +68,7 @@ public class Intake extends SubsystemBase {
 
   private boolean m_rampStable = true;
   private Timer m_timer = new Timer();
+  private Timer m_colorTimer = new Timer();
   private double m_duration = 0;
   private boolean m_ejectInProgress = false;
 
@@ -94,7 +95,7 @@ public class Intake extends SubsystemBase {
   // Initialization
   // -----------------------------------------------------------
   public Intake(Alliance alliance) {
-    m_alliance = alliance;
+    setAllianceColor(alliance);
     // SmartDashboard.putString("Alliance", m_alliance.name());
     // SmartDashboard.putNumber("Alliance Ordinal", m_ballColor.ordinal());
     configMotors();
@@ -104,6 +105,9 @@ public class Intake extends SubsystemBase {
 
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
+    // Used to regulate calls to the color sensor. Re: I2C Lockup issue
+    m_colorTimer.reset();
+    m_colorTimer.start();
   }
 
   public void configMotors(){
@@ -235,12 +239,16 @@ public class Intake extends SubsystemBase {
     }
 
     // sets the intake brake enabled if the feeder has a ball.
-    // if (feederHasBall()) {
-    //   setIntakeBrakeEnabled();
-    // }
-
-    // Get the color of the ball that is in the feeder
-    m_ballColor = getBallColor();
+    if (feederHasBall()) {
+      // Regulate call frequency to the color sensor
+      if (m_colorTimer.hasElapsed(0.1)) {
+        // Get the color of the ball that is in the feeder
+        m_ballColor = getBallColor();
+        
+        m_colorTimer.reset();
+        m_colorTimer.start();
+      }     
+    }
 
     publishTelemetry();
     
@@ -297,7 +305,12 @@ public class Intake extends SubsystemBase {
     return m_commandsLayout;
   }
 
+  public void setAllianceColor(Alliance alliance) {
+    m_alliance = alliance;
+  }
+
   public Alliance getBallColor() {
+
     // Ball color detection
     Color detectedColor = m_colorSensor.getColor();
 
