@@ -97,6 +97,8 @@ public class Flywheel extends SubsystemBase {
 
     //Either using the integrated Falcon sensor or an external one, will change if needed
     m_flywheelTalon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
+
+    m_flywheelTalon.setInverted(true);
   }
 
   public void setFlywheelPIDF() {
@@ -119,7 +121,7 @@ public class Flywheel extends SubsystemBase {
           
     m_commandsLayout = Shuffleboard.getTab("Flywheel")
             .getLayout("Commands", BuiltInLayouts.kList)
-            .withSize(2, 2)
+            .withSize(3, 3)
             .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
             .withPosition(2, 0);
   }
@@ -164,6 +166,7 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void setPower(double power) {
+    System.out.println("Power " + power);
     m_flywheelTalon.set(ControlMode.PercentOutput, power);
   }
 

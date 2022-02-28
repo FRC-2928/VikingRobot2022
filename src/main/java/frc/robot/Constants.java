@@ -269,7 +269,7 @@ public final class Constants {
         public static double IntakekF = 0.4;
 		public static double kClimberErrorThreshold = 0.5; // 5 cm
 
-        public static double kIntakeSpeed = .3;
+        public static double kIntakeSpeed = .7;
         public static double kFeederSpeed = .3;
         public static double kFeederHighSpeed = .8;
 

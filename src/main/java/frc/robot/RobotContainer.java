@@ -182,6 +182,7 @@ public class RobotContainer {
     // Configure button commands
     m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
+    m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
 
     // Configure Shuffleboard commands
     m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
