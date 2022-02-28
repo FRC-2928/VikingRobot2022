@@ -69,7 +69,9 @@ public class Intake extends SubsystemBase {
   private boolean m_rampStable = true;
   private Timer m_timer = new Timer();
   private Timer m_colorTimer = new Timer();
+  private Timer m_intakeTimer = new Timer();
   private double m_duration = 0;
+  private boolean m_startIntakeTimer = true;
   private boolean m_ejectInProgress = false;
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -233,18 +235,17 @@ public class Intake extends SubsystemBase {
   public void periodic() {
 
     if (isIntakeSensorTripped() && feederHasBall()) {
-      stopIntakeMotor();
+      stopIntakeMotorDelayed();
     } else {
       startIntakeMotor(Constants.IntakeConstants.kIntakeSpeed);
     }
 
-    // sets the intake brake enabled if the feeder has a ball.
+    // Get the color of the ball that is in the feeder
     if (feederHasBall()) {
       // Regulate call frequency to the color sensor
-      if (m_colorTimer.hasElapsed(0.1)) {
-        // Get the color of the ball that is in the feeder
+      if (m_colorTimer.hasElapsed(0.1)) {     
         m_ballColor = getBallColor();
-        
+
         m_colorTimer.reset();
         m_colorTimer.start();
       }     
@@ -352,6 +353,23 @@ public class Intake extends SubsystemBase {
   // --------- Intake Motor ------------------------------
   public void stopIntakeMotor(){
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
+  }
+
+  /**
+   * Delays the stopping of the intake motor for 0.1 seconds
+   * This must be run in a periodic loop.
+   */
+  public void stopIntakeMotorDelayed(){
+    if (m_startIntakeTimer) {
+      m_intakeTimer.reset();
+      m_intakeTimer.start();
+      m_startIntakeTimer = false;
+    }     
+
+    if (m_intakeTimer.hasElapsed(0.1)) {
+      stopIntakeMotor();
+      m_startIntakeTimer = true;
+    }    
   }
 
   /**
