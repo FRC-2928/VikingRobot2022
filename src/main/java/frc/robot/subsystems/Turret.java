@@ -255,6 +255,7 @@ public class Turret extends SubsystemBase {
    */
   public void setTurretDegrees(double angleDegrees) {
     double encoderTicks = getDegreesToEncoderTicks(angleDegrees);
+    System.out.println("Set turret ticks" + encoderTicks);
     m_turretMotor.set(ControlMode.Position, encoderTicks);
  
     SmartDashboard.putNumber("turret heading offset", angleDegrees);      

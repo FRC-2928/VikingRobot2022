@@ -41,6 +41,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import com.revrobotics.ColorMatch;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class Intake extends SubsystemBase {
 
@@ -71,7 +72,7 @@ public class Intake extends SubsystemBase {
   private Timer m_colorTimer = new Timer();
   private Timer m_intakeTimer = new Timer();
   private double m_duration = 0;
-  private boolean m_startIntakeTimer = false;
+  private boolean m_startIntakeTimer = true;
   private boolean m_ejectInProgress = false;
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -312,6 +313,8 @@ public class Intake extends SubsystemBase {
 
   public Alliance getBallColor() {
 
+    setAllianceColor(DriverStation.getAlliance());
+    
     // Ball color detection
     Color detectedColor = m_colorSensor.getColor();
 
