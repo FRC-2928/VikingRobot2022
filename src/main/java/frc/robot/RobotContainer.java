@@ -13,6 +13,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
+import frc.robot.oi.LogiTechDriverOI;
 import frc.robot.oi.OperatorOI;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -64,7 +66,9 @@ public class RobotContainer {
   // XBox Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  // private final Joystick m_driverController2 = new Joystick(OIConstants.kDriver2ControllerPort);
   private final DriverOI m_driverOI = new DriverOI(m_driverController);
+  // private final LogiTechDriverOI m_driverOI = new LogiTechDriverOI(m_driverController2);
   private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
   
   // Shuffleboard 

@@ -10,109 +10,86 @@ import frc.robot.oi.DriverOI;
 public class DriverOI {
     private XboxController m_controller;
 
+    private JoystickButton m_toggleIntakeMotor;
+    private JoystickButton m_toggleFeederMotor;
+    private JoystickButton m_shiftLow;
+    private JoystickButton m_shiftHigh;
+    private JoystickButton m_turnTurretToTarget;
+    private JoystickButton m_incrementFlywheel;
+    private JoystickButton m_decrementFlywheel;
+    private JoystickButton m_toggleFlywheel;
+    private Button m_turnTurretLeft;
+    private Button m_turnTurretRight;
+
     public DriverOI(XboxController controller) {
         m_controller = controller;
+
+        m_toggleIntakeMotor = new JoystickButton(m_controller, XboxController.Button.kA.value);
+        m_toggleFeederMotor = new JoystickButton(m_controller, XboxController.Button.kB.value);
+        m_shiftLow = new JoystickButton(m_controller, XboxController.Button.kX.value);
+        m_shiftHigh = new JoystickButton(m_controller, XboxController.Button.kY.value);
+
+        m_incrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+        m_decrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kBack.value);
+
+        m_toggleFlywheel = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+        m_turnTurretToTarget = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+        
+        m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
+        m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
     }
 
     // ---------------- Intake ----------------------------
 
-
-    // public Button getGroundIntakeButton() {
-    //     return new Button(() -> m_controller.getLeftTriggerAxis() > 0.2);
-    // }
-
-
-    // public Button getStationIntakeButton() {
-    //     return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
-    // }
-
     public Button getToggleIntakeMotorButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kA.value);
+        return m_toggleIntakeMotor;
     }
 
     public Button getToggleFeederMotorButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kB.value);
+        return m_toggleFeederMotor;
     }
 
     // ---------------- Climber ----------------------------
 
 
-    // public Button getClimbTrigger() {
-    //     return new JoystickButton(m_controller, XboxController.Axis.kRightTrigger.value);
-    // }
-
-    // ---------------- Shooting ----------------------------
-
-
-    
-    // public Button getAutoShootingButton() {
-    //     return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-    // }
-
-
-    // public Button getSetpointShootingButton(){
-    //     return new Button(() -> m_controller.getRightTriggerAxis() > 0.2);
-    // }
-
-
-    // public Button getFenderShotButton() {
-    //     return new Button(() -> m_controller.getPOV() == 180);
-    // }
-
-
-    // public Button getInitiationlineShotButton() {
-    //     return new Button(() -> m_controller.getPOV() == 0);
-    // }
-
-
-    // public Button getShooterDebugButton() {
-    //     return new Button(() -> m_controller.getPOV() == 90);
-    // }
-
-
-    // public Button getFeedButton() {
-    //     return new Button(() -> m_controller.getRightTriggerAxis() > 0.2);
-    // }
+    // ---------------- Flywheel ----------------------------
 
     public Button getIncrementFlywheelButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kStart.value);
+        return m_incrementFlywheel;
     }
 
     public Button getDecrementFlywheelButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kBack.value);
+        return m_decrementFlywheel;
     }
 
     public Button getToggleFlywheelButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+        return m_toggleFlywheel;
     }
 
+    // ---------------- Turret ---------------------------
+
     public Button getTurnTurretLeftButton(){
-        return new Button(() -> m_controller.getPOV() == 270);
+        return m_turnTurretLeft;
     }
 
     public Button getTurnTurretRightButton(){
-        return new Button(() -> m_controller.getPOV() == 90);
+        return m_turnTurretRight;
+    }
+
+    public Button getTurnTurretToTargetButton() {
+        return m_turnTurretToTarget;
     }
 
     // ---------------- Drivetrain ----------------------------
 
-    // public Button getResetEncodersButton() {
-    //     return new JoystickButton(m_controller, XboxController.Button.kB.value);
-    // }
-
     public Button getShiftLowButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kX.value);
+        return m_shiftLow;
     }
 
 
     public Button getShiftHighButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kY.value);
+        return m_shiftHigh;
     }
-
-    public Button getTurnTurretToTargetButton() {
-        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-    }
-
 
     public DoubleSupplier getMoveSupplier() {
         return () -> -m_controller.getLeftY();
