@@ -10,8 +10,20 @@ import frc.robot.oi.DriverOI;
 public class OperatorOI {
     private XboxController m_controller;
 
+    // buttons
+    private Button m_extendClimberButton;
+    private Button m_retractClimberButton;
+    private Button m_tiltForwardButton;
+    private Button m_tiltBackButton;
+
     public OperatorOI(XboxController controller) {
         m_controller = controller;
+
+        // make sure these are built once
+        m_extendClimberButton = new JoystickButton(m_controller, XboxController.Axis.kRightTrigger.value);
+        m_retractClimberButton = new JoystickButton(m_controller, XboxController.Axis.kLeftTrigger.value);
+        m_tiltForwardButton = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+        m_tiltBackButton = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
     }
 
     // ---------------- Intake ----------------------------
@@ -35,19 +47,19 @@ public class OperatorOI {
     // }
 
     public Button getExtendClimber() {
-        return new JoystickButton(m_controller, XboxController.Axis.kRightTrigger.value);
+        return m_extendClimberButton;
     }
 
     public Button getRetractClimber() {
-        return new JoystickButton(m_controller, XboxController.Axis.kLeftTrigger.value);
+        return m_retractClimberButton;
     }
 
     public Button getTiltForward() {
-        return new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+        return m_tiltForwardButton;
     }
 
     public Button getTiltBack() {
-        return new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+        return m_tiltBackButton;
     }
     // ---------------- Shooting ----------------------------
 
