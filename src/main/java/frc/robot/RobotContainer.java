@@ -84,10 +84,12 @@ public class RobotContainer {
 
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
+     m_intake.setAllianceColor(DriverStation.getAlliance());
     // new TrackTargetCommand(m_turret, m_drivetrain, m_turretLimelight).schedule();
   }
 
   public void onTeleopInit() {  
+    m_intake.setAllianceColor(DriverStation.getAlliance());
   }
 
 

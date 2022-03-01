@@ -41,6 +41,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import com.revrobotics.ColorMatch;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class Intake extends SubsystemBase {
 
@@ -312,6 +313,8 @@ public class Intake extends SubsystemBase {
 
   public Alliance getBallColor() {
 
+    setAllianceColor(DriverStation.getAlliance());
+    
     // Ball color detection
     Color detectedColor = m_colorSensor.getColor();
 
@@ -364,11 +367,13 @@ public class Intake extends SubsystemBase {
       m_intakeTimer.reset();
       m_intakeTimer.start();
       m_startIntakeTimer = false;
+      System.out.println("setting timer");
     }     
 
-    if (m_intakeTimer.hasElapsed(0.1)) {
+    if (m_intakeTimer.hasElapsed(1)) {
       stopIntakeMotor();
       m_startIntakeTimer = true;
+      System.out.println("timer elapsed");
     }    
   }
 

@@ -21,7 +21,7 @@ public class TurnToTarget extends PIDCommand {
         // The controller that the command will use
         new PIDController(0.02, 0, 0),
         // This should return the measurement
-        () -> turret.targetHorizontalOffset(),
+        () -> turret.getTargetHorizontalOffset(),
         // This should return the setpoint (can also be a constant)
         () -> 0,
         // This uses the output

@@ -31,6 +31,7 @@ public class MoveTurret extends CommandBase {
   @Override
   public void initialize() {
     m_currentAngle = m_turret.getTurretDegrees();
+    System.out.println("Initialize Move turret " + m_currentAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
