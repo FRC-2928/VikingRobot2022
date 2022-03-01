@@ -45,6 +45,7 @@ import frc.robot.commands.IntakeCommands.OpenRamp;
 import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
+import frc.robot.commands.TurretCommands.AutoTrackingTurret;
 import frc.robot.commands.TurretCommands.MoveTurret;
 import frc.robot.commands.TurretCommands.TurnTurretToTarget;
 
@@ -144,7 +145,9 @@ public class RobotContainer {
     // Configure button commands
     m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
     m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
-    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
+    m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
+    // m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
+
 
     // m_driverOI.getToggleIntakeMotorButton().whenPressed(new PrintCommand("Print from Driver"));
     // Configure Shuffleboard commands    

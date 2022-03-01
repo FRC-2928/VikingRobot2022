@@ -4,23 +4,21 @@
 
 package frc.robot.commands.TurretCommands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Turret;
 
 public class AutoTrackingTurret extends CommandBase {
 
   Turret m_turret;
-  double m_estimatedTargetRotation;
-  
-  
+  Rotation2d m_estimatedTargetRotation;
 
   /** Creates a new AutoTrackingTurret. */
-  public AutoTrackingTurret(Turret turret, double estimatedTargetRotation) {
+  public AutoTrackingTurret(Turret turret) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret);
     m_turret = turret;
-    m_estimatedTargetRotation = estimatedTargetRotation;
+    m_estimatedTargetRotation = m_turret.getEstimatedTargetRotation();
     
   }
 
@@ -34,15 +32,22 @@ public class AutoTrackingTurret extends CommandBase {
   @Override
   public void execute() {
 
-    //forgot what values we wanted when writing this part
-    if (m_estimatedTargetRotation > 200){
-      System.out.println(m_estimatedTargetRotation);
-      m_turret.setTurretDegrees(204);
-    } else {
-      System.out.println(m_estimatedTargetRotation);
-      m_turret.setTurretDegrees(196);
+    double targetAngle = m_turret.getTargetHorizontalOffset();
+    double turretAngle = m_turret.getTurretDegrees();
+    double newAngle = turretAngle + targetAngle;
+
+    if (m_turret.angleInRange(newAngle)) {
+      m_turret.setTurretDegrees(newAngle);
+    } 
+    else 
+    {  
+      // TODO add this in after testing first part
+      // if (m_estimatedTargetRotation.getDegrees() > 200){
+      //   m_turret.setTurretDegrees(-120);
+      // } else {
+      //   m_turret.setTurretDegrees(120);
+      // }
     }
-    
 
   }
 

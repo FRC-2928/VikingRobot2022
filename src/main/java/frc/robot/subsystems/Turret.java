@@ -81,9 +81,9 @@ public class Turret extends SubsystemBase {
 
   // instance variables for handling targeting.
   // private double m_lastHeading = 0.0;
-  // private double m_targetRobotOffset = 0.0;
+  // private double m_targetHeadingOffset = 0.0;
   private Rotation2d m_lastHeading = new Rotation2d();
-  private Rotation2d m_targetRobotOffset = new Rotation2d();
+  private Rotation2d m_targetHeadingOffset = new Rotation2d();
   private Rotation2d m_estimatedTargetRotation = new Rotation2d();
 
   // -----------------------------------------------------------
@@ -95,7 +95,7 @@ public class Turret extends SubsystemBase {
     setTurretPIDF();
     resetEncoders();
     setupShuffleboard();
-    m_turretPose = new Pose2d(0,0,getTargetToRobotOffset());
+    m_turretPose = new Pose2d(0,0,getTargetToHeadingOffset());
   }
 
   public void configMotors(){
@@ -155,7 +155,7 @@ public class Turret extends SubsystemBase {
 
   public void setupShuffleboard() {
     ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
-    m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", targetHorizontalOffset())
+    m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", getTargetHorizontalOffset())
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
       .withPosition(1, 0)
@@ -169,11 +169,11 @@ public class Turret extends SubsystemBase {
       .withSize(2,1)
       .withPosition(1, 5)
       .getEntry();  
-    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToRobotOffset().getDegrees())
+    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToHeadingOffset().getDegrees())
       .withSize(2,1)
       .withPosition(3, 5)
       .getEntry(); 
-    m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToRobotOffset().getDegrees())
+    m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToHeadingOffset().getDegrees())
       .withSize(2,1)
       .withPosition(5, 5)
       .getEntry(); 
@@ -204,15 +204,15 @@ public class Turret extends SubsystemBase {
     // but only if we have found the target.
     if(getTargetFound()) {
       // m_lastHeading = m_drivetrain.getRotation().getDegrees();
-      // m_targetRobotOffset = getTargetToRobotOffset().getDegrees();
+      // m_targetHeadingOffset = getTargetToHeadingOffset().getDegrees();
       m_lastHeading = m_drivetrain.getRotation();
-      m_targetRobotOffset = getTargetToRobotOffset();
+      m_targetHeadingOffset = getTargetToHeadingOffset();
     }
 
     // calculate the estimated target rotation.                           
-    // m_estimatedTargetRotation = Rotation2d.fromDegrees((m_targetRobotOffset + m_lastHeading) - m_drivetrain.getRotation().getDegrees());
+    // m_estimatedTargetRotation = Rotation2d.fromDegrees((m_targetHeadingOffset + m_lastHeading) - m_drivetrain.getRotation().getDegrees());
     Rotation2d currentHeading = m_drivetrain.getRotation();
-    m_estimatedTargetRotation = m_targetRobotOffset
+    m_estimatedTargetRotation = m_targetHeadingOffset
                                   .plus(m_lastHeading)
                                   .minus(currentHeading);
 
@@ -221,10 +221,10 @@ public class Turret extends SubsystemBase {
 
   public void publishTelemetry() {
     m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
-    m_targetHOEntry.setNumber(targetHorizontalOffset());
+    m_targetHOEntry.setNumber(getTargetHorizontalOffset());
     m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
-    m_turretOffsetEntry.setNumber(getTurretToRobotOffset().getDegrees());
-    m_targetOffsetEntry.setNumber(getTargetToRobotOffset().getDegrees());
+    m_turretOffsetEntry.setNumber(getTurretToHeadingOffset().getDegrees());
+    m_targetOffsetEntry.setNumber(getTargetToHeadingOffset().getDegrees());
     m_estimatedTargetRotationEntry.setNumber(getEstimatedTargetRotation().getDegrees());
 
     m_targetLockedEntry.setBoolean(getTargetLocked());
@@ -250,7 +250,7 @@ public class Turret extends SubsystemBase {
   }
 
   /**
-   * Moves the turret clockwise or anti-clockwise the specified angle
+   * Moves the turret to the specified angle
    * @param angleDegrees the position to move the turret to. 
    */
   public void setTurretDegrees(double angleDegrees) {
@@ -281,11 +281,15 @@ public class Turret extends SubsystemBase {
     m_turretMotor.overrideLimitSwitchesEnable(false);
   }
 
+  public boolean angleInRange(double angle) {
+    return (angle < 120 & angle > -120);
+  }
+
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
   public Pose2d getTargetPose() {
-    m_turretPose = new Pose2d(0,0, getTargetToRobotOffset());
+    m_turretPose = new Pose2d(0,0, getTargetToHeadingOffset());
     return m_turretPose;
   }
 
@@ -306,10 +310,18 @@ public class Turret extends SubsystemBase {
   }
 
   /**
+   * Gets the angle of the turret relative to the robot chassis
+   * @return Rotation2d offset angle between turret and robot chassis in Radians
+   */
+  public Rotation2d getTurretToRobotOffset() {
+    return (Rotation2d.fromDegrees(getTurretDegrees()));
+  }
+
+  /**
    * Gets the angle of the target relative to the turret
    * @return offset angle between target and the turret
    */
-  public double targetHorizontalOffset() {
+  public double getTargetHorizontalOffset() {
     double offset = m_turretLimelight.getHorizontalOffset();
     // pass it though an averaging filter
     return m_filter.calculate(offset);
@@ -317,29 +329,29 @@ public class Turret extends SubsystemBase {
 
   /**
    * Gets the angle of the target relative to the turret
-   * @return offset angle between target and the turret in Radians
+   * @return Rotation2d offset angle between target and the turret in Radians
    */
   public Rotation2d getTargetToTurretOffset() {
-    double offset = targetHorizontalOffset();
+    double offset = getTargetHorizontalOffset();
     return (Rotation2d.fromDegrees(offset));
   }
 
   /**
-   * Gets the angle of the turret relative to the robot chassis
+   * Gets the angle of the turret relative to the robot heading
    * @return offset angle between turret and robot chassis in Radians
    */
-  public Rotation2d getTurretToRobotOffset() {
+  public Rotation2d getTurretToHeadingOffset() {
     double offset = m_drivetrain.getRotation().getDegrees() - getTurretDegrees();
     return (Rotation2d.fromDegrees(offset));
   }
 
   /**
-   * Gets the angle of the target relative to the robot chassis
+   * Gets the angle of the target relative to the robot heading
    * @return offset angle between target and robot chassis in Radians
    */
-  public Rotation2d getTargetToRobotOffset() {
-    double offset = getTurretToRobotOffset().getDegrees() + getTargetToTurretOffset().getDegrees();
-    return (Rotation2d.fromDegrees(offset));
+  public Rotation2d getTargetToHeadingOffset() {
+    Rotation2d offset = getTurretToHeadingOffset().plus(getTargetToTurretOffset());
+    return offset;
   }
 
   public boolean getTargetFound() {
@@ -348,7 +360,7 @@ public class Turret extends SubsystemBase {
 
   public boolean getTargetLocked() {
     if (getTargetFound()) {
-      return Math.abs(targetHorizontalOffset()) < 2;
+      return Math.abs(getTargetHorizontalOffset()) < 2;
     }
     return false;
   }

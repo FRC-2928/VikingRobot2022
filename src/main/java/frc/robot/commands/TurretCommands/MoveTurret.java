@@ -11,6 +11,7 @@ public class MoveTurret extends CommandBase {
 
   Turret m_turret;
   double m_direction;
+  double m_currentAngle = 0;
 
   /** Creates a new MoveTurret. */
   /**
@@ -29,20 +30,22 @@ public class MoveTurret extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Intitialize Moving turret...");
+    m_currentAngle = m_turret.getTurretDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    if(m_direction > 0){
-      System.out.println("Moving turret left...");
-      m_turret.setPower(.2);
-    } else {
-      System.out.println("Moving turret right...");
-      m_turret.setPower(-.2);
-    }
+
+    // Compute and set the new angle
+    m_currentAngle += m_direction;
+    m_turret.setTurretDegrees(m_currentAngle);
+
+    // if(m_direction > 0){  
+    //   m_turret.setPower(.2);
+    // } else {
+    //   m_turret.setPower(-.2);
+    // }
     
   }
 
