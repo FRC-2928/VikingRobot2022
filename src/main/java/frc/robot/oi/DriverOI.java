@@ -2,6 +2,7 @@ package frc.robot.oi;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -10,8 +11,17 @@ import frc.robot.oi.DriverOI;
 public class DriverOI {
     private XboxController m_controller;
 
+    // driver joystick
+    private Joystick m_joystick = new Joystick(2);
+
+    private Button m_toggleIntakeMotorButton;
+    private Button m_toggleFeederMotorButton;
+
     public DriverOI(XboxController controller) {
         m_controller = controller;
+
+        m_toggleIntakeMotorButton = new JoystickButton(m_joystick, 6);
+        m_toggleFeederMotorButton = new JoystickButton(m_joystick, 7);
     }
 
     // ---------------- Intake ----------------------------
@@ -27,11 +37,13 @@ public class DriverOI {
     // }
 
     public Button getToggleIntakeMotorButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kA.value);
+        // return new JoystickButton(m_controller, XboxController.Button.kA.value);
+        return m_toggleIntakeMotorButton;
     }
 
     public Button getToggleFeederMotorButton(){
-        return new JoystickButton(m_controller, XboxController.Button.kB.value);
+        // return new JoystickButton(m_controller, XboxController.Button.kB.value);
+        return m_toggleFeederMotorButton;
     }
 
     // ---------------- Climber ----------------------------
