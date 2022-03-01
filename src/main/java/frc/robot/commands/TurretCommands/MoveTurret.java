@@ -40,13 +40,13 @@ public class MoveTurret extends CommandBase {
 
     // Compute and set the new angle
     m_currentAngle += m_direction;
-    m_turret.setTurretDegrees(m_currentAngle);
+    // m_turret.setTurretDegrees(m_currentAngle);
 
-    // if(m_direction > 0){  
-    //   m_turret.setPower(.2);
-    // } else {
-    //   m_turret.setPower(-.2);
-    // }
+    if(m_direction > 0){  
+      m_turret.setPower(.2);
+    } else {
+      m_turret.setPower(-.2);
+    }
     
   }
 

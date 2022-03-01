@@ -61,15 +61,14 @@ public class LogiTechDriverOI {
         m_turnTurretToTarget = new JoystickButton(m_controller, BUTTON_1);
         // m_unassigned = new JoystickButton(m_controller, BUTTON_2);
         m_shiftLow = new JoystickButton(m_controller, BUTTON_3);
-        m_shiftHigh = new JoystickButton(m_controller, BUTTON_4);       
+        m_shiftHigh = new JoystickButton(m_controller, BUTTON_4);  
+        m_toggleIntakeMotor = new JoystickButton(m_controller, BUTTON_5);     
         m_toggleFeederMotor = new JoystickButton(m_controller, BUTTON_6);
-        m_toggleIntakeMotor = new JoystickButton(m_controller, BUTTON_7);
         m_toggleFlywheel = new JoystickButton(m_controller, BUTTON_8);
         m_decrementFlywheel = new JoystickButton(m_controller, BUTTON_9);
-        m_incrementFlywheel = new JoystickButton(m_controller, BUTTON_10);   
-        
-        m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
-        m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
+        m_incrementFlywheel = new JoystickButton(m_controller, BUTTON_10);       
+        m_turnTurretRight = new JoystickButton(m_controller, BUTTON_11);
+        m_turnTurretLeft = new JoystickButton(m_controller, BUTTON_12);
     }
 
     // ---------------- Intake ----------------------------

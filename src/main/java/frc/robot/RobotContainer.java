@@ -64,12 +64,12 @@ public class RobotContainer {
   
 
   // XBox Controllers
-  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
-  // private final Joystick m_driverController2 = new Joystick(OIConstants.kDriver2ControllerPort);
-  private final DriverOI m_driverOI = new DriverOI(m_driverController);
-  // private final LogiTechDriverOI m_driverOI = new LogiTechDriverOI(m_driverController2);
-  private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
+  // private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  // private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final Joystick m_driverController2 = new Joystick(OIConstants.kDriver2ControllerPort);
+  // private final DriverOI m_driverOI = new DriverOI(m_driverController);
+  private final LogiTechDriverOI m_driverOI = new LogiTechDriverOI(m_driverController2);
+  // private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
   
   // Shuffleboard 
   private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -124,7 +124,7 @@ public class RobotContainer {
     // Configure button commands
     m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
-    m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
+    // m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
     //   m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
 
     // Configure Shuffleboard commands
@@ -145,10 +145,11 @@ public class RobotContainer {
     // Configure default commands
     // m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
     m_turret.setDefaultCommand(
-        new RunCommand(() -> m_turret.rotateTurret(m_operatorOI.getRotateTurretSupplier()),
+        new RunCommand(() -> m_turret.rotateTurret(m_driverOI.getRotateTurretSupplier()),
             m_turret));
 
     // Configure button commands
+
     m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
     m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
     m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
@@ -179,6 +180,7 @@ public class RobotContainer {
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
     m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
     m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
+    m_intake.getCommandsLayout().add(new InstantCommand(m_intake::setAllianceColor, m_intake));
   }
 
   /**
@@ -207,10 +209,10 @@ public class RobotContainer {
     // Configure default commands
 
     // Configure button commands
-    m_operatorOI.getExtendClimber().whileHeld(new ExtendClimberBars(m_climber));
-    m_operatorOI.getRetractClimber().whileHeld(new RetractClimberBars(m_climber));
-    m_operatorOI.getTiltForward().whenPressed(new InstantCommand(m_climber::tiltForward,m_climber));
-    m_operatorOI.getTiltBack().whenPressed(new InstantCommand(m_climber::tiltBack,m_climber));
+    // m_operatorOI.getExtendClimber().whileHeld(new ExtendClimberBars(m_climber));
+    // m_operatorOI.getRetractClimber().whileHeld(new RetractClimberBars(m_climber));
+    // m_operatorOI.getTiltForward().whenPressed(new InstantCommand(m_climber::tiltForward,m_climber));
+    // m_operatorOI.getTiltBack().whenPressed(new InstantCommand(m_climber::tiltBack,m_climber));
   }
 
 

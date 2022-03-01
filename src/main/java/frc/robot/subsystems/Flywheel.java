@@ -142,7 +142,7 @@ public class Flywheel extends SubsystemBase {
   public void publishTelemetry() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Flywheel Speed", m_flywheelTalon.getSelectedSensorVelocity());
 
     m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
     m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
@@ -242,10 +242,7 @@ public class Flywheel extends SubsystemBase {
     m_flywheelSim.update(0.02);
 
     //set the encoder values from the sim motor's output
-    m_flywheelMotorSim.setIntegratedSensorRawPosition((int)m_flywheelSim.getOutput(0));
-
-    // m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
-    // m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
+    m_flywheelMotorSim.setIntegratedSensorVelocity((int)m_flywheelSim.getOutput(0));
   
   }
 

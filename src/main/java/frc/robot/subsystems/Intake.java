@@ -311,9 +311,13 @@ public class Intake extends SubsystemBase {
     m_alliance = alliance;
   }
 
+  public void setAllianceColor() {
+    setAllianceColor(DriverStation.getAlliance());
+  }
+
   public Alliance getBallColor() {
 
-    setAllianceColor(DriverStation.getAlliance());
+    // setAllianceColor(DriverStation.getAlliance());
     
     // Ball color detection
     Color detectedColor = m_colorSensor.getColor();
@@ -640,8 +644,8 @@ public class Intake extends SubsystemBase {
     m_intakeSim.update(0.02);
 
     // Finally, we set our simulated encoder's readings
-    m_intakeMotorSim.setQuadratureRawPosition((int)m_intakeSim.getOutput(0));
-    m_rightFeederMotorSim.setQuadratureRawPosition((int)m_intakeSim.getOutput(0));
+    m_intakeMotorSim.setQuadratureVelocity((int)m_intakeSim.getOutput(0));
+    m_rightFeederMotorSim.setQuadratureVelocity((int)m_intakeSim.getOutput(0));
   }  
   
   public void triggerCloseIntakeSwitchSim() {
