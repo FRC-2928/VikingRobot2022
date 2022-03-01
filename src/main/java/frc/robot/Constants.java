@@ -31,7 +31,7 @@ public final class Constants {
         public static final int kFlywheelTalonFX = 2;
 
         //Sensors
-        public static final int kPigeonIMU = 0;
+        public static final int kPigeonIMU = 3;
 
         //Intake
         public static final int kIntakeMotor = 4;
