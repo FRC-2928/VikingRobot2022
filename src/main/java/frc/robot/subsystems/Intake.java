@@ -71,7 +71,7 @@ public class Intake extends SubsystemBase {
   private Timer m_colorTimer = new Timer();
   private Timer m_intakeTimer = new Timer();
   private double m_duration = 0;
-  private boolean m_startIntakeTimer = true;
+  private boolean m_startIntakeTimer = false;
   private boolean m_ejectInProgress = false;
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -364,11 +364,13 @@ public class Intake extends SubsystemBase {
       m_intakeTimer.reset();
       m_intakeTimer.start();
       m_startIntakeTimer = false;
+      System.out.println("setting timer");
     }     
 
-    if (m_intakeTimer.hasElapsed(0.1)) {
+    if (m_intakeTimer.hasElapsed(1)) {
       stopIntakeMotor();
       m_startIntakeTimer = true;
+      System.out.println("timer elapsed");
     }    
   }
 
