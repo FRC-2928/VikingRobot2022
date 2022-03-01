@@ -88,6 +88,7 @@ public class RobotContainer {
   }
 
   public void onTeleopInit() {  
+    m_intake.setAllianceColor(DriverStation.getAlliance());
   }
 
 
