@@ -68,6 +68,14 @@ public class DriverOI {
 
     // ---------------- Turret ---------------------------
 
+    public DoubleSupplier getRotateTurretLeftSupplier() {
+        return () -> m_controller.getLeftTriggerAxis();
+    }
+
+    public DoubleSupplier getRotateTurretRightSupplier() {
+        return () -> m_controller.getRightTriggerAxis();
+    }
+
     public Button getTurnTurretLeftButton(){
         return m_turnTurretLeft;
     }

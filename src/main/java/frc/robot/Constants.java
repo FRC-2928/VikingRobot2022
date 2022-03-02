@@ -149,11 +149,11 @@ public final class Constants {
     
     public static final class FlywheelConstants {
         public static final double ksVolts = 0.6024;
-        public static final double kvVoltSecondsPerMeter = 0.21907;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
+        public static final double kvVoltSecondsPerRadian = 0.00021907;
+        public static final double kaVoltSecondsSquaredPerRadian = 0.000096252;
 
         public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem = 
-            LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
+            LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerRadian, kaVoltSecondsSquaredPerRadian);
         // public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem2 = 
         //     LinearSystemId.createFlywheelSystem(motor, jKgMetersSquared, G)
 
@@ -213,11 +213,11 @@ public final class Constants {
         public static final double kGearRatio = (50/9);
 
         public static final double ksVolts = 0.06024;
-        public static final double kvVoltSecondsPerMeter = 0.005;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.000096252;
+        public static final double kvVoltSecondsPerRadian = 0.005;
+        public static final double kaVoltSecondsSquaredPerRadian = 0.000096252;
 
         public static final LinearSystem<N2, N1, N1> kTurretLinearSystem = 
-            LinearSystemId.identifyPositionSystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
+            LinearSystemId.identifyPositionSystem(kvVoltSecondsPerRadian, kaVoltSecondsSquaredPerRadian);
         
     }
 

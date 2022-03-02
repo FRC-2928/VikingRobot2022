@@ -15,8 +15,8 @@ import frc.robot.Constants.FlywheelConstants;
 public class FlywheelSim extends LinearSystemSim<N1, N1, N1> {
 
     public FlywheelSim(){
-        super(LinearSystemId.identifyVelocitySystem(FlywheelConstants.kvVoltSecondsPerMeter, 
-                                                    FlywheelConstants.kaVoltSecondsSquaredPerMeter));
+        super(LinearSystemId.identifyVelocitySystem(FlywheelConstants.kvVoltSecondsPerRadian, 
+                                                    FlywheelConstants.kaVoltSecondsSquaredPerRadian));
     }
 
     public FlywheelSim(LinearSystem<N1, N1, N1> linearSystem){

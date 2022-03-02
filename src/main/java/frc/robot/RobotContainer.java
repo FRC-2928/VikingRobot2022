@@ -65,11 +65,11 @@ public class RobotContainer {
 
   // XBox Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  // private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   // private final Joystick m_driverController2 = new Joystick(OIConstants.kDriver2ControllerPort);
   private final DriverOI m_driverOI = new DriverOI(m_driverController);
   // private final LogiTechDriverOI m_driverOI = new LogiTechDriverOI(m_driverController2);
-  // private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
+  private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
   
   // Shuffleboard 
   private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -143,20 +143,18 @@ public class RobotContainer {
   public void configureTurret() {
     
     // Configure default commands
-    // m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
+    // m_turret.setDefaultCommand(new AutoTrackingTurret(m_turret));
     // m_turret.setDefaultCommand(
-    //     new RunCommand(() -> m_turret.rotateTurret(m_driverOI.getRotateTurretSupplier()),
-    //         m_turret));
+    //     new RunCommand(() -> m_turret.rotateTurret(m_driverOI.getRotateTurretLeftSupplier(), 
+    //                                                m_driverOI.getRotateTurretRightSupplier()),
+    //                                                m_turret));
 
     // Configure button commands
-
     m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
     m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
-    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
+    m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
     // m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
-
-    // m_driverOI.getToggleIntakeMotorButton().whenPressed(new PrintCommand("Print from Driver"));
     // Configure Shuffleboard commands    
   }
 
@@ -173,8 +171,7 @@ public class RobotContainer {
 
     // Configure Shuffleboard commands
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
-    m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake)); 
-    // m_intake.getCommandsLayout().add(new PrintCommand("Toggle feeder button")); 
+    m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake));  
     // m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
     m_intake.getCommandsLayout().add(new ShootBall(m_intake)); 
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
@@ -206,13 +203,18 @@ public class RobotContainer {
    * Configure Climber
    */
   public void configureClimber() {
+
     // Configure default commands
+    m_climber.setDefaultCommand(
+        new RunCommand(() -> m_climber.moveClimber(m_operatorOI.getExtendSupplier(), 
+                                                   m_operatorOI.getRetractSupplier()),
+                                                   m_climber));
 
     // Configure button commands
-    // m_operatorOI.getExtendClimber().whileHeld(new ExtendClimberBars(m_climber));
-    // m_operatorOI.getRetractClimber().whileHeld(new RetractClimberBars(m_climber));
-    // m_operatorOI.getTiltForward().whenPressed(new InstantCommand(m_climber::tiltForward,m_climber));
-    // m_operatorOI.getTiltBack().whenPressed(new InstantCommand(m_climber::tiltBack,m_climber));
+    m_operatorOI.getExtendClimber().whileHeld(new ExtendClimberBars(m_climber));
+    m_operatorOI.getRetractClimber().whileHeld(new RetractClimberBars(m_climber));
+    m_operatorOI.getTiltForward().whenPressed(new InstantCommand(m_climber::tiltForward,m_climber));
+    m_operatorOI.getTiltBack().whenPressed(new InstantCommand(m_climber::tiltBack,m_climber));
   }
 
 

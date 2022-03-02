@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
@@ -245,20 +246,16 @@ public class Turret extends SubsystemBase {
     m_turretMotor.setSelectedSensorPosition(0);
   }
 
-  public void rotateTurret(DoubleSupplier rotate){
-    setPower(rotate.getAsDouble());
-  }
-
   /**
    * Moves the turret to the specified angle
    * @param angleDegrees the position to move the turret to. 
    */
   public void setTurretDegrees(double angleDegrees) {
     double encoderTicks = getDegreesToEncoderTicks(angleDegrees);
-    System.out.println("Set turret ticks" + encoderTicks);
+    // System.out.println("Set turret ticks" + encoderTicks);
     m_turretMotor.set(ControlMode.Position, encoderTicks);
  
-    SmartDashboard.putNumber("turret heading offset", angleDegrees);      
+    SmartDashboard.putNumber("turret angleDegrees", angleDegrees);      
   }
 
   /**
@@ -268,6 +265,22 @@ public class Turret extends SubsystemBase {
   public void setPower(double power){
     SmartDashboard.putNumber("Turret Power", power);
     m_turretMotor.set(ControlMode.PercentOutput, power);
+  }
+
+  /**
+   * Move turret left/right using an axis trigger
+   * 
+   * @param extend Move it left
+   * @param retract Move it right
+   */
+  public void rotateTurret(DoubleSupplier left, DoubleSupplier right){
+    double leftPower = MathUtil.applyDeadband(left.getAsDouble(), 0.02);
+    double rightPower = MathUtil.applyDeadband(right.getAsDouble(), 0.02);
+    if (leftPower > 0) {
+      setPower(leftPower);
+    } else {
+      setPower(-rightPower);
+    }
   }
 
   /**
@@ -372,33 +385,33 @@ public class Turret extends SubsystemBase {
   }
 
   // -----------------------------------------------------------
-    // Simulation
-    // -----------------------------------------------------------
-    public void simulationPeriodic() {
-      /* Pass the robot battery voltage to the simulated Talon FXs */
-      m_turretMotorSim.setBusVoltage(RobotController.getInputVoltage());
-      SmartDashboard.putNumber("Sim Turret output voltage", m_turretMotorSim.getMotorOutputLeadVoltage());
-      // System.out.println("Input Voltage " + m_turretMotorSim.getMotorOutputLeadVoltage());
+  // Simulation
+  // -----------------------------------------------------------
+  public void simulationPeriodic() {
+    /* Pass the robot battery voltage to the simulated Talon FXs */
+    m_turretMotorSim.setBusVoltage(RobotController.getInputVoltage());
+    SmartDashboard.putNumber("Sim Turret output voltage", m_turretMotorSim.getMotorOutputLeadVoltage());
+    // System.out.println("Input Voltage " + m_turretMotorSim.getMotorOutputLeadVoltage());
 
-      m_turretSim.setInput(m_turretMotorSim.getMotorOutputLeadVoltage());  
-      
-      /*
-       * Advance the model by 20 ms. Note that if you are running this
-       * subsystem in a separate thread or have changed the nominal
-       * timestep of TimedRobot, this value needs to match it.
-       */
-      m_turretSim.update(0.02);
-  
-      // /*
-      //  * Update all of the sensors.
-      //  *
-      //  * Since WPILib's simulation class is assuming +V is forward,
-      //  * but -V is forward for the right motor, we need to negate the
-      //  * position reported by the simulation class. Basically, we
-      //  * negated the input, so we need to negate the output.
-      //  */
-      m_turretMotorSim.setQuadratureRawPosition((int)m_turretSim.getOutput(0)*10);
-      
-    }
+    m_turretSim.setInput(m_turretMotorSim.getMotorOutputLeadVoltage());  
+    
+    /*
+      * Advance the model by 20 ms. Note that if you are running this
+      * subsystem in a separate thread or have changed the nominal
+      * timestep of TimedRobot, this value needs to match it.
+      */
+    m_turretSim.update(0.02);
+
+    // /*
+    //  * Update all of the sensors.
+    //  *
+    //  * Since WPILib's simulation class is assuming +V is forward,
+    //  * but -V is forward for the right motor, we need to negate the
+    //  * position reported by the simulation class. Basically, we
+    //  * negated the input, so we need to negate the output.
+    //  */
+    m_turretMotorSim.setQuadratureRawPosition((int)m_turretSim.getOutput(0)*10);
+    
+  }
 
 }

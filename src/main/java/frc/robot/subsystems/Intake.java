@@ -400,36 +400,6 @@ public class Intake extends SubsystemBase {
     return m_intakeMotorStop;
   }
 
-  /**
-   * sets the intake brake enabled if the feeder has a ball, and disabled if not
-   */
-  // public void setIntakeBrakeOverride(){
-  //   if(feederHasBall()){
-  //     setIntakeBrakeEnabled();
-  //   } else {
-  //     setIntakeBrakeDisabled();
-  //   }
-  // }
-
-  /**
-   * listen to intake limit switch
-   */
-  // public void setIntakeBrakeEnabled(){
-  //   m_intakeMotor.overrideLimitSwitchesEnable(false);
-  //   m_intakeBrakeEnabled = true;
-  // }
-
-  /**
-   * ignore intake limit switch - motor keeps running
-   */
-  // public void setIntakeBrakeDisabled(){
-  //   m_intakeMotor.overrideLimitSwitchesEnable(true);
-  //   m_intakeBrakeEnabled = false;
-  //   if (!RobotBase.isReal()) {
-  //     m_intakeSim.triggerOpenIntakeSwitchSim();
-  //   }
-  // }
-
   // --------- Feeder Motor ------------------------------
   public void stopFeederMotor(){
     m_rightFeederMotor.set(ControlMode.PercentOutput, 0);
@@ -545,10 +515,6 @@ public class Intake extends SubsystemBase {
     //not percent, range between -1 and 1
     return (m_intakeMotor.getMotorOutputPercent() > .1);
   }
-
-  // public boolean isIntakeBrakeEnabled() {
-  //   return m_intakeBrakeEnabled;
-  // }
 
   public boolean isLeftIntakeSensorTripped(){
     return !m_leftIntakeSensor.get();

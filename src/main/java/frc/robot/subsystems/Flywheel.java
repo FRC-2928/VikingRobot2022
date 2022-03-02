@@ -42,14 +42,14 @@ public class Flywheel extends SubsystemBase {
   FlywheelSim m_flywheelSim = new FlywheelSim(FlywheelConstants.kFlywheelLinearSystem);
 
   //for srx use sim motor
-  FlywheelSim m_flywheelSimMotor = new FlywheelSim(DCMotor.getFalcon500(1), 
-                                                    FlywheelConstants.kFlywheelRadius, 
-                                                    FlywheelConstants.kFlywheelMass, 
-                                                    FlywheelConstants.kGearRatio);
+  // FlywheelSim m_flywheelSimMotor = new FlywheelSim(DCMotor.getFalcon500(1), 
+  //                                                   FlywheelConstants.kFlywheelRadius, 
+  //                                                   FlywheelConstants.kFlywheelMass, 
+  //                                                   FlywheelConstants.kGearRatio);
 
   ShuffleboardLayout m_flywheelLayout;
   NetworkTableEntry m_flywheelSpeedEntry;
-  NetworkTableEntry m_flywheelVoltageEntry;
+  NetworkTableEntry m_flywheelPercentEntry;
   private ShuffleboardLayout m_commandsLayout;
 
 
@@ -115,9 +115,9 @@ public class Flywheel extends SubsystemBase {
             .getLayout("Flywheels", BuiltInLayouts.kList)
             .withSize(2, 2)
             .withPosition(0, 0);
-          m_flywheelSpeedEntry = m_flywheelLayout.add("Flywheel Motor Speed", getVelocity()).getEntry();
-          m_flywheelVoltageEntry = m_flywheelLayout.add
-            ("Sim Motor Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
+          m_flywheelSpeedEntry = m_flywheelLayout.add("Speed in Ticks", getVelocity()).getEntry();
+          m_flywheelPercentEntry = m_flywheelLayout.add
+            ("Percent Output", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
           
     m_commandsLayout = Shuffleboard.getTab("Flywheel")
             .getLayout("Commands", BuiltInLayouts.kList)
@@ -144,7 +144,7 @@ public class Flywheel extends SubsystemBase {
     // SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Flywheel Speed", m_flywheelTalon.getSelectedSensorVelocity());
 
-    m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
+    m_flywheelPercentEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
     m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
   }
 

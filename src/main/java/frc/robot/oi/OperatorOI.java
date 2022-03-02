@@ -16,16 +16,20 @@ public class OperatorOI {
     private JoystickButton m_tiltForward;
     private JoystickButton m_tiltBack;
     private JoystickButton m_printButton;
+    private Button m_turnTurretLeft;
+    private Button m_turnTurretRight;
 
     public OperatorOI(XboxController controller) {
         m_controller = controller;
 
         // make sure these are built once
-        m_printButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
-        m_extendClimber = new JoystickButton(m_controller, XboxController.Axis.kRightTrigger.value);
-        m_retractClimber = new JoystickButton(m_controller, XboxController.Axis.kLeftTrigger.value);
+        m_extendClimber = new JoystickButton(m_controller, XboxController.Button.kA.value);
+        m_retractClimber = new JoystickButton(m_controller, XboxController.Button.kB.value);
         m_tiltForward = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
         m_tiltBack = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+
+        m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
+        m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
     }
 
     // ---------------- Intake ----------------------------
@@ -33,12 +37,20 @@ public class OperatorOI {
 
     // ---------------- Climber ----------------------------
 
-    public Button getExtendClimber() {
+    public JoystickButton getExtendClimber() {
         return m_extendClimber;
     }
 
-    public Button getRetractClimber() {
+    public JoystickButton getRetractClimber() {
         return m_retractClimber;
+    }
+
+    public DoubleSupplier getExtendSupplier() {
+        return () -> m_controller.getLeftTriggerAxis();
+    }
+
+    public DoubleSupplier getRetractSupplier() {
+        return () -> m_controller.getRightTriggerAxis();
     }
 
     public Button getTiltForward() {
@@ -56,8 +68,12 @@ public class OperatorOI {
  
     // ---------------- Turret ----------------------------
 
-    public DoubleSupplier getRotateTurretSupplier() {
-        return () -> m_controller.getRightX();
+    public Button getTurnTurretLeftButton(){
+        return m_turnTurretLeft;
+    }
+
+    public Button getTurnTurretRightButton(){
+        return m_turnTurretRight;
     }
 
     // ---------------- Drivetrain ----------------------------
