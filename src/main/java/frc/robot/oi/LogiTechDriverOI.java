@@ -112,6 +112,10 @@ public class LogiTechDriverOI {
         return m_turnTurretToTarget;
     }
 
+    public DoubleSupplier getRotateTurretSupplier() {
+        return () -> m_controller.getZ();
+    }
+
     // ---------------- Drivetrain ----------------------------
 
     public Button getShiftLowButton() {
@@ -132,7 +136,4 @@ public class LogiTechDriverOI {
         return () -> m_controller.getY();
     }
 
-    public DoubleSupplier getRotateTurretSupplier() {
-        return () -> m_controller.getZ();
-    }
 }

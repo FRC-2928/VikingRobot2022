@@ -224,9 +224,9 @@ public final class Constants {
     public static final class FeederConstants {
 
         // Motor control constants
-        public static final double kIndexFastForwardPower = 0.8;
-        public static final double kIndexPower = 0.5;
-        public static final double kIndexReversePower = -0.8;
+        // public static final double kIndexFastForwardPower = 0.8;
+        // public static final double kIndexPower = 0.5;
+        // public static final double kIndexReversePower = -0.8;
         // public static final double kHopperFastForwardPower = 0.7;
         // public static final double kHopperPower = 0.55;
         // public static final double kHopperReversePower = -0.8;
@@ -270,8 +270,8 @@ public final class Constants {
         public static double IntakekF = 0.4;
 		public static double kClimberErrorThreshold = 0.5; // 5 cm
 
-        public static double kIntakeSpeed = .7;
-        public static double kFeederSpeed = .4;
+        public static double kIntakeSpeed = .45;
+        public static double kFeederSpeed = .3;
         public static double kFeederHighSpeed = .8;
 
         public static int kLeftIntakeSensor = 8;

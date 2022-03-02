@@ -131,19 +131,19 @@ public class Turret extends SubsystemBase {
       //Either using the integrated Falcon sensor or an external one, will change if needed
      m_turretMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
 
-    //  m_turretMotor.configForwardLimitSwitchSource(type, normalOpenOrClose);
-    //  m_turretMotor.configReverseLimitSwitchSource(type, normalOpenOrClose);
     m_turretMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-                                                 LimitSwitchNormal.NormallyClosed, 0);
+                                                 LimitSwitchNormal.NormallyOpen, 0);
+    m_turretMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+                                                 LimitSwitchNormal.NormallyOpen, 0);                                             
 
     m_turretMotor.setInverted(true);
     m_turretMotor.setSensorPhase(true);
 
-    m_turretMotor.configForwardSoftLimitThreshold(2750);
-    m_turretMotor.configReverseSoftLimitThreshold(-2750);
-    m_turretMotor.configForwardSoftLimitEnable(true, 0);
-    m_turretMotor.configReverseSoftLimitEnable(true, 0);
-    m_turretMotor.overrideSoftLimitsEnable(true);
+    m_turretMotor.configForwardSoftLimitThreshold(7300);
+    m_turretMotor.configReverseSoftLimitThreshold(-7300);
+    m_turretMotor.configForwardSoftLimitEnable(false, 0);
+    m_turretMotor.configReverseSoftLimitEnable(false, 0);
+    m_turretMotor.overrideSoftLimitsEnable(false);
   }
 
   public void setTurretPIDF() {

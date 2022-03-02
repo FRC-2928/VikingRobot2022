@@ -64,11 +64,11 @@ public class RobotContainer {
   
 
   // XBox Controllers
-  // private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   // private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
-  private final Joystick m_driverController2 = new Joystick(OIConstants.kDriver2ControllerPort);
-  // private final DriverOI m_driverOI = new DriverOI(m_driverController);
-  private final LogiTechDriverOI m_driverOI = new LogiTechDriverOI(m_driverController2);
+  // private final Joystick m_driverController2 = new Joystick(OIConstants.kDriver2ControllerPort);
+  private final DriverOI m_driverOI = new DriverOI(m_driverController);
+  // private final LogiTechDriverOI m_driverOI = new LogiTechDriverOI(m_driverController2);
   // private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
   
   // Shuffleboard 
@@ -144,15 +144,15 @@ public class RobotContainer {
     
     // Configure default commands
     // m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
-    m_turret.setDefaultCommand(
-        new RunCommand(() -> m_turret.rotateTurret(m_driverOI.getRotateTurretSupplier()),
-            m_turret));
+    // m_turret.setDefaultCommand(
+    //     new RunCommand(() -> m_turret.rotateTurret(m_driverOI.getRotateTurretSupplier()),
+    //         m_turret));
 
     // Configure button commands
 
-    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
-    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
-    m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
+    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
+    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
+    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
     // m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
 

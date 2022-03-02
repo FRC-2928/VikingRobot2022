@@ -342,7 +342,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void drive(double move, double rotate, boolean squaredInputs){
         SmartDashboard.putNumber("Output", rotate);
-        m_differentialDrive.arcadeDrive(move, rotate, squaredInputs);
+        m_differentialDrive.arcadeDrive(move, -rotate, squaredInputs);
     }
 
     public void drive(double move, double rotate){
