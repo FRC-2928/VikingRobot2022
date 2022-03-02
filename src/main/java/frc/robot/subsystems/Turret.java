@@ -377,6 +377,7 @@ public class Turret extends SubsystemBase {
     public void simulationPeriodic() {
       /* Pass the robot battery voltage to the simulated Talon FXs */
       m_turretMotorSim.setBusVoltage(RobotController.getInputVoltage());
+      SmartDashboard.putNumber("Sim Turret output voltage", m_turretMotorSim.getMotorOutputLeadVoltage());
       // System.out.println("Input Voltage " + m_turretMotorSim.getMotorOutputLeadVoltage());
 
       m_turretSim.setInput(m_turretMotorSim.getMotorOutputLeadVoltage());  

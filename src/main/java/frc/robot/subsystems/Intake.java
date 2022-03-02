@@ -74,11 +74,13 @@ public class Intake extends SubsystemBase {
   private double m_duration = 0;
   private boolean m_startIntakeTimer = true;
   private boolean m_ejectInProgress = false;
+  private boolean m_intakeMotorStop = true;
 
   // ------- Shuffleboard variables ----------------------------------------
   private ShuffleboardTab m_intakeTab;
   private ShuffleboardLayout m_commandsLayout;
-  NetworkTableEntry m_intakeBrakeEnabledEntry, m_feederBrakeEnabledEntry;
+  // NetworkTableEntry m_intakeBrakeEnabledEntry;
+  NetworkTableEntry m_feederBrakeEnabledEntry;
   NetworkTableEntry m_intakeBrakeActivatedEntry, m_feederBrakeActivatedEntry;
   NetworkTableEntry m_intakeHasBallEntry, m_feederHasBallEntry;
   NetworkTableEntry m_intakeMotorEntry, m_feederMotorEntry;
@@ -90,7 +92,8 @@ public class Intake extends SubsystemBase {
   TalonSRXSimCollection m_leftFeederMotorSim = m_leftFeederMotor.getSimCollection();
   TalonSRXSimCollection m_rightFeederMotorSim = m_rightFeederMotor.getSimCollection();
   private boolean m_rampOpenSim = false;
-  private boolean m_intakeBrakeEnabled, m_feederBrakeEnabled;
+  // private boolean m_intakeBrakeEnabled;
+  private boolean m_feederBrakeEnabled;
 
   private final IntakeSim m_intakeSim = new IntakeSim(IntakeConstants.kIntakeSystem); 
   
@@ -99,8 +102,6 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
   public Intake(Alliance alliance) {
     setAllianceColor(alliance);
-    // SmartDashboard.putString("Alliance", m_alliance.name());
-    // SmartDashboard.putNumber("Alliance Ordinal", m_ballColor.ordinal());
     configMotors();
     setIntakePIDF();
     resetEncoders();
@@ -183,7 +184,7 @@ public class Intake extends SubsystemBase {
       .getLayout("Intake", BuiltInLayouts.kList)
       .withSize(2, 5)
       .withPosition(5, 0); 
-    m_intakeBrakeEnabledEntry = intakeLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
+    // m_intakeBrakeEnabledEntry = intakeLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
     m_intakeBrakeActivatedEntry = intakeLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
     m_intakeMotorEntry = intakeLayout.add("Motor Speed", m_intakeMotor.getMotorOutputPercent()).getEntry(); 
     m_intakeHasBallEntry = intakeLayout.add("Has Ball", intakeHasBall()).getEntry();
@@ -193,7 +194,7 @@ public class Intake extends SubsystemBase {
       .getLayout("Feeder", BuiltInLayouts.kList)
       .withSize(2, 5)
       .withPosition(7, 0); 
-    m_feederBrakeEnabledEntry = feederLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
+    m_feederBrakeEnabledEntry = feederLayout.add("Switch Enabled", isFeederBrakeEnabled()).getEntry();
     m_feederBrakeActivatedEntry = feederLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
     m_feederMotorEntry = feederLayout.add("Motor Speed", m_rightFeederMotor.getMotorOutputPercent()).getEntry();  
     m_feederHasBallEntry = feederLayout.add("Has Ball", feederHasBall()).getEntry(); 
@@ -238,7 +239,9 @@ public class Intake extends SubsystemBase {
     if (isIntakeSensorTripped() && feederHasBall()) {
       stopIntakeMotorDelayed();
     } else {
-      startIntakeMotor(Constants.IntakeConstants.kIntakeSpeed);
+      if (intakeMotorStopRequired() == false) {      
+        startIntakeMotor(Constants.IntakeConstants.kIntakeSpeed);
+      }     
     }
 
     // Get the color of the ball that is in the feeder
@@ -270,7 +273,7 @@ public class Intake extends SubsystemBase {
     m_feederHasBallEntry.setBoolean(feederHasBall());
 
     m_feederBrakeEnabledEntry.setBoolean(isFeederBrakeEnabled());
-    m_intakeBrakeEnabledEntry.setBoolean(isIntakeBrakeEnabled());
+    // m_intakeBrakeEnabledEntry.setBoolean(isIntakeBrakeEnabled());
 
     m_rampEntry.setBoolean(isRampOpen());
     m_ballValidEntry.setBoolean(hasValidBall());
@@ -372,12 +375,12 @@ public class Intake extends SubsystemBase {
       m_intakeTimer.start();
       m_startIntakeTimer = false;
       System.out.println("setting timer");
-    }     
-
-    if (m_intakeTimer.hasElapsed(1)) {
-      stopIntakeMotor();
-      m_startIntakeTimer = true;
-      System.out.println("timer elapsed");
+    } else {
+      if (m_intakeTimer.hasElapsed(1)) {
+        stopIntakeMotor();
+        m_startIntakeTimer = true;
+        System.out.println("timer elapsed");
+      }  
     }    
   }
 
@@ -387,38 +390,45 @@ public class Intake extends SubsystemBase {
    */
   public void startIntakeMotor(double output){
     m_intakeMotor.set(ControlMode.PercentOutput, output);
-    setIntakeBrakeOverride();
+  }
+
+  public void setIntakeMotorStop(boolean state) {
+    m_intakeMotorStop = state;
+  }
+
+  public boolean intakeMotorStopRequired() {
+    return m_intakeMotorStop;
   }
 
   /**
    * sets the intake brake enabled if the feeder has a ball, and disabled if not
    */
-  public void setIntakeBrakeOverride(){
-    if(feederHasBall()){
-      setIntakeBrakeEnabled();
-    } else {
-      setIntakeBrakeDisabled();
-    }
-  }
+  // public void setIntakeBrakeOverride(){
+  //   if(feederHasBall()){
+  //     setIntakeBrakeEnabled();
+  //   } else {
+  //     setIntakeBrakeDisabled();
+  //   }
+  // }
 
   /**
    * listen to intake limit switch
    */
-  public void setIntakeBrakeEnabled(){
-    m_intakeMotor.overrideLimitSwitchesEnable(false);
-    m_intakeBrakeEnabled = true;
-  }
+  // public void setIntakeBrakeEnabled(){
+  //   m_intakeMotor.overrideLimitSwitchesEnable(false);
+  //   m_intakeBrakeEnabled = true;
+  // }
 
   /**
    * ignore intake limit switch - motor keeps running
    */
-  public void setIntakeBrakeDisabled(){
-    m_intakeMotor.overrideLimitSwitchesEnable(true);
-    m_intakeBrakeEnabled = false;
-    if (!RobotBase.isReal()) {
-      m_intakeSim.triggerOpenIntakeSwitchSim();
-    }
-  }
+  // public void setIntakeBrakeDisabled(){
+  //   m_intakeMotor.overrideLimitSwitchesEnable(true);
+  //   m_intakeBrakeEnabled = false;
+  //   if (!RobotBase.isReal()) {
+  //     m_intakeSim.triggerOpenIntakeSwitchSim();
+  //   }
+  // }
 
   // --------- Feeder Motor ------------------------------
   public void stopFeederMotor(){
@@ -536,9 +546,9 @@ public class Intake extends SubsystemBase {
     return (m_intakeMotor.getMotorOutputPercent() > .1);
   }
 
-  public boolean isIntakeBrakeEnabled() {
-    return m_intakeBrakeEnabled;
-  }
+  // public boolean isIntakeBrakeEnabled() {
+  //   return m_intakeBrakeEnabled;
+  // }
 
   public boolean isLeftIntakeSensorTripped(){
     return !m_leftIntakeSensor.get();
