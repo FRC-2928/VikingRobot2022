@@ -44,6 +44,7 @@ import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
 import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
 import frc.robot.commands.IntakeCommands.OpenRamp;
+import frc.robot.commands.IntakeCommands.ReverseFeeder;
 import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
@@ -150,10 +151,14 @@ public class RobotContainer {
     //                                                m_turret));
 
     // Configure button commands
-    m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
-    m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
-    // m_driverOI.getToggleFlywheelButton().whileHeld(new AutoTrackingTurret(m_turret));
-    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
+    // m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
+    // m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
+    // m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
+    
+    m_operatorOI.getTrackTurretButton().whileHeld(new AutoTrackingTurret(m_turret));
+    m_operatorOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
+    m_operatorOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
+    // m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
     // Configure Shuffleboard commands    
   }
@@ -168,6 +173,12 @@ public class RobotContainer {
     // Configure button commands
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
+
+    m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
+    m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
+    m_operatorOI.getShootBall().whenPressed(new ShootBall(m_intake));
+    m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
+    m_operatorOI.getIntake2Reverse().whenPressed(new ReverseFeeder(m_intake));
 
     // Configure Shuffleboard commands
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 

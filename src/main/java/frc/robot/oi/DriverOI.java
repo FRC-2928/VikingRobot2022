@@ -33,6 +33,7 @@ public class DriverOI {
         m_decrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
         m_toggleFlywheel = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+        
         m_turnTurretToTarget = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
         
         m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
