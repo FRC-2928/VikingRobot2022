@@ -152,8 +152,8 @@ public class RobotContainer {
     // Configure button commands
     m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
     m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
-    m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
-    // m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
+    // m_driverOI.getToggleFlywheelButton().whileHeld(new AutoTrackingTurret(m_turret));
+    m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
     // Configure Shuffleboard commands    
   }
@@ -190,7 +190,7 @@ public class RobotContainer {
     // Configure button commands
     m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
-    m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
+    // m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
 
     // Configure Shuffleboard commands
     m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
