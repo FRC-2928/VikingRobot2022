@@ -43,7 +43,8 @@ public class OperatorOI {
         m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
         m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
 
-        m_reverseIntake2Button = new Button(() -> m_controller.getPOV() == 180);
+        m_turretTrackButton = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
+        // m_reverseIntake2Button = new Button(() -> m_controller.getPOV() == 180);
     }
 
     // ---------------- Intake ----------------------------

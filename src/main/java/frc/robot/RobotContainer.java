@@ -123,8 +123,8 @@ public class RobotContainer {
             m_drivetrain));
 
     // Configure button commands
-    m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
-    m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
+    // m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
+    // m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
 
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     // m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
@@ -157,9 +157,9 @@ public class RobotContainer {
     // m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
     // m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
     
-    m_operatorOI.getTrackTurretButton().whileHeld(new AutoTrackingTurret(m_turret));
-    m_operatorOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, -1));
-    m_operatorOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, 1));
+    m_operatorOI.getTrackTurretButton().whileHeld(new TurnTurretToTarget(m_turret));
+    m_operatorOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
+    m_operatorOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
     // m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
     // Configure Shuffleboard commands    
