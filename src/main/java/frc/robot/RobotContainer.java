@@ -133,6 +133,9 @@ public class RobotContainer {
     // Configure Shuffleboard commands
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
     m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
+    m_autoChooser.addOption("Red 2", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("red2")));
+    m_autoChooser.addOption("Blue 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue 1")));
+    m_autoChooser.addOption("Blue 2", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue 2")));
     m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));
     m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
     m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
