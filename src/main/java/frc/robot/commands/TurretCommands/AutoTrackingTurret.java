@@ -37,7 +37,7 @@ public class AutoTrackingTurret extends CommandBase {
     double newAngle = turretAngle + targetAngle;
 
     if (m_turret.angleInRange(newAngle)) {
-      m_turret.setTurretDegrees(newAngle);
+      m_turret.setTurretDegrees(-newAngle);
     } 
     else 
     {  
