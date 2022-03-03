@@ -12,7 +12,7 @@ public class DriverOI {
 
     private JoystickButton m_toggleIntakeMotor;
     private JoystickButton m_toggleFeederMotor;
-    private JoystickButton m_reverseFeederButton;
+    //private JoystickButton m_reverseFeederButton;
     private JoystickButton m_shiftLow;
     private JoystickButton m_shiftHigh;
     private JoystickButton m_turnTurretToTarget;
@@ -28,7 +28,7 @@ public class DriverOI {
 
         m_toggleIntakeMotor = new JoystickButton(m_controller, XboxController.Button.kA.value);
         m_toggleFeederMotor = new JoystickButton(m_controller, XboxController.Button.kB.value);
-        m_reverseFeederButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
+        //m_reverseFeederButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
         // m_shiftLow = new JoystickButton(m_controller, XboxController.Button.kX.value);
         // m_shiftHigh = new JoystickButton(m_controller, XboxController.Button.kY.value);
         m_shiftButton = new Button(() -> m_controller.getLeftStickButtonPressed());
@@ -54,9 +54,9 @@ public class DriverOI {
         return m_toggleFeederMotor;
     }
 
-    public Button getReverseFeederButton(){
-        return m_reverseFeederButton;
-    }
+    // public Button getReverseFeederButton(){
+    //     return m_reverseFeederButton;
+    // }
 
     // ---------------- Climber ----------------------------
 
@@ -99,14 +99,14 @@ public class DriverOI {
 
     // ---------------- Drivetrain ----------------------------
 
-    public Button getShiftLowButton() {
-        return m_shiftLow;
-    }
+    // public Button getShiftLowButton() {
+    //     return m_shiftLow;
+    // }
 
 
-    public Button getShiftHighButton() {
-        return m_shiftHigh;
-    }
+    // public Button getShiftHighButton() {
+    //     return m_shiftHigh;
+    // }
 
     public Button getShiftButton(){
         return m_shiftButton;

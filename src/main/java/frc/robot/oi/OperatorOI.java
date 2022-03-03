@@ -38,16 +38,16 @@ public class OperatorOI {
         m_tiltBack = new Button(() -> m_controller.getPOV() == 270);
 
         m_shootButton = new Button(() -> m_controller.getRightTriggerAxis() > 0);
-        m_reverseFeederButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
         m_ejectButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
         m_openRampButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
         m_closeRampButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
+
+        m_reverseFeederButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
 
         m_turnTurretRight = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
         m_turnTurretLeft = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
 
         m_turretTrackButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0);
-        // m_reverseIntake2Button = new Button(() -> m_controller.getPOV() == 180);
     }
 
     // ---------------- Intake ----------------------------
@@ -72,9 +72,6 @@ public class OperatorOI {
         return m_reverseFeederButton;
     }
 
-    // public Button getIntake2Reverse(){
-    //     return m_reverseIntake2Button;
-    // }
 
     // ---------------- Climber ----------------------------
 
