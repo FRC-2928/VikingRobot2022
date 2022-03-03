@@ -44,6 +44,7 @@ import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
 import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
 import frc.robot.commands.IntakeCommands.OpenRamp;
+import frc.robot.commands.IntakeCommands.ReverseFeeder;
 import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
@@ -177,6 +178,7 @@ public class RobotContainer {
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
     m_operatorOI.getShootBall().whenPressed(new ShootBall(m_intake));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
+    m_operatorOI.getIntake2Reverse().whenPressed(new ReverseFeeder(m_intake));
 
     // Configure Shuffleboard commands
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 

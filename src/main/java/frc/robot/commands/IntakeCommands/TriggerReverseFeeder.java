@@ -10,22 +10,19 @@ import frc.robot.subsystems.Intake;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TriggerOpenRamp extends InstantCommand {
+public class TriggerReverseFeeder extends InstantCommand {
 
-  private Intake m_intake;
-
-  public TriggerOpenRamp(Intake intake) {
+  Intake m_intake;
+  
+  public TriggerReverseFeeder(Intake intake) {
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
-
     m_intake = intake;
   }
 
- 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    m_intake.setRampState(false);
-    m_intake.openRamp();
-
+    m_intake.startFeederMotor(-.25);
   }
 }

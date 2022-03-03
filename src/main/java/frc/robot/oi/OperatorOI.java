@@ -23,6 +23,7 @@ public class OperatorOI {
     private JoystickButton m_closeRampButton;
     private Button m_turnTurretLeft;
     private Button m_turnTurretRight;
+    private Button m_reverseIntake2Button;
 
     public OperatorOI(XboxController controller) {
         m_controller = controller;
@@ -41,6 +42,8 @@ public class OperatorOI {
 
         m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
         m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
+
+        m_reverseIntake2Button = new Button(() -> m_controller.getPOV() == 180);
     }
 
     // ---------------- Intake ----------------------------
@@ -59,6 +62,10 @@ public class OperatorOI {
 
     public JoystickButton getShootBall(){
         return m_shootButton;
+    }
+
+    public Button getIntake2Reverse(){
+        return m_reverseIntake2Button;
     }
 
     // ---------------- Climber ----------------------------
