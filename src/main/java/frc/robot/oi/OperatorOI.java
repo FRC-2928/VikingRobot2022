@@ -37,7 +37,7 @@ public class OperatorOI {
         m_tiltForward = new Button(() -> m_controller.getPOV() == 90);
         m_tiltBack = new Button(() -> m_controller.getPOV() == 270);
 
-        m_shootButton = new Button(() -> m_controller.getRightTriggerAxis() > 0);
+        m_shootButton = new Button(() -> m_controller.getRightTriggerAxis() > 0.1);
         m_ejectButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
         m_openRampButton = new JoystickButton(m_controller, XboxController.Button.kA.value);
         m_closeRampButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
@@ -47,7 +47,7 @@ public class OperatorOI {
         m_turnTurretRight = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
         m_turnTurretLeft = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
 
-        m_turretTrackButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0);
+        m_turretTrackButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0.1);
     }
 
     // ---------------- Intake ----------------------------
