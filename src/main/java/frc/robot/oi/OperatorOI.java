@@ -64,9 +64,9 @@ public class OperatorOI {
         return m_shootButton;
     }
 
-    public Button getIntake2Reverse(){
-        return m_reverseIntake2Button;
-    }
+    // public Button getIntake2Reverse(){
+    //     return m_reverseIntake2Button;
+    // }
 
     // ---------------- Climber ----------------------------
 

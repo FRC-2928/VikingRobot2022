@@ -125,6 +125,8 @@ public class RobotContainer {
     // Configure button commands
     m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
     m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
+
+    m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     // m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
     //   m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
 
@@ -178,7 +180,7 @@ public class RobotContainer {
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
     m_operatorOI.getShootBall().whenPressed(new ShootBall(m_intake));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
-    m_operatorOI.getIntake2Reverse().whenPressed(new ReverseFeeder(m_intake));
+    m_driverOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
 
     // Configure Shuffleboard commands
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 

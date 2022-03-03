@@ -12,6 +12,7 @@ public class DriverOI {
 
     private JoystickButton m_toggleIntakeMotor;
     private JoystickButton m_toggleFeederMotor;
+    private JoystickButton m_reverseFeederButton;
     private JoystickButton m_shiftLow;
     private JoystickButton m_shiftHigh;
     private JoystickButton m_turnTurretToTarget;
@@ -20,19 +21,22 @@ public class DriverOI {
     private JoystickButton m_toggleFlywheel;
     private Button m_turnTurretLeft;
     private Button m_turnTurretRight;
+    private Button m_shiftButton;
 
     public DriverOI(XboxController controller) {
         m_controller = controller;
 
         m_toggleIntakeMotor = new JoystickButton(m_controller, XboxController.Button.kA.value);
         m_toggleFeederMotor = new JoystickButton(m_controller, XboxController.Button.kB.value);
-        m_shiftLow = new JoystickButton(m_controller, XboxController.Button.kX.value);
-        m_shiftHigh = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        m_reverseFeederButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
+        // m_shiftLow = new JoystickButton(m_controller, XboxController.Button.kX.value);
+        // m_shiftHigh = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        m_shiftButton = new Button(() -> m_controller.getLeftStickButtonPressed());
 
         m_incrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kStart.value);
         m_decrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
-        m_toggleFlywheel = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
+        m_toggleFlywheel = new JoystickButton(m_controller, XboxController.Button.kY.value);
         
         m_turnTurretToTarget = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
         
@@ -48,6 +52,10 @@ public class DriverOI {
 
     public Button getToggleFeederMotorButton(){
         return m_toggleFeederMotor;
+    }
+
+    public Button getReverseFeederButton(){
+        return m_reverseFeederButton;
     }
 
     // ---------------- Climber ----------------------------
@@ -98,6 +106,10 @@ public class DriverOI {
 
     public Button getShiftHighButton() {
         return m_shiftHigh;
+    }
+
+    public Button getShiftButton(){
+        return m_shiftButton;
     }
 
     public DoubleSupplier getMoveSupplier() {
