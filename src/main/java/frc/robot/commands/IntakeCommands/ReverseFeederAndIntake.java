@@ -11,15 +11,15 @@ import frc.robot.subsystems.Intake;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ReverseFeeder extends SequentialCommandGroup {
+public class ReverseFeederAndIntake extends SequentialCommandGroup {
 
   Intake m_intake;
   /** Creates a new ReverseIntake2. */
-  public ReverseFeeder(Intake intake) {
+  public ReverseFeederAndIntake(Intake intake) {
 
     m_intake = intake;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new TriggerReverseFeeder (m_intake), new WaitCommand(.5), new ToggleFeederMotor(m_intake));
+    addCommands(new TriggerReverseFeeder (m_intake),new TriggerReverseIntake(m_intake), new WaitCommand(1), new ToggleFeederMotor(m_intake), new ToggleIntakeMotor(m_intake));
   }
 }

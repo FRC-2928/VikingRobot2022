@@ -48,6 +48,7 @@ public class OperatorOI {
         m_turnTurretLeft = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
 
         m_turretTrackButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0.1);
+        
     }
 
     // ---------------- Intake ----------------------------
@@ -83,13 +84,13 @@ public class OperatorOI {
         return m_retractClimber;
     }
 
-    public DoubleSupplier getExtendSupplier() {
-        return () -> m_controller.getLeftTriggerAxis();
+    public DoubleSupplier getExtendRetractSupplier() {
+        return () -> m_controller.getLeftY();
     }
 
-    public DoubleSupplier getRetractSupplier() {
-        return () -> m_controller.getRightTriggerAxis();
-    }
+    // public DoubleSupplier getRetractSupplier() {
+    //     return () -> m_controller.getRightTriggerAxis();
+    // }
 
     public Button getTiltForward() {
         return m_tiltForward;

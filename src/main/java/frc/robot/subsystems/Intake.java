@@ -185,7 +185,7 @@ public class Intake extends SubsystemBase {
       .withSize(2, 5)
       .withPosition(5, 0); 
     // m_intakeBrakeEnabledEntry = intakeLayout.add("Switch Enabled", isIntakeBrakeEnabled()).getEntry();
-    m_intakeBrakeActivatedEntry = intakeLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
+    m_intakeBrakeActivatedEntry = intakeLayout.add("Brake Activated", intakeHasBall()).getEntry(); 
     m_intakeMotorEntry = intakeLayout.add("Motor Speed", m_intakeMotor.getMotorOutputPercent()).getEntry(); 
     m_intakeHasBallEntry = intakeLayout.add("Has Ball", intakeHasBall()).getEntry();
   
@@ -195,7 +195,7 @@ public class Intake extends SubsystemBase {
       .withSize(2, 5)
       .withPosition(7, 0); 
     m_feederBrakeEnabledEntry = feederLayout.add("Switch Enabled", isFeederBrakeEnabled()).getEntry();
-    m_feederBrakeActivatedEntry = feederLayout.add("Brake Activated", isIntakeBrakeActivated()).getEntry(); 
+    m_feederBrakeActivatedEntry = feederLayout.add("Brake Activated", intakeHasBall()).getEntry(); 
     m_feederMotorEntry = feederLayout.add("Motor Speed", m_rightFeederMotor.getMotorOutputPercent()).getEntry();  
     m_feederHasBallEntry = feederLayout.add("Has Ball", feederHasBall()).getEntry(); 
 
@@ -266,7 +266,7 @@ public class Intake extends SubsystemBase {
     m_intakeMotorEntry.setNumber(m_intakeMotor.getMotorOutputPercent());
     m_feederMotorEntry.setNumber(m_rightFeederMotor.getMotorOutputPercent());
 
-    m_intakeBrakeActivatedEntry.setBoolean(isIntakeBrakeActivated());
+    m_intakeBrakeActivatedEntry.setBoolean(intakeHasBall());
     m_feederBrakeActivatedEntry.setBoolean(isFeederBrakeActivated());
 
     m_intakeHasBallEntry.setBoolean(intakeHasBall());
@@ -376,7 +376,7 @@ public class Intake extends SubsystemBase {
       m_startIntakeTimer = false;
       System.out.println("setting timer");
     } else {
-      if (m_intakeTimer.hasElapsed(1)) {
+      if (m_intakeTimer.hasElapsed(.5)) {
         stopIntakeMotor();
         m_startIntakeTimer = true;
         System.out.println("timer elapsed");
@@ -489,21 +489,9 @@ public class Intake extends SubsystemBase {
 
   // --------- Intake ------------------------------  
 
-  public boolean isIntakeBrakeActivated() {
-    // return isIntakeSwitchActivated() && isIntakeBrakeEnabled();
-    return isIntakeSensorTripped();
-  }
-
-  public boolean isIntakeSwitchActivated() {
-    // Simulate this return if not running on the real robot
-    if (RobotBase.isReal()) {
-      return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
-    }
-    return m_intakeSim.isIntakeSwitchClosed();
-  }
 
   public boolean intakeHasBall(){
-    return isIntakeBrakeActivated();
+    return isIntakeSensorTripped();
   }
 
   public boolean intakeCleared() {
@@ -598,7 +586,7 @@ public class Intake extends SubsystemBase {
 
     /* Pass the robot battery voltage to the simulated Talon SRXs */
     // If the brake is activated we simulate the fact that the motor has stopped.
-    if (isIntakeBrakeActivated()) {
+    if (intakeHasBall()) {
       m_intakeMotorSim.setBusVoltage(0);
     } else {
       m_intakeMotorSim.setBusVoltage(RobotController.getInputVoltage());

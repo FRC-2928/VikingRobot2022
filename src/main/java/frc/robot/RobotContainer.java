@@ -45,7 +45,7 @@ import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
 import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
 import frc.robot.commands.IntakeCommands.OpenRamp;
-import frc.robot.commands.IntakeCommands.ReverseFeeder;
+import frc.robot.commands.IntakeCommands.ReverseFeederAndIntake;
 import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
@@ -190,7 +190,7 @@ public class RobotContainer {
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
     m_operatorOI.getShootBall().whenPressed(new ShootBall(m_intake));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
-    m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
+    m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeederAndIntake(m_intake));
 
     // Configure Shuffleboard commands
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
@@ -229,9 +229,7 @@ public class RobotContainer {
 
     // Configure default commands
     m_climber.setDefaultCommand(
-        new RunCommand(() -> m_climber.moveClimber(m_operatorOI.getExtendSupplier(), 
-                                                   m_operatorOI.getRetractSupplier()),
-                                                   m_climber));
+        new RunCommand(() -> m_climber.moveClimber(m_operatorOI.getExtendRetractSupplier()), m_climber));
 
     // Configure button commands
     m_operatorOI.getExtendClimber().whileHeld(new ExtendClimberBars(m_climber));

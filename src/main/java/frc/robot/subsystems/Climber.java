@@ -121,18 +121,13 @@ public class Climber extends SubsystemBase {
 
   /**
    * Move climber up/down using an axis trigger
+   * Positive value moves up, negative moves down
    * 
-   * @param extend Move it up
-   * @param retract Move it down
+   * @param extendRetract value provided by double supplier (left axis' Y value)
    */
-  public void moveClimber(DoubleSupplier extend, DoubleSupplier retract){
-    double extendPower = MathUtil.applyDeadband(extend.getAsDouble(), 0.02);
-    double retractPower = MathUtil.applyDeadband(retract.getAsDouble(), 0.02);
-    if (extendPower > 0) {
-      setPower(extendPower);
-    } else {
-      setPower(-retractPower);
-    }
+  public void moveClimber(DoubleSupplier extendRetract){
+    double power = MathUtil.applyDeadband(extendRetract.getAsDouble(), 0.07);
+    setPower(power);
   }
   
   public void tiltForward(){
