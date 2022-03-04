@@ -172,6 +172,7 @@ public class RobotContainer {
     m_turret.getCommandsLayout().add("90 degrees", new MoveTurretProfiled(m_turret, 90));
     m_turret.getCommandsLayout().add("0 degrees", new MoveTurretProfiled(m_turret, 0));
     m_turret.getCommandsLayout().add("-90 degrees", new MoveTurretProfiled(m_turret, -90));
+    m_turret.getCommandsLayout().add("Reset encoders", new InstantCommand(m_turret::resetEncoders, m_turret));
   }
 
   /**
