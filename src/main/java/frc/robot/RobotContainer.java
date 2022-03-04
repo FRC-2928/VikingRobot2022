@@ -93,8 +93,8 @@ public class RobotContainer {
 
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
-     m_intake.setAllianceColor(DriverStation.getAlliance());
-    // new TrackTargetCommand(m_turret, m_drivetrain, m_turretLimelight).schedule();
+    m_intake.setAllianceColor(DriverStation.getAlliance());
+    new InstantCommand(m_intake::startMotors, m_intake); 
   }
 
   public void onTeleopInit() {  
@@ -136,14 +136,22 @@ public class RobotContainer {
 
     // Configure Shuffleboard commands
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
-    // m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
     m_autoChooser.addOption("Red 1", new SequentialCommandGroup(
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")),
                                             new ShootBall(m_intake)
                                             ));
-    m_autoChooser.addOption("Red 2", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("red2")));
-    m_autoChooser.addOption("Blue 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue1")));
-    m_autoChooser.addOption("Blue 2", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue2")));
+    m_autoChooser.addOption("Red 2", new SequentialCommandGroup(
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("red2")),
+                                            new ShootBall(m_intake)
+                                            ));
+    m_autoChooser.addOption("Blue 1", new SequentialCommandGroup(
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue1")),
+                                            new ShootBall(m_intake)
+                                            ));
+    m_autoChooser.addOption("Blue 2", new SequentialCommandGroup(
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue2")),
+                                            new ShootBall(m_intake)
+                                            ));
     m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
 
     // m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));  
@@ -158,7 +166,7 @@ public class RobotContainer {
   public void configureTurret() {
     
     // Configure default commands
-    // m_turret.setDefaultCommand(new AutoTrackingTurret(m_turret));
+    m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
     // m_turret.setDefaultCommand(
     //     new RunCommand(() -> m_turret.rotateTurret(m_driverOI.getRotateTurretLeftSupplier(), 
     //                                                m_driverOI.getRotateTurretRightSupplier()),

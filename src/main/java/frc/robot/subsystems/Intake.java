@@ -74,7 +74,7 @@ public class Intake extends SubsystemBase {
   private double m_duration = 0;
   private boolean m_startIntakeTimer = true;
   private boolean m_ejectInProgress = false;
-  private boolean m_intakeMotorStop = true;
+  private boolean m_intakeMotorStop = false;
 
   // ------- Shuffleboard variables ----------------------------------------
   private ShuffleboardTab m_intakeTab;
