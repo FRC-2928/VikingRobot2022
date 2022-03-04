@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import org.photonvision.SimVisionSystem;
 
+import java.util.Map;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -45,8 +46,9 @@ public class Turret extends SubsystemBase {
   private final Limelight m_turretLimelight = new Limelight();
   private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.CANBusIDs.kTurretTalonSRX);
+  private ShuffleboardLayout m_commandsLayout;
   private NetworkTableEntry m_targetHOEntry;
-  private NetworkTableEntry m_turretTicksEntry, m_turretPowerEntry;
+  private NetworkTableEntry m_headingOffsetEntry, m_turretPowerEntry;
   private NetworkTableEntry m_turretOffsetEntry, m_targetOffsetEntry;
   private NetworkTableEntry m_targetLockedEntry, m_targetFoundEntry, m_estimatedTargetRotationEntry;
   LinearFilter m_filter = LinearFilter.movingAverage(5);
@@ -159,36 +161,42 @@ public class Turret extends SubsystemBase {
     m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", getTargetHorizontalOffset())
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
-      .withPosition(1, 0)
+      .withPosition(0, 0)
       .getEntry(); 
     m_turretPowerEntry = m_turretTab.add("Motor Power", m_turretMotor.getMotorOutputPercent())
       .withSize(3,3)
       .withWidget(BuiltInWidgets.kGraph)
-      .withPosition(5, 0)
+      .withPosition(3, 0)
       .getEntry();
-    m_turretTicksEntry = m_turretTab.add("Turret Ticks", m_turretMotor.getSelectedSensorPosition())
+    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToRobotOffset().getDegrees())
       .withSize(2,1)
-      .withPosition(1, 5)
+      .withPosition(1, 4)
       .getEntry();  
-    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToHeadingOffset().getDegrees())
+    m_headingOffsetEntry = m_turretTab.add("Heading Offset", getTurretToHeadingOffset().getDegrees())
       .withSize(2,1)
-      .withPosition(3, 5)
+      .withPosition(3, 4)
       .getEntry(); 
     m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToHeadingOffset().getDegrees())
       .withSize(2,1)
-      .withPosition(5, 5)
+      .withPosition(5, 4)
       .getEntry(); 
     m_estimatedTargetRotationEntry = m_turretTab.add("Estimated Offset", getEstimatedTargetRotation().getDegrees())
       .withSize(2,1)
-      .withPosition(7, 5)
+      .withPosition(7, 4)
       .getEntry();   
       
     ShuffleboardLayout targetLayout = Shuffleboard.getTab("Turret")
       .getLayout("Target", BuiltInLayouts.kList)
-      .withSize(2, 5)
-      .withPosition(9, 0);  
+      .withSize(2, 3)
+      .withPosition(7, 0);  
     m_targetLockedEntry = targetLayout.add("Locked", getTargetLocked()).getEntry();
     m_targetFoundEntry = targetLayout.add("Found", getTargetFound()).getEntry();
+
+    m_commandsLayout = Shuffleboard.getTab("Turret")
+      .getLayout("Commands", BuiltInLayouts.kList)
+      .withSize(3, 6)
+      .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
+      .withPosition(9, 0);  
 
     // SmartDashboard.putData("Target Pose", m_field2d);  
   }
@@ -220,11 +228,11 @@ public class Turret extends SubsystemBase {
     publishTelemetry();
   }
 
-  public void publishTelemetry() {
-    m_turretTicksEntry.setNumber(m_turretMotor.getSelectedSensorPosition());
+  public void publishTelemetry() {   
     m_targetHOEntry.setNumber(getTargetHorizontalOffset());
     m_turretPowerEntry.setNumber(m_turretMotor.getMotorOutputPercent());
-    m_turretOffsetEntry.setNumber(getTurretToHeadingOffset().getDegrees());
+    m_turretOffsetEntry.setNumber(getTurretToRobotOffset().getDegrees());   
+    m_headingOffsetEntry.setNumber(getTurretToHeadingOffset().getDegrees());
     m_targetOffsetEntry.setNumber(getTargetToHeadingOffset().getDegrees());
     m_estimatedTargetRotationEntry.setNumber(getEstimatedTargetRotation().getDegrees());
 
@@ -242,20 +250,30 @@ public class Turret extends SubsystemBase {
     // SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
   }
 
+  public ShuffleboardLayout getCommandsLayout() {
+    return m_commandsLayout;
+  }
+
   public void resetEncoders(){
     m_turretMotor.setSelectedSensorPosition(0);
   }
 
   /**
    * Moves the turret to the specified angle
-   * @param angleDegrees the position to move the turret to. 
+   * @param angleDegrees the absolute position to move the turret to. 
    */
   public void setTurretDegrees(double angleDegrees) {
     double encoderTicks = getDegreesToEncoderTicks(angleDegrees);
-    // System.out.println("Set turret ticks" + encoderTicks);
-    m_turretMotor.set(ControlMode.Position, encoderTicks);
+    // m_turretMotor.set(ControlMode.Position, encoderTicks);
+    m_turretMotor.set(ControlMode.MotionMagic, encoderTicks);
+   
  
-    SmartDashboard.putNumber("turret angleDegrees", angleDegrees);      
+    SmartDashboard.putNumber("Turret angleDegrees", angleDegrees);
+    SmartDashboard.putNumber("Turret ticks", encoderTicks);      
+  }
+
+  public boolean motionProfileFinished() {
+    return m_turretMotor.isMotionProfileFinished();
   }
 
   /**
@@ -410,7 +428,7 @@ public class Turret extends SubsystemBase {
     //  * position reported by the simulation class. Basically, we
     //  * negated the input, so we need to negate the output.
     //  */
-    m_turretMotorSim.setQuadratureRawPosition((int)m_turretSim.getOutput(0)*10);
+    m_turretMotorSim.setQuadratureRawPosition((int)m_turretSim.getOutput(0));
     
   }
 

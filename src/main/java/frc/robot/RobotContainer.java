@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
@@ -50,6 +51,8 @@ import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
 import frc.robot.commands.TurretCommands.AutoTrackingTurret;
 import frc.robot.commands.TurretCommands.MoveTurret;
+import frc.robot.commands.TurretCommands.MoveTurretProfiled;
+import frc.robot.commands.TurretCommands.MoveTurretToAngle;
 import frc.robot.commands.TurretCommands.TurnTurretToTarget;
 
 public class RobotContainer {
@@ -132,15 +135,20 @@ public class RobotContainer {
 
     // Configure Shuffleboard commands
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
-    m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
-    m_autoChooser.addOption("Red 2", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red2")));
+    // m_autoChooser.addOption("Red 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")));
+    m_autoChooser.addOption("Red 1", new SequentialCommandGroup(
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")),
+                                            new ShootBall(m_intake)
+                                            ));
+    m_autoChooser.addOption("Red 2", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("red2")));
     m_autoChooser.addOption("Blue 1", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue1")));
     m_autoChooser.addOption("Blue 2", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue2")));
-    m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));
     m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
-    m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
-    m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
-    m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
+
+    // m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));  
+    // m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
+    // m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
+    // m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
   }
 
   /**
@@ -155,17 +163,15 @@ public class RobotContainer {
     //                                                m_driverOI.getRotateTurretRightSupplier()),
     //                                                m_turret));
 
-    // Configure button commands
-    // m_driverOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
-    // m_driverOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
-    // m_driverOI.getTurnTurretToTargetButton().whileHeld(new AutoTrackingTurret(m_turret));
-    
+    // Configure button commands   
     m_operatorOI.getTrackTurretButton().whileHeld(new TurnTurretToTarget(m_turret));
     m_operatorOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
     m_operatorOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
-    // m_driverOI.getTurnTurretToTargetButton().whileHeld(new TurnTurretToTarget(m_turret));
 
     // Configure Shuffleboard commands    
+    m_turret.getCommandsLayout().add("90 degrees", new MoveTurretProfiled(m_turret, 90));
+    m_turret.getCommandsLayout().add("0 degrees", new MoveTurretProfiled(m_turret, 0));
+    m_turret.getCommandsLayout().add("-90 degrees", new MoveTurretProfiled(m_turret, -90));
   }
 
   /**
@@ -239,11 +245,11 @@ public class RobotContainer {
     // Note that all coordinates are in meters, and follow NWU conventions.
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
-        new Pose2d(0, 4, new Rotation2d(0)),
+        new Pose2d(0, 0, new Rotation2d(0)),
         List.of(
-            new Translation2d(1.0, 4.0)
+            new Translation2d(1.0, 0.0)
         ),
-        new Pose2d(3.0, 4.0, new Rotation2d(0)), // left
+        new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
         AutoConstants.kTrajectoryConfig);
 
     return trajectory;

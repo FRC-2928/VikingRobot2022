@@ -219,6 +219,12 @@ public final class Constants {
         public static final LinearSystem<N2, N1, N1> kTurretLinearSystem = 
             LinearSystemId.identifyPositionSystem(kvVoltSecondsPerRadian, kaVoltSecondsSquaredPerRadian);
         
+        public static final double kMaxSpeedRotationsPerSecond = 50.0;
+        public static final double kMaxAccelRotationsPerSecondSquared = 50.0;
+        public static final double kangleToleranceDegrees = 5.0;
+
+        public static final TrapezoidProfile.Constraints kTrapezoidProfileConstraints =
+            new TrapezoidProfile.Constraints(kMaxSpeedRotationsPerSecond, kMaxAccelRotationsPerSecondSquared);    
     }
 
     public static final class FeederConstants {
