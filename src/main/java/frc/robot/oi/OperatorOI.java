@@ -24,6 +24,7 @@ public class OperatorOI {
     private JoystickButton m_turnTurretLeft;
     private JoystickButton m_turnTurretRight;
     private JoystickButton m_reverseFeederButton;
+    private Button m_reverseIntakeButton;
 
     public OperatorOI(XboxController controller) {
         m_controller = controller;
@@ -43,6 +44,7 @@ public class OperatorOI {
         m_closeRampButton = new JoystickButton(m_controller, XboxController.Button.kB.value);
 
         m_reverseFeederButton = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        m_reverseIntakeButton = new Button(() -> m_controller.getRightStickButtonPressed());
 
         m_turnTurretRight = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
         m_turnTurretLeft = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
@@ -71,6 +73,10 @@ public class OperatorOI {
 
     public JoystickButton getReverseFeederButton(){
         return m_reverseFeederButton;
+    }
+
+    public Button getReverseIntakeButton(){
+        return m_reverseIntakeButton;
     }
 
 
