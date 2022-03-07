@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.LimelightConstants;
@@ -69,12 +70,15 @@ public class Limelight{
   }
 
   public double getHorizontalOffset(){
-    m_horizontalOffset = m_limelightNI.getEntry("tx").getDouble(0);
+    NetworkTableEntry tx = m_limelightNI.getEntry("tx");
+    m_horizontalOffset = tx.getDouble(0.0);
+    //System.out.println(m_horizontalOffset);
     return m_horizontalOffset;
   }
 
   public double getVerticalOffset(){
-    m_verticalOffset = m_limelightNI.getEntry("ty").getDouble(0);
+    NetworkTableEntry ty = m_limelightNI.getEntry("ty");
+    m_verticalOffset = ty.getDouble(0.0);
     return m_verticalOffset;
   }
 
@@ -83,7 +87,7 @@ public class Limelight{
   }
 
   public boolean isTargetFound(){
-    if (m_limelightNI.getEntry("tv").getDouble(0) == 0){
+    if (m_limelightNI.getEntry("tv").getDouble(0.0) == 0.0){
       m_targetFound = false;
     }
     else{

@@ -4,6 +4,7 @@
 
 package frc.robot.commands.IntakeCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 import frc.robot.Constants.IntakeConstants;
@@ -11,6 +12,7 @@ import frc.robot.Constants.IntakeConstants;
 public class ShootBall extends CommandBase {
   
   Intake m_intake;
+  //Timer m_shootTimer;
 
   /** Creates a new CheckAndShootBall. */
   public ShootBall(Intake intake) {
@@ -30,6 +32,8 @@ public class ShootBall extends CommandBase {
 
       // Start feeder motor at high power
       m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
+      //m_shootTimer.reset();
+      //m_shootTimer.start();
       
     } 
   }
@@ -53,6 +57,6 @@ public class ShootBall extends CommandBase {
   @Override
   public boolean isFinished() {
     //return m_intake.intakeCleared() && m_intake.feederCleared();
-    return m_intake.feederCleared();
+    return (m_intake.feederCleared());
   }
 }

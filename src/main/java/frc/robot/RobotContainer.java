@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
@@ -38,6 +39,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.commands.ClimberCommands.ExtendClimberBars;
 import frc.robot.commands.ClimberCommands.RetractClimberBars;
 import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
+import frc.robot.commands.DrivetrainCommands.MoveToShootingDistance;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.FlywheelCommands.DecrementFlywheel;
 import frc.robot.commands.FlywheelCommands.IncrementFlywheel;
@@ -136,23 +138,32 @@ public class RobotContainer {
 
     // Configure Shuffleboard commands
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
-    m_autoChooser.addOption("Red 1", new SequentialCommandGroup(
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")),
-                                            new ShootBall(m_intake)
+    m_autoChooser.addOption("Red 1", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1"))
                                             ));
-    m_autoChooser.addOption("Red 2", new SequentialCommandGroup(
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("red2")),
-                                            new ShootBall(m_intake)
+    m_autoChooser.addOption("Red 2", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("red2"))
                                             ));
-    m_autoChooser.addOption("Blue 1", new SequentialCommandGroup(
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue1")),
-                                            new ShootBall(m_intake)
+    m_autoChooser.addOption("Blue 1", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue1"))
                                             ));
-    m_autoChooser.addOption("Blue 2", new SequentialCommandGroup(
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue2")),
-                                            new ShootBall(m_intake)
+    m_autoChooser.addOption("Blue 2", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue2"))
                                             ));
-    m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
+
+    m_autoChooser.addOption("Red 3", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red3"))
+                                            ));
+    m_autoChooser.addOption("Red 4", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red4"))
+                                            ));
+    m_autoChooser.addOption("Blue 3", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue3"))
+                                            ));
+    m_autoChooser.addOption("Blue 4", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue4"))
+                                            ));
+                                            
 
     // m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));  
     // m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
@@ -176,6 +187,7 @@ public class RobotContainer {
     m_operatorOI.getTrackTurretButton().whileHeld(new TurnTurretToTarget(m_turret));
     m_operatorOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
     m_operatorOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
+    //m_driverOI.moveToShootingDistance().whenPressed(new MoveToShootingDistance(m_turret, m_drivetrain));
 
     // Configure Shuffleboard commands    
     m_turret.getCommandsLayout().add("90 degrees", new MoveTurretProfiled(m_turret, 90));
@@ -189,7 +201,7 @@ public class RobotContainer {
    */
   public void configureIntake() {
     // Configure default commands
-    // m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
+    //m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
 
     // Configure button commands
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
@@ -219,10 +231,11 @@ public class RobotContainer {
   public void configureFlywheel() {
 
     // Configure default commands
+    m_flywheel.setDefaultCommand(new RunCommand(m_flywheel::setVelocity, m_flywheel));
 
     // Configure button commands
-    m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
-    m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
+    // m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
+    // m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
     // m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
 
     // Configure Shuffleboard commands
@@ -264,26 +277,26 @@ public class RobotContainer {
     return trajectory;
   }
 
-  public Trajectory navigateConesTrajectory() {
+  // public Trajectory navigateConesTrajectory() {
 
-    // Note that all coordinates are in meters, and follow NWU conventions.
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 4, new Rotation2d(0)),
-        List.of(
-            new Translation2d(3.0, 5.0),
-            new Translation2d(6.0, 3.0),
-            new Translation2d(9.0, 5.0),
-            new Translation2d(12.0, 4.0),
-            new Translation2d(9.0, 3.0),
-            new Translation2d(6.0, 5.0),
-            new Translation2d(3.0, 3.0)
-        ),
-        new Pose2d(0, 4, new Rotation2d(180)), // left
-        AutoConstants.kTrajectoryConfig);
+  //   // Note that all coordinates are in meters, and follow NWU conventions.
+  //   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+  //       // Start at the origin facing the +X direction
+  //       new Pose2d(0, 4, new Rotation2d(0)),
+  //       List.of(
+  //           new Translation2d(3.0, 5.0),
+  //           new Translation2d(6.0, 3.0),
+  //           new Translation2d(9.0, 5.0),
+  //           new Translation2d(12.0, 4.0),
+  //           new Translation2d(9.0, 3.0),
+  //           new Translation2d(6.0, 5.0),
+  //           new Translation2d(3.0, 3.0)
+  //       ),
+  //       new Pose2d(0, 4, new Rotation2d(180)), // left
+  //       AutoConstants.kTrajectoryConfig);
 
-    return trajectory;
-  }
+  //   return trajectory;
+  // }
 
   public Trajectory loadTrajectory(String trajectoryJSON) {
     Trajectory trajectory = new Trajectory();

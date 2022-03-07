@@ -168,7 +168,7 @@ public class Drivetrain extends SubsystemBase {
             fx.configPeakOutputForward(1);
             fx.configPeakOutputReverse(-1);
 
-            fx.configOpenloopRamp(0.1);
+            fx.configOpenloopRamp(0);
 
             //Setting deadband(area required to start moving the motor) to 1%
             fx.configNeutralDeadband(0.01);
@@ -342,7 +342,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void drive(double move, double rotate, boolean squaredInputs){
         SmartDashboard.putNumber("Output", rotate);
-        m_differentialDrive.arcadeDrive(move, -rotate, squaredInputs);
+        m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
     }
 
     public void drive(double move, double rotate){

@@ -359,6 +359,11 @@ public class Turret extends SubsystemBase {
     return m_filter.calculate(offset);
   }
 
+  public double getTargetVerticalOffset(){
+    double offset = m_turretLimelight.getVerticalOffset();
+    return m_filter.calculate(offset);
+  }
+
   /**
    * Gets the angle of the target relative to the turret
    * @return Rotation2d offset angle between target and the turret in Radians

@@ -370,7 +370,9 @@ public class Intake extends SubsystemBase {
 
   // --------- Intake Motor ------------------------------
   public void stopIntakeMotor(){
+    System.out.println("intake motor stopping");
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
+
   }
 
   /**
@@ -378,14 +380,14 @@ public class Intake extends SubsystemBase {
    * This must be run in a periodic loop.
    */
   public void stopIntakeMotorDelayed(){
+    System.out.println("in stop intake motor delayed");
+
     if (m_startIntakeTimer) {
       m_intakeTimer.reset();
       m_intakeTimer.start();  // Tested in else below
       m_startIntakeTimer = false;
     } 
-    else 
-    {
-      if (m_intakeTimer.hasElapsed(.5)) {
+    else if (m_intakeTimer.hasElapsed(.5)) {
         stopIntakeMotor();
         m_startIntakeTimer = true;
         
@@ -396,7 +398,7 @@ public class Intake extends SubsystemBase {
         m_motorLowSpeedTimer.start(); // Tested in periodic()
       }  
     }    
-  }
+  
 
   /**
    * 
@@ -487,7 +489,7 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
 
   public boolean readyToShoot() {
-    if (isRampClosed() && hasValidBall()) {
+    if (isRampClosed()) {
       return true;
     } 
     return false;
@@ -515,7 +517,7 @@ public class Intake extends SubsystemBase {
 
   public boolean isIntakeMotorOn(){
     //not percent, range between -1 and 1
-    return (m_intakeMotor.getMotorOutputPercent() > .1);
+    return (Math.abs(m_intakeMotor.getMotorOutputPercent()) > .1);
   }
 
   public boolean isLeftIntakeSensorTripped(){
