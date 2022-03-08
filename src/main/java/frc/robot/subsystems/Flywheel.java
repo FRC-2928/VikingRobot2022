@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -165,18 +164,28 @@ public class Flywheel extends SubsystemBase {
     // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
   }
 
+  public void setVelocity(){
+
+    //turn change in ticks per sec to change in ticks per 100 ms
+    m_flywheelTalon.set(ControlMode.Velocity, 10000);
+
+    // TODO may need to add FeedForward using SimpleMotorFeedforward
+    // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
+  }
+
   public void setPower(double power) {
     System.out.println("Power " + power);
     m_flywheelTalon.set(ControlMode.PercentOutput, power);
   }
 
+  public void setPower() {
+    m_flywheelTalon.set(ControlMode.PercentOutput, 0.7);
+  }
+
   public void incrementVelocity(double increment){
-    if(getVelocity() < FlywheelConstants.kMaxVelocity){
-      m_velocity += increment;
-      setPower(m_velocity);
-    } else {
-      setPower(FlywheelConstants.kIdealVelocity);
-    }
+    m_velocity += increment;
+    setPower(m_velocity);
+    
   }
 
   public void decrementVelocity(double decrement){

@@ -82,7 +82,8 @@ public class OperatorOI {
 
     // ---------------- Climber ----------------------------
 
-    public Button getExtendClimber() {
+    public Button 
+    getExtendClimber() {
         return m_extendClimber;
     }
 

@@ -12,6 +12,7 @@ public class DriverOI {
 
     private JoystickButton m_toggleIntakeMotor;
     private JoystickButton m_toggleFeederMotor;
+    private JoystickButton m_moveToShootingDistance;
     //private JoystickButton m_reverseFeederButton;
     private JoystickButton m_shiftLow;
     private JoystickButton m_shiftHigh;
@@ -33,6 +34,7 @@ public class DriverOI {
         // m_shiftHigh = new JoystickButton(m_controller, XboxController.Button.kY.value);
         m_shiftButton = new Button(() -> m_controller.getLeftStickButtonPressed());
 
+        m_moveToShootingDistance = new JoystickButton(m_controller, XboxController.Button.kX.value);
         m_incrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kStart.value);
         m_decrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
@@ -97,6 +99,10 @@ public class DriverOI {
         return m_turnTurretToTarget;
     }
 
+    public JoystickButton moveToShootingDistance(){
+        return m_moveToShootingDistance;
+    }
+
     // ---------------- Drivetrain ----------------------------
 
     // public Button getShiftLowButton() {
@@ -120,4 +126,6 @@ public class DriverOI {
     public DoubleSupplier getRotateSupplier() {
         return () -> m_controller.getRightX();
     }
+
+    
 }

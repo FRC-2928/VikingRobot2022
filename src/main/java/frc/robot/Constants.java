@@ -164,20 +164,20 @@ public final class Constants {
          * kF: 1023 represents output value to Talon at 100%, 20660 represents Velocity units at 100% output
          * 
          * 	                                    			  kP   	 kI    kD      kF          Iz    PeakOut */
-        public final static Gains kGainsVelocity  = new Gains( 0.1, 0.001, 5, 1023.0/20660.0,  300,  1.00);
+        public final static Gains kGainsVelocity  = new Gains( 0.25, 0.00001, 1, 0,  300,  1.00);
 
         public static final double kGearRatio = 1;
 
         public static final double kEncoderCPR = 2048;
 
-        public static final double kMotorLimit = .9;
+        // public static final double kMotorLimit = .9;
 
         //TODO: set to actual desired power
-        public static final double kIdealMotorPower = .9;
+        // public static final double kIdealMotorPower = .9;
         
         //velocity in ticks per sec
-        public static final double kMaxVelocity = 80000;
-        public static final double kIdealVelocity = 60000;
+        public static final double kMaxVelocity = 180000;
+        public static final double kIdealVelocity = 50000;
 
         public static final double kFlywheelMass = 1;
         public static final double kFlywheelRadius = 1;
