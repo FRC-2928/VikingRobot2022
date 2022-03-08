@@ -99,7 +99,6 @@ public class Intake extends SubsystemBase {
   }
 
   public void configMotors(){
-
     
     for(TalonSRX srx : new TalonSRX[] {m_intakeMotor, m_rightFeederMotor, m_leftFeederMotor}) {
     

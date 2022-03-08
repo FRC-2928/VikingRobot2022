@@ -56,7 +56,7 @@ public class Climber extends SubsystemBase {
     m_climberMotor.configFactoryDefault();
 
     //Sets voltage compensation to 12, used for percent output
-    m_climberMotor.configVoltageCompSaturation(10);
+    m_climberMotor.configVoltageCompSaturation(12);
     m_climberMotor.enableVoltageCompensation(true);
 
     //Setting just in case
