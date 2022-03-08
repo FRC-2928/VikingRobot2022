@@ -86,7 +86,6 @@ public class Intake extends SubsystemBase {
   // Initialization
   // -----------------------------------------------------------
   public Intake(Alliance alliance) {
-    setAllianceColor(alliance);
     configMotors();
     setIntakePIDF();
     resetEncoders();

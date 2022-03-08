@@ -94,12 +94,12 @@ public class RobotContainer {
 
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
-    m_intake.setAllianceColor(DriverStation.getAlliance());
-    new InstantCommand(m_intake::startMotors, m_intake); 
+    
+    // new InstantCommand(m_intake::startMotors, m_intake); 
   }
 
   public void onTeleopInit() {  
-    m_intake.setAllianceColor(DriverStation.getAlliance());
+    
   }
 
 
@@ -229,7 +229,7 @@ public class RobotContainer {
     // Configure default commands
     m_flywheel.setDefaultCommand(new RunCommand(m_flywheel::setVelocity, m_flywheel));
     m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
-    m_operatorOI.getAdjustFlywheelButton().whenHeld(new AdjustFlywheel(m_flywheel));
+    //m_operatorOI.getAdjustFlywheelButton().whenHeld(new AdjustFlywheel(m_flywheel));
 
     // Configure button commands
     // m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
