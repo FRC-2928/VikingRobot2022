@@ -61,7 +61,6 @@ public class RobotContainer {
   // The Robot's Subsystems
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
-  // private final Pigeon m_pigeon = new Pigeon();
   private final Turret m_turret = new Turret(m_drivetrain);
   private final Intake m_intake = new Intake(DriverStation.getAlliance());
   private final Flywheel m_flywheel = new Flywheel();
@@ -131,12 +130,9 @@ public class RobotContainer {
     // m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
 
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
-    // m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
-    //   m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
-
+    
     // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
-    m_autoChooser.addOption("Red 1", new SequentialCommandGroup(
+    m_autoChooser.setDefaultOption("Red 1", new SequentialCommandGroup(
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1")),
                                             new ShootBall(m_intake)
                                             ));
@@ -153,11 +149,6 @@ public class RobotContainer {
                                             new ShootBall(m_intake)
                                             ));
     m_autoChooser.addOption("Straight", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Straight")));
-
-    // m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));  
-    // m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
-    // m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
-    // m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
   }
 
   /**
@@ -248,43 +239,6 @@ public class RobotContainer {
     m_operatorOI.getTiltBack().whenPressed(new InstantCommand(m_climber::tiltBack,m_climber));
   }
 
-
-  public Trajectory calibrateTrajectory() {
-    
-    // Note that all coordinates are in meters, and follow NWU conventions.
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(1.0, 0.0)
-        ),
-        new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
-        AutoConstants.kTrajectoryConfig);
-
-    return trajectory;
-  }
-
-  public Trajectory navigateConesTrajectory() {
-
-    // Note that all coordinates are in meters, and follow NWU conventions.
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 4, new Rotation2d(0)),
-        List.of(
-            new Translation2d(3.0, 5.0),
-            new Translation2d(6.0, 3.0),
-            new Translation2d(9.0, 5.0),
-            new Translation2d(12.0, 4.0),
-            new Translation2d(9.0, 3.0),
-            new Translation2d(6.0, 5.0),
-            new Translation2d(3.0, 3.0)
-        ),
-        new Pose2d(0, 4, new Rotation2d(180)), // left
-        AutoConstants.kTrajectoryConfig);
-
-    return trajectory;
-  }
-
   public Trajectory loadTrajectory(String trajectoryJSON) {
     Trajectory trajectory = new Trajectory();
 
@@ -309,9 +263,5 @@ public class RobotContainer {
   public Drivetrain getDrivetrain() {
     return m_drivetrain;
   }
-
-  // public boolean getButtonA() {
-  //   return m_driverController.getAButton();
-  // }
     
-  }
+}
