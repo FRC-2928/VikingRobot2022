@@ -63,7 +63,6 @@ public class RobotContainer {
   // The Robot's Subsystems
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
-  // private final Pigeon m_pigeon = new Pigeon();
   private final Turret m_turret = new Turret(m_drivetrain);
   private final Intake m_intake = new Intake(DriverStation.getAlliance());
   private final Flywheel m_flywheel = new Flywheel();
@@ -133,9 +132,7 @@ public class RobotContainer {
     // m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
 
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
-    // m_operatorOI.getPrintButton().whenPressed(new PrintCommand("Print from Operator"));
-    //   m_driverOI.getResetEncodersButton().whenPressed(new InstantCommand(m_drivetrain::resetEncoders, m_drivetrain));
-
+    
     // Configure Shuffleboard commands
     m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
     m_autoChooser.addOption("Red 1", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
@@ -324,9 +321,5 @@ public class RobotContainer {
   public Drivetrain getDrivetrain() {
     return m_drivetrain;
   }
-
-  // public boolean getButtonA() {
-  //   return m_driverController.getAButton();
-  // }
     
-  }
+}
