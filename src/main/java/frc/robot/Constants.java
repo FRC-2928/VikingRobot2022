@@ -177,7 +177,7 @@ public final class Constants {
         
         //velocity in ticks per sec
         public static final double kMaxVelocity = 180000;
-        public static final double kIdealVelocity = 50000;
+        public static final double kIdealVelocity = 10000;
 
         public static final double kFlywheelMass = 1;
         public static final double kFlywheelRadius = 1;

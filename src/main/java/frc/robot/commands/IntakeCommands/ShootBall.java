@@ -14,7 +14,7 @@ public class ShootBall extends CommandBase {
   Intake m_intake;
   //Timer m_shootTimer;
 
-  /** Creates a new CheckAndShootBall. */
+  /** Creates a new ShootBall. */
   public ShootBall(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
@@ -41,7 +41,6 @@ public class ShootBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // to check: there is a ball (of right color), ramp is fully closed
     
   }
 

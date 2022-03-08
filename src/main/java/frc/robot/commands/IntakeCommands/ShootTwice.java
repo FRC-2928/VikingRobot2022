@@ -5,6 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
 
@@ -17,6 +18,6 @@ public class ShootTwice extends SequentialCommandGroup {
   public ShootTwice(Intake intake, Flywheel flywheel) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootBall(intake), new AdjustFlywheel(flywheel), new ShootBall(intake));
+    addCommands(new ShootBall(intake), new WaitCommand(1), new ShootBall(intake));
   }
 }
