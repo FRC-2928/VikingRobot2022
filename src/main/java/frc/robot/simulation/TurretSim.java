@@ -11,13 +11,14 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import frc.robot.Constants.FlywheelConstants;
+import frc.robot.Constants.TurretConstants;
 
 /** Add your docs here. */
 public class TurretSim extends LinearSystemSim<N2, N1, N1> {
 
     public TurretSim(){
-        super(LinearSystemId.identifyPositionSystem(FlywheelConstants.kvVoltSecondsPerMeter, 
-                                                    FlywheelConstants.kaVoltSecondsSquaredPerMeter));
+        super(LinearSystemId.identifyPositionSystem(TurretConstants.kvVoltSecondsPerRadian, 
+                                                    TurretConstants.kaVoltSecondsSquaredPerRadian));
     }
 
     public TurretSim(LinearSystem<N2, N1, N1> linearSystem){

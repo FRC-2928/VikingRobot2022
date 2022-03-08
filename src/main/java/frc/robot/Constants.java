@@ -67,6 +67,7 @@ public final class Constants {
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
+        public static final int kDriver2ControllerPort = 2;
     }
 
     public static final class DrivetrainConstants{
@@ -103,8 +104,8 @@ public final class Constants {
         public static final double kUnitsPerRevolution = 2048;
 
         //TODO change to correct values
-        public static final double kHighGearRatio = 2.91;
-        public static final double kLowGearRatio = 9.08;
+        public static final double kHighGearRatio = 4.4;
+        public static final double kLowGearRatio = 8.82;
 
         public static final double kMaxSpeedMetersPerSecond = 2.0;
         public static final double kMaxAccelMetersPerSecondSquared = 2.0;
@@ -148,11 +149,11 @@ public final class Constants {
     
     public static final class FlywheelConstants {
         public static final double ksVolts = 0.6024;
-        public static final double kvVoltSecondsPerMeter = 0.21907;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.0096252;
+        public static final double kvVoltSecondsPerRadian = 0.00021907;
+        public static final double kaVoltSecondsSquaredPerRadian = 0.000096252;
 
         public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem = 
-            LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
+            LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerRadian, kaVoltSecondsSquaredPerRadian);
         // public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem2 = 
         //     LinearSystemId.createFlywheelSystem(motor, jKgMetersSquared, G)
 
@@ -163,20 +164,20 @@ public final class Constants {
          * kF: 1023 represents output value to Talon at 100%, 20660 represents Velocity units at 100% output
          * 
          * 	                                    			  kP   	 kI    kD      kF          Iz    PeakOut */
-        public final static Gains kGainsVelocity  = new Gains( 0.1, 0.001, 5, 1023.0/20660.0,  300,  1.00);
+        public final static Gains kGainsVelocity  = new Gains( 0.25, 0.00001, 1, 0,  300,  1.00);
 
         public static final double kGearRatio = 1;
 
         public static final double kEncoderCPR = 2048;
 
-        public static final double kMotorLimit = .9;
+        // public static final double kMotorLimit = .9;
 
         //TODO: set to actual desired power
-        public static final double kIdealMotorPower = .9;
+        // public static final double kIdealMotorPower = .9;
         
         //velocity in ticks per sec
-        public static final double kMaxVelocity = 80000;
-        public static final double kIdealVelocity = 60000;
+        public static final double kMaxVelocity = 180000;
+        public static final double kIdealVelocity = 50000;
 
         public static final double kFlywheelMass = 1;
         public static final double kFlywheelRadius = 1;
@@ -212,20 +213,26 @@ public final class Constants {
         public static final double kGearRatio = (50/9);
 
         public static final double ksVolts = 0.06024;
-        public static final double kvVoltSecondsPerMeter = 0.005;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.000096252;
+        public static final double kvVoltSecondsPerRadian = 0.005;
+        public static final double kaVoltSecondsSquaredPerRadian = 0.000096252;
 
         public static final LinearSystem<N2, N1, N1> kTurretLinearSystem = 
-            LinearSystemId.identifyPositionSystem(kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
+            LinearSystemId.identifyPositionSystem(kvVoltSecondsPerRadian, kaVoltSecondsSquaredPerRadian);
         
+        public static final double kMaxSpeedRotationsPerSecond = 50.0;
+        public static final double kMaxAccelRotationsPerSecondSquared = 50.0;
+        public static final double kangleToleranceDegrees = 5.0;
+
+        public static final TrapezoidProfile.Constraints kTrapezoidProfileConstraints =
+            new TrapezoidProfile.Constraints(kMaxSpeedRotationsPerSecond, kMaxAccelRotationsPerSecondSquared);    
     }
 
     public static final class FeederConstants {
 
         // Motor control constants
-        public static final double kIndexFastForwardPower = 0.8;
-        public static final double kIndexPower = 0.5;
-        public static final double kIndexReversePower = -0.8;
+        // public static final double kIndexFastForwardPower = 0.8;
+        // public static final double kIndexPower = 0.5;
+        // public static final double kIndexReversePower = -0.8;
         // public static final double kHopperFastForwardPower = 0.7;
         // public static final double kHopperPower = 0.55;
         // public static final double kHopperReversePower = -0.8;
@@ -269,8 +276,9 @@ public final class Constants {
         public static double IntakekF = 0.4;
 		public static double kClimberErrorThreshold = 0.5; // 5 cm
 
-        public static double kIntakeSpeed = .7;
-        public static double kFeederSpeed = .3;
+        public static double kIntakeLowSpeed = .2;
+        public static double kIntakeSpeed = .4;      
+        public static double kFeederSpeed = .37;
         public static double kFeederHighSpeed = .8;
 
         public static int kLeftIntakeSensor = 8;

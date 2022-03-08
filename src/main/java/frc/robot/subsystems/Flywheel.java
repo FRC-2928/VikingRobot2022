@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -42,14 +41,14 @@ public class Flywheel extends SubsystemBase {
   FlywheelSim m_flywheelSim = new FlywheelSim(FlywheelConstants.kFlywheelLinearSystem);
 
   //for srx use sim motor
-  FlywheelSim m_flywheelSimMotor = new FlywheelSim(DCMotor.getFalcon500(1), 
-                                                    FlywheelConstants.kFlywheelRadius, 
-                                                    FlywheelConstants.kFlywheelMass, 
-                                                    FlywheelConstants.kGearRatio);
+  // FlywheelSim m_flywheelSimMotor = new FlywheelSim(DCMotor.getFalcon500(1), 
+  //                                                   FlywheelConstants.kFlywheelRadius, 
+  //                                                   FlywheelConstants.kFlywheelMass, 
+  //                                                   FlywheelConstants.kGearRatio);
 
   ShuffleboardLayout m_flywheelLayout;
   NetworkTableEntry m_flywheelSpeedEntry;
-  NetworkTableEntry m_flywheelVoltageEntry;
+  NetworkTableEntry m_flywheelPercentEntry;
   private ShuffleboardLayout m_commandsLayout;
 
 
@@ -115,9 +114,9 @@ public class Flywheel extends SubsystemBase {
             .getLayout("Flywheels", BuiltInLayouts.kList)
             .withSize(2, 2)
             .withPosition(0, 0);
-          m_flywheelSpeedEntry = m_flywheelLayout.add("Flywheel Motor Speed", getVelocity()).getEntry();
-          m_flywheelVoltageEntry = m_flywheelLayout.add
-            ("Sim Motor Voltage", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
+          m_flywheelSpeedEntry = m_flywheelLayout.add("Speed in Ticks", getVelocity()).getEntry();
+          m_flywheelPercentEntry = m_flywheelLayout.add
+            ("Percent Output", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
           
     m_commandsLayout = Shuffleboard.getTab("Flywheel")
             .getLayout("Commands", BuiltInLayouts.kList)
@@ -142,9 +141,9 @@ public class Flywheel extends SubsystemBase {
   public void publishTelemetry() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("Flywheel Motor Percent", m_flywheelTalon.getMotorOutputPercent());
-    // SmartDashboard.putNumber("Flywheel Motor Voltage", m_flywheelTalon.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Flywheel Speed", m_flywheelTalon.getSelectedSensorVelocity());
 
-    m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getMotorOutputVoltage());
+    m_flywheelPercentEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
     m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
   }
 
@@ -165,18 +164,28 @@ public class Flywheel extends SubsystemBase {
     // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
   }
 
+  public void setVelocity(){
+
+    //turn change in ticks per sec to change in ticks per 100 ms
+    m_flywheelTalon.set(ControlMode.Velocity, 10000);
+
+    // TODO may need to add FeedForward using SimpleMotorFeedforward
+    // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
+  }
+
   public void setPower(double power) {
     System.out.println("Power " + power);
     m_flywheelTalon.set(ControlMode.PercentOutput, power);
   }
 
+  public void setPower() {
+    m_flywheelTalon.set(ControlMode.PercentOutput, 0.7);
+  }
+
   public void incrementVelocity(double increment){
-    if(getVelocity() < FlywheelConstants.kMaxVelocity){
-      m_velocity += increment;
-      setPower(m_velocity);
-    } else {
-      setPower(FlywheelConstants.kIdealVelocity);
-    }
+    m_velocity += increment;
+    setPower(m_velocity);
+    
   }
 
   public void decrementVelocity(double decrement){
@@ -242,10 +251,7 @@ public class Flywheel extends SubsystemBase {
     m_flywheelSim.update(0.02);
 
     //set the encoder values from the sim motor's output
-    m_flywheelMotorSim.setIntegratedSensorRawPosition((int)m_flywheelSim.getOutput(0));
-
-    // m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
-    // m_flywheelVoltageEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
+    m_flywheelMotorSim.setIntegratedSensorVelocity((int)m_flywheelSim.getOutput(0));
   
   }
 

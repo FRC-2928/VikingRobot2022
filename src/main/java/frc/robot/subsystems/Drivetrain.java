@@ -152,14 +152,13 @@ public class Drivetrain extends SubsystemBase {
 
     public void configmotors() {
 
-
         // Configure the motors
         for(TalonFX fx : new TalonFX[] {m_leftLeader, m_leftFollower, m_rightLeader, m_rightFollower}){
             //Reset settings for safety
             fx.configFactoryDefault();
 
             //Sets voltage compensation to 12, used for percent output
-            fx.configVoltageCompSaturation(10);
+            fx.configVoltageCompSaturation(12);
             fx.enableVoltageCompensation(true);
 
             //Setting just in case
@@ -168,7 +167,7 @@ public class Drivetrain extends SubsystemBase {
             fx.configPeakOutputForward(1);
             fx.configPeakOutputReverse(-1);
 
-            fx.configOpenloopRamp(0.1);
+            fx.configOpenloopRamp(0);
 
             //Setting deadband(area required to start moving the motor) to 1%
             fx.configNeutralDeadband(0.01);
@@ -265,7 +264,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // publishTelemetry();   
+        publishTelemetry();   
         
     }
 
@@ -342,7 +341,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void drive(double move, double rotate, boolean squaredInputs){
         SmartDashboard.putNumber("Output", rotate);
-        m_differentialDrive.arcadeDrive(move, rotate, squaredInputs);
+        m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
     }
 
     public void drive(double move, double rotate){

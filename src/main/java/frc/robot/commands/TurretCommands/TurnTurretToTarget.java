@@ -5,6 +5,7 @@
 package frc.robot.commands.TurretCommands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.Turret;
 
@@ -18,7 +19,7 @@ public class TurnTurretToTarget extends PIDCommand {
   public TurnTurretToTarget(Turret turret) {
     super(
         // The controller that the command will use
-        new PIDController(0.015, 0, 0.001),
+        new PIDController(0.018, 0, 0.001),
         // This should return the measurement
         () -> turret.getTargetHorizontalOffset(),
         // This should return the setpoint (can also be a constant)
@@ -26,7 +27,7 @@ public class TurnTurretToTarget extends PIDCommand {
         // This uses the output
         output -> {
           // Use the output here
-          turret.setPower(-output);
+          turret.setPower(output);
         });
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(turret);

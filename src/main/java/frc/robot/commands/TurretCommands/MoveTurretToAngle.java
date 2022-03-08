@@ -7,47 +7,27 @@ package frc.robot.commands.TurretCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 
-public class MoveTurret extends CommandBase {
-
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class MoveTurretToAngle extends CommandBase {
   Turret m_turret;
-  double m_direction;
-  double m_currentAngle = 0;
-
-  /** Creates a new MoveTurret. */
-  /**
-   * moves the turret at half power in the desired direction
-   * left direction is clockwise, right is counter
-   * @param turret
-   * @param direction negative value for left, positive for right
-   */
-  public MoveTurret(Turret turret, double direction) {
+  double m_angle;
+  public MoveTurretToAngle(Turret turret, double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(turret);
     m_turret = turret;
-    m_direction = direction;
+    m_angle = angle;
+    addRequirements(turret);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_currentAngle = m_turret.getTurretDegrees();
-    System.out.println("Initialize Move turret " + m_currentAngle);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    // Compute and set the new angle
-    m_currentAngle += m_direction;
-    // m_turret.setTurretDegrees(m_currentAngle);
-
-    if(m_direction > 0){  
-      m_turret.setPower(.3);
-    } else {
-      m_turret.setPower(-.3);
-    }
-    
+    m_turret.setTurretDegrees(-m_angle);
   }
 
   // Called once the command ends or is interrupted.
@@ -59,6 +39,7 @@ public class MoveTurret extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_turret.motionProfileFinished();
   }
+
 }

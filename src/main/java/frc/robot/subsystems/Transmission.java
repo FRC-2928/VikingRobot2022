@@ -24,7 +24,7 @@ public class Transmission extends SubsystemBase {
   public Transmission() {
 
     m_shiftPiston = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kDrivetrainShiftSolenoid);
-    // m_shiftPistonHigh = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kDrivetrainShiftSolenoidHigh);
+    // m_shiftPistonHigh = new Solenoid(PneumaticsModuleType.CTREPCM, Constant=s.PneumaticIDs.kDrivetrainShiftSolenoidHigh);
     // m_shiftPistonLow = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kDrivetrainShiftSolenoidLow);
 
     m_gearState = GearState.LOW;
