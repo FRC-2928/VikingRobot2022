@@ -152,14 +152,13 @@ public class Drivetrain extends SubsystemBase {
 
     public void configmotors() {
 
-
         // Configure the motors
         for(TalonFX fx : new TalonFX[] {m_leftLeader, m_leftFollower, m_rightLeader, m_rightFollower}){
             //Reset settings for safety
             fx.configFactoryDefault();
 
             //Sets voltage compensation to 12, used for percent output
-            fx.configVoltageCompSaturation(10);
+            fx.configVoltageCompSaturation(12);
             fx.enableVoltageCompensation(true);
 
             //Setting just in case

@@ -137,7 +137,7 @@ public class Intake extends SubsystemBase {
       srx.configPeakOutputForward(1);
       srx.configPeakOutputReverse(-1);
 
-      srx.configOpenloopRamp(0.1);
+      srx.configOpenloopRamp(0);
 
       //Setting deadband(area required to start moving the motor) to 1%
       srx.configNeutralDeadband(0.01);

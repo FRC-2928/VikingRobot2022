@@ -115,7 +115,7 @@ public class Turret extends SubsystemBase {
      m_turretMotor.configPeakOutputForward(1);
      m_turretMotor.configPeakOutputReverse(-1);
 
-     m_turretMotor.configOpenloopRamp(0.1);
+     m_turretMotor.configOpenloopRamp(0);
 
       //Setting deadband(area required to start moving the motor) to 1%
      m_turretMotor.configNeutralDeadband(0.01);

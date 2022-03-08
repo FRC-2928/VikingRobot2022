@@ -19,6 +19,7 @@ public class OperatorOI {
     private Button m_shootButton;
     private JoystickButton m_ejectButton;
     private Button m_turretTrackButton;
+    private Button m_adjustFlywheelButton;
     private JoystickButton m_openRampButton;
     private JoystickButton m_closeRampButton;
     private JoystickButton m_turnTurretLeft;
@@ -50,6 +51,7 @@ public class OperatorOI {
         m_turnTurretLeft = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
 
         m_turretTrackButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0.1);
+        m_adjustFlywheelButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0.1);
         
     }
 
@@ -110,6 +112,10 @@ public class OperatorOI {
  
     public Button getPrintButton() {
       return m_printButton;
+    }
+
+    public Button getAdjustFlywheelButton(){
+        return m_adjustFlywheelButton;
     }
  
     // ---------------- Turret ----------------------------
