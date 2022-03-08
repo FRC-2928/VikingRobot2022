@@ -167,7 +167,7 @@ public class Flywheel extends SubsystemBase {
   public void setVelocity(){
 
     //turn change in ticks per sec to change in ticks per 100 ms
-    m_flywheelTalon.set(ControlMode.Velocity, 10000);
+    m_flywheelTalon.set(ControlMode.Velocity, FlywheelConstants.kIdealVelocity);
 
     // TODO may need to add FeedForward using SimpleMotorFeedforward
     // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
