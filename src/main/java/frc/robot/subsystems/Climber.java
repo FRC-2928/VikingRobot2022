@@ -65,7 +65,7 @@ public class Climber extends SubsystemBase {
     m_climberMotor.configPeakOutputForward(1);
     m_climberMotor.configPeakOutputReverse(-1);
 
-    m_climberMotor.configOpenloopRamp(0.1);
+    m_climberMotor.configOpenloopRamp(0);
 
     //Setting deadband(area required to start moving the motor) to 1%
     m_climberMotor.configNeutralDeadband(0.01);
