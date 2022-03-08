@@ -37,8 +37,8 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
+//import com.revrobotics.ColorMatchResult;
+//import com.revrobotics.ColorSensorV3;
 
 import com.revrobotics.ColorMatch;
 
@@ -52,11 +52,11 @@ public class Intake extends SubsystemBase {
   // Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidClosed);
 
 
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-  private final ColorMatch m_colorMatcher = new ColorMatch();
-  private final Color kBlueTarget = new Color(0.143, 0.427, 0.429);
-  private final Color kRedTarget = new Color(0.561, 0.232, 0.114);
+  // private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  // private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+  // private final ColorMatch m_colorMatcher = new ColorMatch();
+  // private final Color kBlueTarget = new Color(0.143, 0.427, 0.429);
+  // private final Color kRedTarget = new Color(0.561, 0.232, 0.114);
   
  
   private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kRightFeederMotor);
@@ -105,11 +105,11 @@ public class Intake extends SubsystemBase {
     resetEncoders();
     setupShuffleboard();
 
-    m_colorMatcher.addColorMatch(kBlueTarget);
-    m_colorMatcher.addColorMatch(kRedTarget);
+    // m_colorMatcher.addColorMatch(kBlueTarget);
+    // m_colorMatcher.addColorMatch(kRedTarget);
     // Used to regulate calls to the color sensor. Re: I2C Lockup issue
-    m_colorTimer.reset();
-    m_colorTimer.start();
+    // m_colorTimer.reset();
+    // m_colorTimer.start();
   }
 
   public void configMotors(){
@@ -205,13 +205,13 @@ public class Intake extends SubsystemBase {
     m_rampEntry = rampLayout.add("Ramp Open?", isRampOpen()).getEntry();  
 
     // Ball 
-    ShuffleboardLayout ballLayout = Shuffleboard.getTab("Intake")
-      .getLayout("Ball", BuiltInLayouts.kList)
-      .withSize(2, 4)
-      .withPosition(10, 5); 
-    m_allianceEntry = ballLayout.add("Alliance", m_alliance.name()).getEntry();
-    m_ballColorEntry = ballLayout.add("Ball Color", m_ballColor.name()).getEntry();  
-    m_ballValidEntry = ballLayout.add("Valid Ball?", false).getEntry();
+    // ShuffleboardLayout ballLayout = Shuffleboard.getTab("Intake")
+    //   .getLayout("Ball", BuiltInLayouts.kList)
+    //   .withSize(2, 4)
+    //   .withPosition(10, 5); 
+    // m_allianceEntry = ballLayout.add("Alliance", m_alliance.name()).getEntry();
+    // m_ballColorEntry = ballLayout.add("Ball Color", m_ballColor.name()).getEntry();  
+    // m_ballValidEntry = ballLayout.add("Valid Ball?", false).getEntry();
 
     // Commands
     m_commandsLayout = Shuffleboard.getTab("Intake")
@@ -241,15 +241,15 @@ public class Intake extends SubsystemBase {
     }
 
     // Get the color of the ball that is in the feeder
-    if (feederHasBall()) {
+    // if (feederHasBall()) {
       // Regulate call frequency to the color sensor
-      if (m_colorTimer.hasElapsed(0.1)) {     
-        m_ballColor = getBallColor();
+    //   if (m_colorTimer.hasElapsed(0.1)) {     
+    //     m_ballColor = getBallColor();
 
-        m_colorTimer.reset();
-        m_colorTimer.start();
-      }     
-    }
+    //     m_colorTimer.reset();
+    //     m_colorTimer.start();
+    //   }     
+    // }
 
     publishTelemetry();
     
@@ -272,12 +272,12 @@ public class Intake extends SubsystemBase {
     m_intakeBrakeEnabledEntry.setBoolean(isIntakeBrakeEnabled());
 
     m_rampEntry.setBoolean(isRampOpen());
-    m_ballValidEntry.setBoolean(hasValidBall());
-    m_ballColorEntry.setString(m_ballColor.name());
+    // m_ballValidEntry.setBoolean(hasValidBall());
+    // m_ballColorEntry.setString(m_ballColor.name());
   }
 
   public void ejectBall() {
-    if (feederHasBall() && hasInvalidBall() && m_ejectInProgress == false) {
+    if (feederHasBall() && m_ejectInProgress == false) {
       m_ejectInProgress = true;
       openRamp();
       // Set the timer to wait until the ramp is open
@@ -310,45 +310,45 @@ public class Intake extends SubsystemBase {
     m_alliance = alliance;
   }
 
-  public Alliance getBallColor() {
+  // public Alliance getBallColor() {
 
-    // Ball color detection
-    Color detectedColor = m_colorSensor.getColor();
+  //   // Ball color detection
+  //   Color detectedColor = m_colorSensor.getColor();
 
-    // Run the color match algorithm on our detected color
-    ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+  //   // Run the color match algorithm on our detected color
+  //   ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-    double IR = m_colorSensor.getIR();
+  //   double IR = m_colorSensor.getIR();
 
-    Alliance ballColor;
-    if (RobotBase.isReal()) {
-      if (IR < 5){
-        ballColor = Alliance.Invalid;
-      } else if (match.color == kBlueTarget) {
-        ballColor = Alliance.Blue;
-      } else if (match.color == kRedTarget) {
-        ballColor = Alliance.Red;
-      } else {
-        ballColor = Alliance.Invalid;
-      }
-    } else {
-      ballColor = m_intakeSim.getBallColor();
-    }
+  //   Alliance ballColor;
+  //   if (RobotBase.isReal()) {
+  //     if (IR < 5){
+  //       ballColor = Alliance.Invalid;
+  //     } else if (match.color == kBlueTarget) {
+  //       ballColor = Alliance.Blue;
+  //     } else if (match.color == kRedTarget) {
+  //       ballColor = Alliance.Red;
+  //     } else {
+  //       ballColor = Alliance.Invalid;
+  //     }
+  //   } else {
+  //     ballColor = m_intakeSim.getBallColor();
+  //   }
   
     
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
      * sensor.
      */
-    SmartDashboard.putNumber("Detected Color Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", ballColor.name());
-    SmartDashboard.putNumber("Detected Red", detectedColor.red);
-    SmartDashboard.putNumber("Detected Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
+  //   SmartDashboard.putNumber("Detected Color Confidence", match.confidence);
+  //   SmartDashboard.putString("Detected Color", ballColor.name());
+  //   SmartDashboard.putNumber("Detected Red", detectedColor.red);
+  //   SmartDashboard.putNumber("Detected Blue", detectedColor.blue);
+  //   SmartDashboard.putNumber("IR", IR);
     
 
-    return ballColor;
-  }
+  //   return ballColor;
+  // }
 
   // --------- Intake Motor ------------------------------
   public void stopIntakeMotor(){
@@ -486,19 +486,19 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
 
   public boolean readyToShoot() {
-    if (isRampClosed() && hasValidBall()) {
+    if (isRampClosed()) {
       return true;
     } 
     return false;
   }
 
-  public boolean hasValidBall() {
-    return (m_alliance.ordinal() == m_ballColor.ordinal());
-  }
+  // public boolean hasValidBall() {
+  //   return (m_alliance.ordinal() == m_ballColor.ordinal());
+  // }
 
-  public boolean hasInvalidBall() {
-    return !hasValidBall();
-  }
+  // public boolean hasInvalidBall() {
+  //   return !hasValidBall();
+  // }
 
   // --------- Intake ------------------------------  
 
