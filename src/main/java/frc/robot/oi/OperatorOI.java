@@ -51,7 +51,7 @@ public class OperatorOI {
         m_turnTurretLeft = new JoystickButton(m_controller, XboxController.Button.kLeftBumper.value);
 
         m_turretTrackButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0.1);
-        m_adjustFlywheelButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0.1);
+        m_adjustFlywheelButton = new Button(() -> m_controller.getLeftBumperPressed());
         
     }
 
