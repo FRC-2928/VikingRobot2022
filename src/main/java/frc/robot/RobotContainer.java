@@ -219,7 +219,6 @@ public class RobotContainer {
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
     m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
     m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
-    m_intake.getCommandsLayout().add(new InstantCommand(m_intake::setAllianceColor, m_intake));
   }
 
   /**

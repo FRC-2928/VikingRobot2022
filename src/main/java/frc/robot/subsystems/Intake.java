@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -18,7 +16,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -33,31 +30,15 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-//import com.revrobotics.ColorMatchResult;
-//import com.revrobotics.ColorSensorV3;
 
-import com.revrobotics.ColorMatch;
-import edu.wpi.first.wpilibj.DriverStation;
 
 public class Intake extends SubsystemBase {
 
-  private Alliance m_alliance;
-  private Alliance m_ballColor = Alliance.Blue;
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoid);
-  // Solenoid m_rampSolenoidOpen = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidOpen);
-  // Solenoid m_rampSolenoidClosed = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoidClosed);
-
-
-  // private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  // private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-  // private final ColorMatch m_colorMatcher = new ColorMatch();
-  // private final Color kBlueTarget = new Color(0.143, 0.427, 0.429);
-  // private final Color kRedTarget = new Color(0.561, 0.232, 0.114);
   
  
   private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kRightFeederMotor);
@@ -68,7 +49,6 @@ public class Intake extends SubsystemBase {
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.CANBusIDs.kIntakeMotor);
 
   private Timer m_ejectTimer = new Timer();
-  private Timer m_colorTimer = new Timer();
   private Timer m_intakeTimer = new Timer();
   private Timer m_motorLowSpeedTimer = new Timer();
   private double m_ejectDuration = 0;
@@ -210,15 +190,6 @@ public class Intake extends SubsystemBase {
       .withPosition(8, 0); 
     m_rampEntry = rampLayout.add("Ramp Open?", isRampOpen()).getEntry();  
 
-    // Ball 
-    // ShuffleboardLayout ballLayout = Shuffleboard.getTab("Intake")
-    //   .getLayout("Ball", BuiltInLayouts.kList)
-    //   .withSize(2, 4)
-    //   .withPosition(10, 5); 
-    // m_allianceEntry = ballLayout.add("Alliance", m_alliance.name()).getEntry();
-    // m_ballColorEntry = ballLayout.add("Ball Color", m_ballColor.name()).getEntry();  
-    // m_ballValidEntry = ballLayout.add("Valid Ball?", false).getEntry();
-
     // Commands
     m_commandsLayout = Shuffleboard.getTab("Intake")
       .getLayout("Commands", BuiltInLayouts.kList)
@@ -254,21 +225,9 @@ public class Intake extends SubsystemBase {
       m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
     }
 
-    // Get the color of the ball that is in the feeder
-    // if (feederHasBall()) {
-      // Regulate call frequency to the color sensor
-    //   if (m_colorTimer.hasElapsed(0.1)) {     
-    //     m_ballColor = getBallColor();
-
-    //     m_colorTimer.reset();
-    //     m_colorTimer.start();
-    //   }     
-    // }
 
     publishTelemetry();
-    
-    // ejectBall();
-    
+
   }
 
   public void publishTelemetry() {
@@ -284,8 +243,6 @@ public class Intake extends SubsystemBase {
     m_feederBrakeEnabledEntry.setBoolean(isFeederBrakeEnabled());
 
     m_rampEntry.setBoolean(isRampOpen());
-    // m_ballValidEntry.setBoolean(hasValidBall());
-    // m_ballColorEntry.setString(m_ballColor.name());
   }
 
   public void ejectBall() {
@@ -317,50 +274,6 @@ public class Intake extends SubsystemBase {
   public ShuffleboardLayout getCommandsLayout() {
     return m_commandsLayout;
   }
-
-  public void setAllianceColor(Alliance alliance) {
-    m_alliance = alliance;
-  }
-
-  // public Alliance getBallColor() {
-
-  //   // Ball color detection
-  //   Color detectedColor = m_colorSensor.getColor();
-
-  //   // Run the color match algorithm on our detected color
-  //   ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-
-  //   double IR = m_colorSensor.getIR();
-
-  //   Alliance ballColor;
-  //   if (RobotBase.isReal()) {
-  //     if (IR < 5){
-  //       ballColor = Alliance.Invalid;
-  //     } else if (match.color == kBlueTarget) {
-  //       ballColor = Alliance.Blue;
-  //     } else if (match.color == kRedTarget) {
-  //       ballColor = Alliance.Red;
-  //     } else {
-  //       ballColor = Alliance.Invalid;
-  //     }
-  //   } else {
-  //     ballColor = m_intakeSim.getBallColor();
-  //   }
-  
-    
-    /**
-     * Open Smart Dashboard or Shuffleboard to see the color detected by the 
-     * sensor.
-     */
-  //   SmartDashboard.putNumber("Detected Color Confidence", match.confidence);
-  //   SmartDashboard.putString("Detected Color", ballColor.name());
-  //   SmartDashboard.putNumber("Detected Red", detectedColor.red);
-  //   SmartDashboard.putNumber("Detected Blue", detectedColor.blue);
-  //   SmartDashboard.putNumber("IR", IR);
-    
-
-  //   return ballColor;
-  // }
 
   // --------- Intake Motor ------------------------------
   public void stopIntakeMotor(){
@@ -488,14 +401,6 @@ public class Intake extends SubsystemBase {
     } 
     return false;
   }
-
-  // public boolean hasValidBall() {
-  //   return (m_alliance.ordinal() == m_ballColor.ordinal());
-  // }
-
-  // public boolean hasInvalidBall() {
-  //   return !hasValidBall();
-  // }
 
   // --------- Intake ------------------------------  
 
