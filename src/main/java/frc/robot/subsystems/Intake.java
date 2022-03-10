@@ -321,6 +321,10 @@ public class Intake extends SubsystemBase {
     return m_intakeMotorStop;
   }
 
+  public void setLowIntakePower(){
+    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakeLowSpeed);
+  }
+
   // --------- Feeder Motor ------------------------------
   public void stopFeederMotor(){
     m_rightFeederMotor.set(ControlMode.PercentOutput, 0);

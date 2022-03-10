@@ -122,6 +122,9 @@ public class DriverOI {
         return () -> -m_controller.getLeftY();
     }
 
+    public Button getIsAtHighSpeed() {
+        return new Button(() -> Math.abs(m_controller.getLeftY()) > .85);
+    }
 
     public DoubleSupplier getRotateSupplier() {
         return () -> m_controller.getRightX();
