@@ -49,6 +49,7 @@ import frc.robot.commands.IntakeCommands.OpenRamp;
 import frc.robot.commands.IntakeCommands.ReverseFeeder;
 import frc.robot.commands.IntakeCommands.ReverseFeederAndIntake;
 import frc.robot.commands.IntakeCommands.ShootBall;
+import frc.robot.commands.IntakeCommands.ShootTwice;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
 import frc.robot.commands.TurretCommands.AutoTrackingTurret;
@@ -205,7 +206,7 @@ public class RobotContainer {
 
     m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
-    m_operatorOI.getShootBall().whenPressed(new ShootBall(m_intake));
+    m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
     m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
     m_operatorOI.getReverseIntakeButton().whenPressed(new ReverseFeederAndIntake(m_intake));
