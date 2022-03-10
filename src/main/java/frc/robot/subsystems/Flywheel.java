@@ -172,7 +172,10 @@ public class Flywheel extends SubsystemBase {
     // TODO may need to add FeedForward using SimpleMotorFeedforward
     // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
   }
-
+  public void setPosition(double position) {
+    System.out.println("Position " + position);
+    m_flywheelTalon.set(ControlMode.Position, position);
+  }
   public void setPower(double power) {
     System.out.println("Power " + power);
     m_flywheelTalon.set(ControlMode.PercentOutput, power);

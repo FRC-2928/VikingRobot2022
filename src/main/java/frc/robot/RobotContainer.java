@@ -39,7 +39,6 @@ import frc.robot.subsystems.Turret;
 import frc.robot.commands.ClimberCommands.ExtendClimberBars;
 import frc.robot.commands.ClimberCommands.RetractClimberBars;
 import frc.robot.commands.DrivetrainCommands.DriveDistanceProfiled;
-import frc.robot.commands.DrivetrainCommands.MoveToShootingDistance;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.FlywheelCommands.DecrementFlywheel;
 import frc.robot.commands.FlywheelCommands.IncrementFlywheel;
