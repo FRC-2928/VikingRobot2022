@@ -447,6 +447,10 @@ public class Drivetrain extends SubsystemBase {
         return m_rightLeader.getMotorOutputVoltage();
     }
 
+    public double getMotorOutputPercent(){
+        return m_rightLeader.getMotorOutputPercent();
+    }
+
     public Rotation2d getRotation(){
         m_yaw = m_pigeon.getYaw();
         if (RobotBase.isReal()) {
