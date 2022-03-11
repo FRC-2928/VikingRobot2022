@@ -135,38 +135,18 @@ public class RobotContainer {
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     
     // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("Calibrate Robot", new RunRamseteTrajectory(m_drivetrain, calibrateTrajectory()));
-    m_autoChooser.addOption("Red 1", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red1"))
+    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
-    m_autoChooser.addOption("Red 2", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("red2"))
+    m_autoChooser.addOption("2-Ball Auto #1", new SequentialCommandGroup( new WaitCommand(1), 
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto1")), new ShootTwice(m_intake)             
                                             ));
-    m_autoChooser.addOption("Blue 1", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue1"))
+    m_autoChooser.addOption("2-Ball Auto #2", new SequentialCommandGroup( new WaitCommand(1), 
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto2")), new ShootTwice(m_intake)             
                                             ));
-    m_autoChooser.addOption("Blue 2", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue2"))
+    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootBall(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallAuto")), new ShootTwice(m_intake)
                                             ));
-
-    m_autoChooser.addOption("Red 3", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red3"))
-                                            ));
-    m_autoChooser.addOption("Red 4", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Red4"))
-                                            ));
-    m_autoChooser.addOption("Blue 3", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue3"))
-                                            ));
-    m_autoChooser.addOption("Blue 4", new SequentialCommandGroup( new WaitCommand(4), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Blue4"))
-                                            ));
-                                            
-
-    // m_autoChooser.addOption("Figure 8", new RunRamseteTrajectory(m_drivetrain, loadTrajectory("Figure8")));  
-    // m_autoChooser.addOption("Navigate Cones", new RunRamseteTrajectory(m_drivetrain, navigateConesTrajectory()));
-    // m_autoChooser.addOption("Drive Distance PID", new DriveDistanceProfiled(3.0, m_drivetrain));
-    // m_autoChooser.addOption("Reverse Distance PID", new DriveDistanceProfiled(-3.0, m_drivetrain));
   }
 
   /**
