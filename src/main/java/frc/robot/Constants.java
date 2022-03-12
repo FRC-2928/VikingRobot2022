@@ -38,6 +38,7 @@ public final class Constants {
         
         //Climber
         public static final int kClimberMotor = 5; 
+        public static final int kClimberMotor2 = 8;
         
         //Turret
         public static final int kTurretTalonSRX = 9;

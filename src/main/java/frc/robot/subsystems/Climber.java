@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
@@ -29,6 +30,8 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
 
   private final WPI_TalonSRX m_climberMotor = new WPI_TalonSRX(Constants.CANBusIDs.kClimberMotor);
+  private final WPI_TalonSRX m_climberFollower = new WPI_TalonSRX(Constants.CANBusIDs.kClimberMotor2);
+  
   Solenoid m_climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kClimberSolenoid);
 
   ShuffleboardTab m_climberTab;
@@ -52,37 +55,43 @@ public class Climber extends SubsystemBase {
 
   public void configMotors(){
 
-    //Reset settings for safety
-    m_climberMotor.configFactoryDefault();
+    for(WPI_TalonSRX srx : new WPI_TalonSRX[] {m_climberMotor, m_climberFollower}) {
 
-    //Sets voltage compensation to 12, used for percent output
-    m_climberMotor.configVoltageCompSaturation(12);
-    m_climberMotor.enableVoltageCompensation(true);
+      //Reset settings for safety
+      srx.configFactoryDefault();
 
-    //Setting just in case
-    m_climberMotor.configNominalOutputForward(0);
-    m_climberMotor.configNominalOutputReverse(0);
-    m_climberMotor.configPeakOutputForward(1);
-    m_climberMotor.configPeakOutputReverse(-1);
+      //Sets voltage compensation to 12, used for percent output
+      srx.configVoltageCompSaturation(12);
+      srx.enableVoltageCompensation(true);
 
-    m_climberMotor.configOpenloopRamp(0);
+      //Setting just in case
+      srx.configNominalOutputForward(0);
+      srx.configNominalOutputReverse(0);
+      srx.configPeakOutputForward(1);
+      srx.configPeakOutputReverse(-1);
 
-    //Setting deadband(area required to start moving the motor) to 1%
-    m_climberMotor.configNeutralDeadband(0.01);
+      srx.configOpenloopRamp(0);
 
-    //Set to brake mode, will brake the motor when no power is sent
-    m_climberMotor.setNeutralMode(NeutralMode.Brake);
+      //Setting deadband(area required to start moving the motor) to 1%
+      srx.configNeutralDeadband(0.01);
 
-    /** 
-     * Setting input side current limit (amps)
-     * 45 continious, 80 peak, 30 millieseconds allowed at peak
-     * 40 amp breaker can support above 40 amps for a little bit
-     * Falcons have insane acceleration so allowing it to reach 80 for 0.03 seconds should be fine
-     */
-    m_climberMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
+      //Set to brake mode, will brake the motor when no power is sent
+      srx.setNeutralMode(NeutralMode.Brake);
 
-    //Either using the integrated Falcon sensor or an external one, will change if needed
-    // m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
+      /** 
+       * Setting input side current limit (amps)
+       * 45 continious, 80 peak, 30 millieseconds allowed at peak
+       * 40 amp breaker can support above 40 amps for a little bit
+       * Falcons have insane acceleration so allowing it to reach 80 for 0.03 seconds should be fine
+       */
+      srx.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 55, 20));
+
+      //Either using the integrated Falcon sensor or an external one, will change if needed
+      // m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
+    }
+
+    m_climberFollower.follow(m_climberMotor, FollowerType.PercentOutput);
+
   }
 
   public void setClimberPIDF() {
