@@ -18,7 +18,7 @@ public class SetFlywheelVelocity extends InstantCommand {
   Turret m_turret;
 
   /** Creates a new TurnToTarget. */
-  public SetFlywheelVelocity(Flywheel flywheel, Turret turret, Limelight limelight) {
+  public SetFlywheelVelocity(Flywheel flywheel, Turret turret) {
   
     addRequirements(flywheel);
     m_flywheel = flywheel;
@@ -30,7 +30,7 @@ public class SetFlywheelVelocity extends InstantCommand {
   public void initialize() {
     super.initialize();  
     System.out.println("IN PID");  
-    
+
     double distance = m_turret.getRoundedVerticalOffset();
     double flywheelTicksPerSecond = m_flywheel.calculateFlywheelTicksPerSecond(distance);
     m_flywheel.setVelocity(flywheelTicksPerSecond);
