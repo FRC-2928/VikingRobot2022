@@ -30,6 +30,7 @@ import frc.robot.Constants.FlywheelConstants;
 import frc.robot.Constants;
 import frc.robot.simulation.FlywheelSim;
 
+
 public class Flywheel extends SubsystemBase {
 
   private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(Constants.CANBusIDs.kFlywheelTalonFX);
@@ -43,6 +44,7 @@ public class Flywheel extends SubsystemBase {
   ShuffleboardLayout m_flywheelLayout;
   NetworkTableEntry m_flywheelSpeedEntry;
   NetworkTableEntry m_flywheelPercentEntry;
+  NetworkTableEntry m_flywheelTicksEntry;
   private ShuffleboardLayout m_commandsLayout;
 
 
@@ -111,7 +113,13 @@ public class Flywheel extends SubsystemBase {
           m_flywheelSpeedEntry = m_flywheelLayout.add("Speed in Ticks", getVelocity()).getEntry();
           m_flywheelPercentEntry = m_flywheelLayout.add
             ("Percent Output", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
-          
+       
+    m_flywheelTicksEntry = m_flywheelTab.add("Ticks Per Second", getVelocity())
+            .withSize(3,3)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withPosition(5, 0)
+            .getEntry();
+
     m_commandsLayout = Shuffleboard.getTab("Flywheel")
             .getLayout("Commands", BuiltInLayouts.kList)
             .withSize(3, 3)
@@ -138,6 +146,7 @@ public class Flywheel extends SubsystemBase {
 
     m_flywheelPercentEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
     m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
+    m_flywheelTicksEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
   }
 
   public void resetEncoders(){
