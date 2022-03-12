@@ -49,6 +49,7 @@ import frc.robot.commands.IntakeCommands.OpenRamp;
 import frc.robot.commands.IntakeCommands.ReverseFeeder;
 import frc.robot.commands.IntakeCommands.ReverseFeederAndIntake;
 import frc.robot.commands.IntakeCommands.ShootBall;
+import frc.robot.commands.IntakeCommands.ShootOnce;
 import frc.robot.commands.IntakeCommands.ShootTwice;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
@@ -135,17 +136,17 @@ public class RobotContainer {
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     
     // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootBall(m_intake),
+    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
     m_autoChooser.addOption("2-Ball Auto #1", new SequentialCommandGroup( new WaitCommand(1), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto1")), new ShootTwice(m_intake)             
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto1")), new ShootTwice(m_intake, m_flywheel, m_turret)             
                                             ));
     m_autoChooser.addOption("2-Ball Auto #2", new SequentialCommandGroup( new WaitCommand(1), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto2")), new ShootTwice(m_intake)             
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto2")), new ShootTwice(m_intake, m_flywheel, m_turret)             
                                             ));
-    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootBall(m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallAuto")), new ShootTwice(m_intake)
+    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallAuto")), new ShootTwice(m_intake, m_flywheel, m_turret)
                                             ));
   }
 
@@ -188,7 +189,8 @@ public class RobotContainer {
 
     m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
-    m_operatorOI.getShootBall().whenPressed(new ShootBall(m_intake));
+    m_operatorOI.getShootBall().whenPressed(new ShootOnce(m_intake, m_flywheel, m_turret));
+    //m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake, m_flywheel, m_turret));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
     m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
     m_operatorOI.getReverseIntakeButton().whenPressed(new ReverseFeederAndIntake(m_intake));
