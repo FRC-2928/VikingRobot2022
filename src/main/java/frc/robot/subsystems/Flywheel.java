@@ -238,6 +238,10 @@ public class Flywheel extends SubsystemBase {
     return(m_flywheelTalon.getMotorOutputPercent() > 0);
   }
 
+  public boolean speedInRange(double velocity) {
+    return (m_velocity < 5000 & m_velocity > 15000);
+  }
+
   // -----------------------------------------------------------
   // Simulation
   // -----------------------------------------------------------
