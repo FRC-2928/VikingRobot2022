@@ -40,6 +40,7 @@ public class Intake extends SubsystemBase {
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoid);
   
+  private final Drivetrain m_drivetrain;
  
   private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kRightFeederMotor);
   private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kLeftFeederMotor);
@@ -85,7 +86,8 @@ public class Intake extends SubsystemBase {
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Intake(Alliance alliance) {
+  public Intake(Drivetrain drivetrain) {
+    m_drivetrain = drivetrain;
     configMotors();
     setIntakePIDF();
     resetEncoders();
@@ -210,13 +212,20 @@ public class Intake extends SubsystemBase {
   public void periodic() {
 
     if (isIntakeSensorTripped() && feederHasBall()) {
-      stopIntakeMotorWithBounce();
+      stopIntakeMotor();
     } else {
       // Check if we commanded a stop from Operator Input
       if (intakeMotorStopRequired() == false) {      
         startIntakeMotor(m_intakeMotorSpeed);
       }     
     }
+
+    if(m_drivetrain.getMotorOutputPercent() > -0.2){
+        m_intakeMotorSpeed = 0;
+    } else {
+        m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
+    }
+    
 
     // Intake motor will run at normal speed unless a low-speed timer has just been set
     if (m_motorLowSpeedTimer.hasElapsed(2)) {
@@ -292,7 +301,7 @@ public class Intake extends SubsystemBase {
       m_intakeTimer.start();  // Tested in else below
       m_startIntakeTimer = false;
     } 
-    else if (m_intakeTimer.hasElapsed(.5)) {
+    else if (m_intakeTimer.hasElapsed(1)) {
         stopIntakeMotor();
         m_startIntakeTimer = true;
         

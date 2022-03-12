@@ -164,8 +164,8 @@ public final class Constants {
          * PID Gains may have to be adjusted based on the responsiveness of control loop.
          * kF: 1023 represents output value to Talon at 100%, 20660 represents Velocity units at 100% output
          * 
-         * 	                                    			    kP 	   kI    kD  kF  Iz    PeakOut */
-        public final static Gains kGainsVelocity  = new Gains( 0.25, 0.00001, 1, 0,  300,  1.00);
+         * 	                                    			  kP   	 kI    kD      kF          Iz    PeakOut */
+        public final static Gains kGainsVelocity  = new Gains( 0.1 , 0, 0, (.6 * 1023)/10000,  300,  1.00);
 
         public static final double kGearRatio = 1;
 
@@ -176,12 +176,11 @@ public final class Constants {
         // public static final double kIdealMotorPower = .9;
         
         //velocity in ticks per sec
-        //public static final double kMaxVelocity = 180000;
+        // public static final double kMaxVelocity = 180000;
         public static final double kIdealVelocity = 10000;
 
-        //for sim flywheel
-        public static final double kFlywheelMass = 1;
-        public static final double kFlywheelRadius = 1;
+        // public static final double kFlywheelMass = 1;
+        // public static final double kFlywheelRadius = 1;
     }
 
     
@@ -193,10 +192,10 @@ public final class Constants {
          * Not all set of Gains are used in this project and may be removed as desired.
          * 
          * 	                                    			  kP   kI   kD   kF               Iz    PeakOut */
-        public final static Gains kGainsTurret = new Gains( 0.1, 0.0,  0.0, 0.0,            100,  0.50 );
+        public final static Gains kGainsTurret = new Gains( 0.01, 0.0,  0.0, 0.0,            100,  0.50 );
         // public final static Gains kGainsTurning = new Gains( 2.0, 0.0,  4.0, 0.0,            200,  1.00 );
         // public final static Gains kGainsVelocity = new Gains( 0.1, 0.0, 20.0, 1023.0/6800.0,  300,  0.75 );
-	    public final static Gains kGainsMotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
+	    // public final static Gains kGainsMotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 
         public static final double kTurretGearRatio = 9.08;
         public static final double kTurretDegreesPerRotation = 360;
@@ -278,7 +277,7 @@ public final class Constants {
 		public static double kClimberErrorThreshold = 0.5; // 5 cm
 
         public static double kIntakeLowSpeed = .2;
-        public static double kIntakeSpeed = .4;      
+        public static double kIntakeSpeed = .3;      
         public static double kFeederSpeed = .37;
         public static double kFeederHighSpeed = .8;
 

@@ -64,9 +64,9 @@ public class RobotContainer {
   // The Robot's Subsystems
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
-  private final Turret m_turret = new Turret(m_drivetrain);
-  private final Intake m_intake = new Intake(DriverStation.getAlliance());
   private final Flywheel m_flywheel = new Flywheel();
+  private final Turret m_turret = new Turret(m_drivetrain, m_flywheel);
+  private final Intake m_intake = new Intake(m_drivetrain);
   private final Climber m_climber = new Climber();
   
 
@@ -188,7 +188,7 @@ public class RobotContainer {
 
     m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
-    m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake));
+    m_operatorOI.getShootBall().whenPressed(new ShootBall(m_intake));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
     m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
     m_operatorOI.getReverseIntakeButton().whenPressed(new ReverseFeederAndIntake(m_intake));
