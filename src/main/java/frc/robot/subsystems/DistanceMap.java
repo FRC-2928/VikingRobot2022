@@ -19,35 +19,18 @@ public class DistanceMap {
         return m_instance;
     }
 
-    private final Map<Double, Integer> m_degrees = new HashMap<>();
     private final Map<Double, Integer> m_rpm = new HashMap<>();
 
     public void loadMaps() {
-        // Load degrees
-        m_degrees.put(1.0, 1);
-       
-
-        // Load RPM
-        m_rpm.put(1.0, 1000);
         
-    }
-
-    public double getHoodDegrees(double distance) {
-        double closestOffset = Double.POSITIVE_INFINITY;
-        double closestDegrees = 0;
-
-        for(var entry : m_degrees.entrySet()){
-            double entryDistance = entry.getKey();
-            double entryOffset = Math.abs(entryDistance - distance);
-            if(entryOffset < closestOffset){
-                closestOffset = entryOffset;
-                closestDegrees = entry.getValue();
-            }
-        }
-
-        SmartDashboard.putNumber("Distance Map Distance(hood)", distance);
-        SmartDashboard.putNumber("Distance Map Degrees", closestDegrees);
-        return closestDegrees;
+        // Load RPM
+        m_rpm.put(5.0, 8000);
+        m_rpm.put(6.0, 9000);
+        m_rpm.put(7.0, 10000);
+        m_rpm.put(8.0, 11000);
+        m_rpm.put(9.0, 12000);
+        m_rpm.put(10.0, 13000);
+        
     }
 
     public double getFlywheelRPM(double distance) {
