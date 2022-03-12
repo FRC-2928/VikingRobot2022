@@ -308,29 +308,29 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  /**
-   * Delays the stopping of the intake motor for 0.1 seconds
-   * This must be run in a periodic loop.
-   */
-  public void stopIntakeMotorDelayed(){
-    System.out.println("in stop intake motor delayed");
+  // /**
+  //  * Delays the stopping of the intake motor for 0.1 seconds
+  //  * This must be run in a periodic loop.
+  //  */
+  // public void stopIntakeMotorDelayed(){
+  //   System.out.println("in stop intake motor delayed");
 
-    if (m_startIntakeTimer) {
-      m_intakeTimer.reset();
-      m_intakeTimer.start();  // Tested in else below
-      m_startIntakeTimer = false;
-    } 
-    else if (m_intakeTimer.hasElapsed(1)) {
-        stopIntakeMotor();
-        m_startIntakeTimer = true;
+  //   if (m_startIntakeTimer) {
+  //     m_intakeTimer.reset();
+  //     m_intakeTimer.start();  // Tested in else below
+  //     m_startIntakeTimer = false;
+  //   } 
+  //   else if (m_intakeTimer.hasElapsed(1)) {
+  //       stopIntakeMotor();
+  //       m_startIntakeTimer = true;
         
-        // Now lower the intake speed for a short period in case the 
-        // intake sensor bounces.
-        m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
-        m_motorLowSpeedTimer.reset();
-        m_motorLowSpeedTimer.start(); // Tested in periodic()
-      }  
-    }    
+  //       // Now lower the intake speed for a short period in case the 
+  //       // intake sensor bounces.
+  //       m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
+  //       m_motorLowSpeedTimer.reset();
+  //       m_motorLowSpeedTimer.start(); // Tested in periodic()
+  //     }  
+  //   }    
   
 
   /**
@@ -476,10 +476,6 @@ public class Intake extends SubsystemBase {
 
   // --------- Feeder ------------------------------
 
-  public boolean isFeederBrakeActivated(){
-    return isFeederSwitchActivated();
-  }
-
   public boolean isFeederSwitchActivated() {
     // Simulate this return if not running on the real robot
     if (RobotBase.isReal()) {
@@ -488,12 +484,12 @@ public class Intake extends SubsystemBase {
     return m_intakeSim.isFeederSwitchClosed();
   }
 
-  public boolean isFeederBrakeDeactivated(){
-    return !(isFeederBrakeActivated());
-  }
+  // public boolean isFeederBrakeDeactivated(){
+  //   return !(isFeederBrakeActivated());
+  // }
    
   public boolean feederHasBall(){
-    return isFeederBrakeActivated();  
+    return isFeederSwitchActivated();  
   }
 
   public boolean feederCleared() {
@@ -548,7 +544,7 @@ public class Intake extends SubsystemBase {
       m_intakeMotorSim.setBusVoltage(RobotController.getInputVoltage());
     }
 
-    if (isFeederBrakeActivated()) {
+    if (feederHasBall()) {
       m_rightFeederMotorSim.setBusVoltage(0);
     } else {
       m_rightFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());
