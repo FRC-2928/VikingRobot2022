@@ -43,6 +43,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
   private final Drivetrain m_drivetrain;
+  private final Flywheel m_flywheel;
   private final Limelight m_turretLimelight = new Limelight();
   private LimelightData m_turretLimelightData = m_turretLimelight.getLimelightData();
   private final TalonSRX m_turretMotor  = new TalonSRX(Constants.CANBusIDs.kTurretTalonSRX);
@@ -92,8 +93,9 @@ public class Turret extends SubsystemBase {
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
-  public Turret(Drivetrain drivetrain) {
+  public Turret(Drivetrain drivetrain, Flywheel flywheel) {
     m_drivetrain = drivetrain;
+    m_flywheel = flywheel;
     configMotors();
     setTurretPIDF();
     resetEncoders();
@@ -364,6 +366,9 @@ public class Turret extends SubsystemBase {
     return m_filter.calculate(offset);
   }
 
+  public long getRoundedVerticalOffset(){
+    return Math.round(getTargetVerticalOffset());
+  }
   /**
    * Gets the angle of the target relative to the turret
    * @return Rotation2d offset angle between target and the turret in Radians

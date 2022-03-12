@@ -188,6 +188,11 @@ public class Flywheel extends SubsystemBase {
     }
   }
 
+  public double calculateFlywheelTicksPerSecond(double distance) {
+    double ticks = DistanceMap.getInstance().getFlywheelTicksPerSecond(distance);
+    return ticks;
+  }
+
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
