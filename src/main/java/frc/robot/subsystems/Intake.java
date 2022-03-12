@@ -44,8 +44,8 @@ public class Intake extends SubsystemBase {
  
   private final WPI_TalonSRX m_rightFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kRightFeederMotor);
   private final WPI_TalonSRX m_leftFeederMotor = new WPI_TalonSRX(Constants.CANBusIDs.kLeftFeederMotor);
-  private final DigitalInput m_leftIntakeSensor = new DigitalInput(IntakeConstants.kLeftIntakeSensor);
-  private final DigitalInput m_rightIntakeSensor = new DigitalInput(IntakeConstants.kRightIntakeSensor);
+  // private final DigitalInput m_leftIntakeSensor = new DigitalInput(IntakeConstants.kLeftIntakeSensor);
+  // private final DigitalInput m_rightIntakeSensor = new DigitalInput(IntakeConstants.kRightIntakeSensor);
   
   private final TalonSRX m_intakeMotor  = new TalonSRX(Constants.CANBusIDs.kIntakeMotor);
 
@@ -145,6 +145,10 @@ public class Intake extends SubsystemBase {
     //configure limit switches for intake motor and leading feeder motor
     m_rightFeederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
                                                       LimitSwitchNormal.NormallyClosed, 0);
+    
+    m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+                                                  LimitSwitchNormal.NormallyClosed, 0);
+
   
     setFeederBrakeEnabled();
     
@@ -446,17 +450,21 @@ public class Intake extends SubsystemBase {
     return (Math.abs(m_intakeMotor.getMotorOutputPercent()) > .1);
   }
 
-  public boolean isLeftIntakeSensorTripped(){
-    return !m_leftIntakeSensor.get();
+  // public boolean isLeftIntakeSensorTripped(){
+  //   return !m_leftIntakeSensor.get();
+  // }
+
+  // public boolean isRightIntakeSensorTripped(){
+  //   return !m_rightIntakeSensor.get();
+  // }
+
+  public boolean isIntakeSensorTripped(){
+    return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
-  public boolean isRightIntakeSensorTripped(){
-    return !m_rightIntakeSensor.get();
-  }
-
-  public boolean isIntakeSensorTripped() {
-    return isLeftIntakeSensorTripped() || isRightIntakeSensorTripped();
-  }
+  // public boolean isIntakeSensorTripped() {
+  //   return isLeftIntakeSensorTripped() || isRightIntakeSensorTripped();
+  // }
 
 
   // --------- Feeder ------------------------------
