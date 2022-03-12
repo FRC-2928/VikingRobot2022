@@ -332,22 +332,6 @@ public class Intake extends SubsystemBase {
       }  
     }    
   
-  /**
-   * stops the intake motor and starts the low speed timer
-   * 
-   */
-  public void stopIntakeMotorWithBounce(){
-
-    System.out.println("in stop intake motor delayed");
-        stopIntakeMotor();
-        
-        // Now lower the intake speed for a short period in case the 
-        // intake sensor bounces.
-        m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
-        m_motorLowSpeedTimer.reset();
-        m_motorLowSpeedTimer.start(); // Tested in periodic()
-       
-    }
 
   /**
    * 
@@ -409,7 +393,7 @@ public class Intake extends SubsystemBase {
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
     m_feederBrakeEnabled = false;
   }
-  
+
 
   // --------- Ramp ------------------------------
 
