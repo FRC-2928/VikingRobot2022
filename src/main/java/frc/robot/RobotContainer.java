@@ -65,7 +65,7 @@ public class RobotContainer {
   private final Transmission m_transmission = new Transmission();
   private final Drivetrain m_drivetrain = new Drivetrain(m_transmission::getGearState);
   private final Turret m_turret = new Turret(m_drivetrain);
-  private final Intake m_intake = new Intake(DriverStation.getAlliance());
+  private final Intake m_intake = new Intake(m_drivetrain);
   private final Flywheel m_flywheel = new Flywheel();
   private final Climber m_climber = new Climber();
   
