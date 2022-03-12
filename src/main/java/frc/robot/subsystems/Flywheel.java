@@ -235,8 +235,4 @@ public class Flywheel extends SubsystemBase {
     m_flywheelMotorSim.setIntegratedSensorVelocity((int)m_flywheelSim.getOutput(0));
   
   }
-
-
-  
-
 }
