@@ -210,7 +210,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
 
     if (isIntakeSensorTripped() && feederHasBall()) {
-      stopIntakeMotorDelayed();
+      stopIntakeMotorWithBounce();
     } else {
       // Check if we commanded a stop from Operator Input
       if (intakeMotorStopRequired() == false) {      
@@ -304,6 +304,22 @@ public class Intake extends SubsystemBase {
       }  
     }    
   
+  /**
+   * stops the intake motor and starts the low speed timer
+   * 
+   */
+  public void stopIntakeMotorWithBounce(){
+
+    System.out.println("in stop intake motor delayed");
+        stopIntakeMotor();
+        
+        // Now lower the intake speed for a short period in case the 
+        // intake sensor bounces.
+        m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
+        m_motorLowSpeedTimer.reset();
+        m_motorLowSpeedTimer.start(); // Tested in periodic()
+       
+    }
 
   /**
    * 

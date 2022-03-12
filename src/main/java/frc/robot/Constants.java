@@ -148,6 +148,7 @@ public final class Constants {
     }
     
     public static final class FlywheelConstants {
+
         public static final double ksVolts = 0.6024;
         public static final double kvVoltSecondsPerRadian = 0.00021907;
         public static final double kaVoltSecondsSquaredPerRadian = 0.000096252;
@@ -163,7 +164,7 @@ public final class Constants {
          * PID Gains may have to be adjusted based on the responsiveness of control loop.
          * kF: 1023 represents output value to Talon at 100%, 20660 represents Velocity units at 100% output
          * 
-         * 	                                    			  kP   	 kI    kD      kF          Iz    PeakOut */
+         * 	                                    			    kP 	   kI    kD  kF  Iz    PeakOut */
         public final static Gains kGainsVelocity  = new Gains( 0.25, 0.00001, 1, 0,  300,  1.00);
 
         public static final double kGearRatio = 1;
@@ -172,13 +173,13 @@ public final class Constants {
 
         // public static final double kMotorLimit = .9;
 
-        //TODO: set to actual desired power
         // public static final double kIdealMotorPower = .9;
         
         //velocity in ticks per sec
-        public static final double kMaxVelocity = 180000;
+        //public static final double kMaxVelocity = 180000;
         public static final double kIdealVelocity = 10000;
 
+        //for sim flywheel
         public static final double kFlywheelMass = 1;
         public static final double kFlywheelRadius = 1;
     }

@@ -19,7 +19,6 @@ public class AdjustFlywheelSpeed extends CommandBase {
     addRequirements(flywheel);
     m_flywheel = flywheel;
     m_estimatedTargetSpeed = m_flywheel.getRPM();
-    
   }
 
   // Called when the command is initially scheduled.
