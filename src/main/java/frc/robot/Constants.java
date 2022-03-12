@@ -148,6 +148,7 @@ public final class Constants {
     }
     
     public static final class FlywheelConstants {
+
         public static final double ksVolts = 0.6024;
         public static final double kvVoltSecondsPerRadian = 0.00021907;
         public static final double kaVoltSecondsSquaredPerRadian = 0.000096252;
@@ -172,7 +173,6 @@ public final class Constants {
 
         // public static final double kMotorLimit = .9;
 
-        //TODO: set to actual desired power
         // public static final double kIdealMotorPower = .9;
         
         //velocity in ticks per sec
