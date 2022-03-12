@@ -172,10 +172,10 @@ public class Flywheel extends SubsystemBase {
     // TODO may need to add FeedForward using SimpleMotorFeedforward
     // m_flywheelTalon.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, velocity);
   }
-  public void setPosition(double position) {
-    System.out.println("Position " + position);
-    m_flywheelTalon.set(ControlMode.Position, position);
-  }
+  // public void setPosition(double position) {
+  //   System.out.println("Position " + position);
+  //   m_flywheelTalon.set(ControlMode.Position, position);
+  // }
   public void setPower(double power) {
     System.out.println("Power " + power);
     m_flywheelTalon.set(ControlMode.PercentOutput, power);
@@ -203,44 +203,42 @@ public class Flywheel extends SubsystemBase {
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
-  public double getRPM(){
-    double ticksPerSec = m_flywheelTalon.getSelectedSensorVelocity() * 10;
-    return (ticksToRotations(ticksPerSec) * 60);
-  }
+  // public double getRPM(){
+  //   double ticksPerSec = m_flywheelTalon.getSelectedSensorVelocity() * 10;
+  //   return (ticksToRotations(ticksPerSec) * 60);
+  // }
 
-  public double rotationsToTicks(double rotations){
-    return ((rotations * FlywheelConstants.kEncoderCPR) * FlywheelConstants.kGearRatio);
-  }
+  // public double rotationsToTicks(double rotations){
+  //   return ((rotations * FlywheelConstants.kEncoderCPR) * FlywheelConstants.kGearRatio);
+  // }
 
-  public double ticksToRotations(double ticks){
-    return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.kGearRatio);
-  }
+  // public double ticksToRotations(double ticks){
+  //   return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.kGearRatio);
+  // }
 
   /**
    * 
    * @return the percent output of the motor (-1 to 1)
    */
-  public double getPower(){
-    return(m_flywheelTalon.getMotorOutputPercent());
-  }
+  // public double getPower(){
+  //   return(m_flywheelTalon.getMotorOutputPercent());
+  // }
 
   /**
    * 
    * @return velocity in ticks per sec
    */
   public double getVelocity(){
-    return (m_flywheelTalon.getSelectedSensorVelocity() * 10);
-
-    
+    return (m_flywheelTalon.getSelectedSensorVelocity() * 10); 
   }
 
   public boolean isFlywheelMotorOn(){
     return(m_flywheelTalon.getMotorOutputPercent() > 0);
   }
 
-  public boolean speedInRange(double velocity) {
-    return (m_velocity < 5000 & m_velocity > 15000);
-  }
+  // public boolean speedInRange(double velocity) {
+  //   return (m_velocity < 5000 & m_velocity > 15000);
+  // }
 
   // -----------------------------------------------------------
   // Simulation
