@@ -215,13 +215,28 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if (isIntakeSensorTripped() && feederHasBall()) {
-      stopIntakeMotor();
+    // if (isIntakeSensorActivated() && feederHasBall()) {
+    //   stopIntakeMotor();
+    // } else {
+    //   // Check if we commanded a stop from Operator Input
+    //   if (intakeMotorStopRequired() == false) {      
+    //     startIntakeMotor(m_intakeMotorSpeed);
+    //   }     
+    // }
+
+    //if feeder has a ball, set intake brake enabled, otherwise set disabled
+    if(feederHasBall()){
+      setIntakeBrakeEnabled();
     } else {
+      setIntakeBrakeDisabled();
+    }
+
+    //if either the feeder or intake is empty..
+    if(!(isIntakeSensorActivated() && feederHasBall())){
       // Check if we commanded a stop from Operator Input
       if (intakeMotorStopRequired() == false) {      
         startIntakeMotor(m_intakeMotorSpeed);
-      }     
+      }
     }
 
     if(m_drivetrain.getMotorOutputPercent() > -0.2){
@@ -287,10 +302,10 @@ public class Intake extends SubsystemBase {
   }
 
   // --------- Intake Motor ------------------------------
+
   public void stopIntakeMotor(){
     System.out.println("intake motor stopping");
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
-
   }
 
   /**
@@ -354,6 +369,14 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakeLowSpeed);
   }
 
+  public void setIntakeBrakeEnabled(){
+    m_intakeMotor.overrideLimitSwitchesEnable(true);
+  }
+
+  public void setIntakeBrakeDisabled(){
+    m_intakeMotor.overrideLimitSwitchesEnable(false);
+  }
+
   // --------- Feeder Motor ------------------------------
   public void stopFeederMotor(){
     m_rightFeederMotor.set(ControlMode.PercentOutput, 0);
@@ -371,7 +394,7 @@ public class Intake extends SubsystemBase {
    * listen to feeder limit switch
    */
   public void setFeederBrakeEnabled(){
-    //overriding the brake (true) means the brake is disabled
+    
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
     m_feederBrakeEnabled = true;
     if (!RobotBase.isReal()) {
@@ -386,10 +409,10 @@ public class Intake extends SubsystemBase {
     m_rightFeederMotor.overrideLimitSwitchesEnable(false);
     m_feederBrakeEnabled = false;
   }
+  
 
   // --------- Ramp ------------------------------
 
-  //TODO: maybe switch false and true depending on which solenoid state is the open ramp
   public void openRamp(){
     m_rampSolenoid.set(true);
 
@@ -437,7 +460,7 @@ public class Intake extends SubsystemBase {
 
 
   public boolean intakeHasBall(){
-    return isIntakeSensorTripped();
+    return isIntakeSensorActivated();
   }
 
   public boolean intakeCleared() {
@@ -458,7 +481,7 @@ public class Intake extends SubsystemBase {
   //   return !m_rightIntakeSensor.get();
   // }
 
-  public boolean isIntakeSensorTripped(){
+  public boolean isIntakeSensorActivated(){
     return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
@@ -504,7 +527,7 @@ public class Intake extends SubsystemBase {
 
   // --------- Ramp ------------------------------
 
-  //TODO: maybe switch true to false depending on which solenoid state is the open ramp
+  
   public boolean isRampOpen(){
     // Simulate this return if not running on the real robot
     // if (RobotBase.isReal()) {
