@@ -147,10 +147,11 @@ public class Intake extends SubsystemBase {
                                                       LimitSwitchNormal.NormallyClosed, 0);
     
     m_intakeMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-                                                  LimitSwitchNormal.NormallyClosed, 0);
+                                                  LimitSwitchNormal.NormallyOpen, 0);
 
   
     setFeederBrakeEnabled();
+    setIntakeBrakeEnabled();
     
   }
 
@@ -232,24 +233,24 @@ public class Intake extends SubsystemBase {
     }
 
     //if either the feeder or intake is empty..
-    if(!(isIntakeSensorActivated() && feederHasBall())){
-      // Check if we commanded a stop from Operator Input
-      if (intakeMotorStopRequired() == false) {      
-        startIntakeMotor(m_intakeMotorSpeed);
-      }
-    }
+    // if(!(isIntakeSensorActivated() && feederHasBall())){
+    //   // Check if we commanded a stop from Operator Input
+    //   if (intakeMotorStopRequired() == false) {      
+    //     startIntakeMotor(m_intakeMotorSpeed);
+    //   }
+    // }
 
-    if(m_drivetrain.getMotorOutputPercent() > -0.2){
-        m_intakeMotorSpeed = 0;
-    } else {
-        m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
-    }
+    // if(m_drivetrain.getMotorOutputPercent() > -0.2){
+    //     m_intakeMotorSpeed = 0;
+    // } else {
+    //     m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
+    // }
     
 
     // Intake motor will run at normal speed unless a low-speed timer has just been set
-    if (m_motorLowSpeedTimer.hasElapsed(2)) {
-      m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
-    }
+    // if (m_motorLowSpeedTimer.hasElapsed(2)) {
+    //   m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
+    // }
 
 
     publishTelemetry();

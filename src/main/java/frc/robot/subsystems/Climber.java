@@ -136,7 +136,7 @@ public class Climber extends SubsystemBase {
    */
   public void moveClimber(DoubleSupplier extendRetract){
     double power = MathUtil.applyDeadband(extendRetract.getAsDouble(), 0.07);
-    setPower(power);
+    setPower(-power);
   }
   
   public void tiltForward(){

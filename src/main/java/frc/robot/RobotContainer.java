@@ -180,7 +180,7 @@ public class RobotContainer {
    */
   public void configureIntake() {
     // Configure default commands
-    //m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
+    m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
 
     // Configure button commands
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));

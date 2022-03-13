@@ -23,7 +23,7 @@ public class DistanceMap {
 
     public void loadMaps() {
        
-        m_tickspersecond.put(5.5, 3500);
+        m_tickspersecond.put(5.5, 10000);
      
         m_tickspersecond.put(10.0, 10000); // INITIATION LINE
 
