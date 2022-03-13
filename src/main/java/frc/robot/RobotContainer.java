@@ -43,6 +43,7 @@ import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.FlywheelCommands.DecrementFlywheel;
 import frc.robot.commands.FlywheelCommands.IncrementFlywheel;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
+import frc.robot.commands.FlywheelCommands.SetFlywheelVelocity;
 import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
 import frc.robot.commands.IntakeCommands.OpenRamp;
@@ -222,6 +223,7 @@ public class RobotContainer {
     m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
     m_flywheel.getCommandsLayout().add(new IncrementFlywheel(m_flywheel));
     m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
+    m_flywheel.getCommandsLayout().add(new SetFlywheelVelocity(m_flywheel, m_turret));
     
   }
 

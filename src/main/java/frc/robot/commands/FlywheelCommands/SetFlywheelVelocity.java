@@ -28,7 +28,7 @@ public class SetFlywheelVelocity extends InstantCommand {
     super.initialize();  
     System.out.println("IN PID");  
 
-    double distance = m_turret.getRoundedVerticalOffset();
+    double distance = 5;
     double flywheelTicksPerSecond = m_flywheel.calculateFlywheelTicksPerSecond(distance);
     System.out.println("distance" + distance);
     System.out.println("ticks" + flywheelTicksPerSecond);

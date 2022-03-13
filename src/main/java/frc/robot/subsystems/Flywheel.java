@@ -112,8 +112,7 @@ public class Flywheel extends SubsystemBase {
             .withPosition(0, 0);
           m_flywheelSpeedEntry = m_flywheelLayout.add("Speed in Ticks", getVelocity()).getEntry();
           m_flywheelPercentEntry = m_flywheelLayout.add
-            ("Percent Output", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();
-       
+            ("Percent Output", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();       
     m_flywheelTicksEntry = m_flywheelTab.add("Ticks Per Second", getVelocity())
             .withSize(3,3)
             .withWidget(BuiltInWidgets.kGraph)
