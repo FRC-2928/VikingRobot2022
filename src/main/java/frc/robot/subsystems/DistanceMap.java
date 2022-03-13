@@ -40,17 +40,17 @@ public class DistanceMap {
 
     public int getFlywheelTicksPerSecond(int distance) {
       
-        int closestTicksPerSecond = 0;
+       int closestTicksPerSecond = 0;
 
         for(var entry : m_tickspersecond.entrySet()){
+            //not printing
+            System.out.println("INSIDE FOR LOOP");
             double entryDistance = entry.getKey();
             if(entryDistance == distance){
                 closestTicksPerSecond = entry.getValue();
             }
         }
-
-        SmartDashboard.putNumber("Distance Map Distance(flywheel)", distance);
-        SmartDashboard.putNumber("Distance Map TicksPerSecond", closestTicksPerSecond);
         return closestTicksPerSecond;
+        
     }
 }    
