@@ -57,6 +57,7 @@ public class Flywheel extends SubsystemBase {
     resetEncoders();
     setFlywheelPIDF();
     setupShuffleboard();
+    DistanceMap.getInstance().loadMaps();
   }
 
   public void configMotors(){

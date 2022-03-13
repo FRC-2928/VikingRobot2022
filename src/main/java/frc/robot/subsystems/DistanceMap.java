@@ -22,35 +22,23 @@ public class DistanceMap {
     private final Map<Integer, Integer> m_ticksPer100ms = new HashMap<>();
 
     public void loadMaps() {
-        m_ticksPer100ms.put(0, 10000);
-        m_ticksPer100ms.put(1, 10000);
-        m_ticksPer100ms.put(2, 10000);
-        m_ticksPer100ms.put(3, 10000);
-        m_ticksPer100ms.put(4, 10000);
-        m_ticksPer100ms.put(5, 10000);
-        m_ticksPer100ms.put(6, 10000);
+        m_ticksPer100ms.put(0, 15000);
+        m_ticksPer100ms.put(1, 15000);
+        m_ticksPer100ms.put(2, 15000);
+        m_ticksPer100ms.put(3, 15000);
+        m_ticksPer100ms.put(4, 15000);
+        m_ticksPer100ms.put(5, 12000);
+        m_ticksPer100ms.put(6, 12000);
         m_ticksPer100ms.put(7, 10000);
         m_ticksPer100ms.put(8, 10000);
         m_ticksPer100ms.put(9, 10000);
-        m_ticksPer100ms.put(10, 10000); 
-        m_ticksPer100ms.put(11, 10000);
-        m_ticksPer100ms.put(12, 10000);
-        m_ticksPer100ms.put(13, 10000);
+        m_ticksPer100ms.put(10, 8500); 
+        m_ticksPer100ms.put(11, 8500);
+        m_ticksPer100ms.put(12, 8500);
+        m_ticksPer100ms.put(13, 8500);
     }
 
     public int getFlywheelTicksPer100ms(int distance) {
-      
-       int closestTicksPer100ms = 0;
-
-        for(var entry : m_ticksPer100ms.entrySet()){
-            //not printing
-            System.out.println("INSIDE FOR LOOP");
-            double entryDistance = entry.getKey();
-            if(entryDistance == distance){
-                closestTicksPer100ms = entry.getValue();
-            }
-        }
-        return closestTicksPer100ms;
-        
+        return m_ticksPer100ms.get(distance);
     }
 }    

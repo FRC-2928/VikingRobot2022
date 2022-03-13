@@ -200,7 +200,7 @@ public class RobotContainer {
     m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
     m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake));  
     // m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
-    m_intake.getCommandsLayout().add(new ShootBall(m_intake)); 
+    m_intake.getCommandsLayout().add(new ShootOnce(m_intake, m_flywheel, m_turret)); 
     m_intake.getCommandsLayout().add(new EjectBall(m_intake));
     m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
     m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
