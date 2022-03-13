@@ -28,7 +28,7 @@ public class DistanceMap {
         m_tickspersecond.put(3, 10000);
         m_tickspersecond.put(4, 10000);
         m_tickspersecond.put(5, 10000);
-        m_tickspersecond.put(6, 10000);
+        m_tickspersecond.put(6, 90000);
         m_tickspersecond.put(7, 10000);
         m_tickspersecond.put(8, 10000);
         m_tickspersecond.put(9, 10000);
@@ -39,18 +39,6 @@ public class DistanceMap {
     }
 
     public int getFlywheelTicksPerSecond(int distance) {
-      
-       int closestTicksPerSecond = 0;
-
-        for(var entry : m_tickspersecond.entrySet()){
-            //not printing
-            System.out.println("INSIDE FOR LOOP");
-            double entryDistance = entry.getKey();
-            if(entryDistance == distance){
-                closestTicksPerSecond = entry.getValue();
-            }
-        }
-        return closestTicksPerSecond;
-        
+        return m_tickspersecond.get(distance);
     }
 }    
