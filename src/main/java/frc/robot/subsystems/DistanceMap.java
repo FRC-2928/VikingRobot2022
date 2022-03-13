@@ -22,7 +22,7 @@ public class DistanceMap {
     private final Map<Integer, Integer> m_tickspersecond = new HashMap<>();
 
     public void loadMaps() {
-        m_tickspersecond.put(0, 0);
+        m_tickspersecond.put(0, 10000);
         m_tickspersecond.put(1, 10000);
         m_tickspersecond.put(2, 10000);
         m_tickspersecond.put(3, 10000);
@@ -38,15 +38,13 @@ public class DistanceMap {
         m_tickspersecond.put(13, 10000);
     }
 
-    public double getFlywheelTicksPerSecond(double distance) {
-        double closestOffset = Double.POSITIVE_INFINITY;
-        double closestTicksPerSecond = 0;
+    public int getFlywheelTicksPerSecond(int distance) {
+      
+        int closestTicksPerSecond = 0;
 
         for(var entry : m_tickspersecond.entrySet()){
             double entryDistance = entry.getKey();
-            double entryOffset = Math.abs(entryDistance - distance);
-            if(entryOffset < closestOffset){
-                closestOffset = entryOffset;
+            if(entryDistance == distance){
                 closestTicksPerSecond = entry.getValue();
             }
         }
