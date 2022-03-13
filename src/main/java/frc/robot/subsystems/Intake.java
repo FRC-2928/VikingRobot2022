@@ -215,13 +215,28 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if (isIntakeSensorTripped() && feederHasBall()) {
-      stopIntakeMotor();
+    // if (isIntakeSensorActivated() && feederHasBall()) {
+    //   stopIntakeMotor();
+    // } else {
+    //   // Check if we commanded a stop from Operator Input
+    //   if (intakeMotorStopRequired() == false) {      
+    //     startIntakeMotor(m_intakeMotorSpeed);
+    //   }     
+    // }
+
+    //if feeder has a ball, set intake brake enabled, otherwise set disabled
+    if(feederHasBall()){
+      setIntakeBrakeEnabled();
     } else {
+      setIntakeBrakeDisabled();
+    }
+
+    //if either the feeder or intake is empty..
+    if(!(isIntakeSensorActivated() && feederHasBall())){
       // Check if we commanded a stop from Operator Input
       if (intakeMotorStopRequired() == false) {      
         startIntakeMotor(m_intakeMotorSpeed);
-      }     
+      }
     }
 
     if(m_drivetrain.getMotorOutputPercent() > -0.2){
@@ -287,52 +302,36 @@ public class Intake extends SubsystemBase {
   }
 
   // --------- Intake Motor ------------------------------
+
   public void stopIntakeMotor(){
     System.out.println("intake motor stopping");
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
-
   }
 
-  /**
-   * Delays the stopping of the intake motor for 0.1 seconds
-   * This must be run in a periodic loop.
-   */
-  public void stopIntakeMotorDelayed(){
-    System.out.println("in stop intake motor delayed");
+  // /**
+  //  * Delays the stopping of the intake motor for 0.1 seconds
+  //  * This must be run in a periodic loop.
+  //  */
+  // public void stopIntakeMotorDelayed(){
+  //   System.out.println("in stop intake motor delayed");
 
-    if (m_startIntakeTimer) {
-      m_intakeTimer.reset();
-      m_intakeTimer.start();  // Tested in else below
-      m_startIntakeTimer = false;
-    } 
-    else if (m_intakeTimer.hasElapsed(1)) {
-        stopIntakeMotor();
-        m_startIntakeTimer = true;
+  //   if (m_startIntakeTimer) {
+  //     m_intakeTimer.reset();
+  //     m_intakeTimer.start();  // Tested in else below
+  //     m_startIntakeTimer = false;
+  //   } 
+  //   else if (m_intakeTimer.hasElapsed(1)) {
+  //       stopIntakeMotor();
+  //       m_startIntakeTimer = true;
         
-        // Now lower the intake speed for a short period in case the 
-        // intake sensor bounces.
-        m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
-        m_motorLowSpeedTimer.reset();
-        m_motorLowSpeedTimer.start(); // Tested in periodic()
-      }  
-    }    
+  //       // Now lower the intake speed for a short period in case the 
+  //       // intake sensor bounces.
+  //       m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
+  //       m_motorLowSpeedTimer.reset();
+  //       m_motorLowSpeedTimer.start(); // Tested in periodic()
+  //     }  
+  //   }    
   
-  /**
-   * stops the intake motor and starts the low speed timer
-   * 
-   */
-  public void stopIntakeMotorWithBounce(){
-
-    System.out.println("in stop intake motor delayed");
-        stopIntakeMotor();
-        
-        // Now lower the intake speed for a short period in case the 
-        // intake sensor bounces.
-        m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
-        m_motorLowSpeedTimer.reset();
-        m_motorLowSpeedTimer.start(); // Tested in periodic()
-       
-    }
 
   /**
    * 
@@ -354,6 +353,14 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakeLowSpeed);
   }
 
+  public void setIntakeBrakeEnabled(){
+    m_intakeMotor.overrideLimitSwitchesEnable(true);
+  }
+
+  public void setIntakeBrakeDisabled(){
+    m_intakeMotor.overrideLimitSwitchesEnable(false);
+  }
+
   // --------- Feeder Motor ------------------------------
   public void stopFeederMotor(){
     m_rightFeederMotor.set(ControlMode.PercentOutput, 0);
@@ -371,7 +378,7 @@ public class Intake extends SubsystemBase {
    * listen to feeder limit switch
    */
   public void setFeederBrakeEnabled(){
-    //overriding the brake (true) means the brake is disabled
+    
     m_rightFeederMotor.overrideLimitSwitchesEnable(true);
     m_feederBrakeEnabled = true;
     if (!RobotBase.isReal()) {
@@ -387,9 +394,9 @@ public class Intake extends SubsystemBase {
     m_feederBrakeEnabled = false;
   }
 
+
   // --------- Ramp ------------------------------
 
-  //TODO: maybe switch false and true depending on which solenoid state is the open ramp
   public void openRamp(){
     m_rampSolenoid.set(true);
 
@@ -437,7 +444,7 @@ public class Intake extends SubsystemBase {
 
 
   public boolean intakeHasBall(){
-    return isIntakeSensorTripped();
+    return isIntakeSensorActivated();
   }
 
   public boolean intakeCleared() {
@@ -458,7 +465,7 @@ public class Intake extends SubsystemBase {
   //   return !m_rightIntakeSensor.get();
   // }
 
-  public boolean isIntakeSensorTripped(){
+  public boolean isIntakeSensorActivated(){
     return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
@@ -469,10 +476,6 @@ public class Intake extends SubsystemBase {
 
   // --------- Feeder ------------------------------
 
-  public boolean isFeederBrakeActivated(){
-    return isFeederSwitchActivated();
-  }
-
   public boolean isFeederSwitchActivated() {
     // Simulate this return if not running on the real robot
     if (RobotBase.isReal()) {
@@ -481,12 +484,12 @@ public class Intake extends SubsystemBase {
     return m_intakeSim.isFeederSwitchClosed();
   }
 
-  public boolean isFeederBrakeDeactivated(){
-    return !(isFeederBrakeActivated());
-  }
+  // public boolean isFeederBrakeDeactivated(){
+  //   return !(isFeederBrakeActivated());
+  // }
    
   public boolean feederHasBall(){
-    return isFeederBrakeActivated();  
+    return isFeederSwitchActivated();  
   }
 
   public boolean feederCleared() {
@@ -504,7 +507,7 @@ public class Intake extends SubsystemBase {
 
   // --------- Ramp ------------------------------
 
-  //TODO: maybe switch true to false depending on which solenoid state is the open ramp
+  
   public boolean isRampOpen(){
     // Simulate this return if not running on the real robot
     // if (RobotBase.isReal()) {
@@ -541,7 +544,7 @@ public class Intake extends SubsystemBase {
       m_intakeMotorSim.setBusVoltage(RobotController.getInputVoltage());
     }
 
-    if (isFeederBrakeActivated()) {
+    if (feederHasBall()) {
       m_rightFeederMotorSim.setBusVoltage(0);
     } else {
       m_rightFeederMotorSim.setBusVoltage(RobotController.getInputVoltage());

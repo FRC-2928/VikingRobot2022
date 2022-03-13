@@ -166,12 +166,12 @@ public class RobotContainer {
     m_operatorOI.getTrackTurretButton().whileHeld(new TurnTurretToTarget(m_turret));
     m_operatorOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
     m_operatorOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
-    //m_driverOI.moveToShootingDistance().whenPressed(new MoveToShootingDistance(m_turret, m_drivetrain));
+    // m_driverOI.moveToShootingDistance().whenPressed(new MoveToShootingDistance(m_turret, m_drivetrain));
 
     // Configure Shuffleboard commands    
-    m_turret.getCommandsLayout().add("90 degrees", new MoveTurretProfiled(m_turret, 90));
-    m_turret.getCommandsLayout().add("0 degrees", new MoveTurretProfiled(m_turret, 0));
-    m_turret.getCommandsLayout().add("-90 degrees", new MoveTurretProfiled(m_turret, -90));
+    // m_turret.getCommandsLayout().add("90 degrees", new MoveTurretProfiled(m_turret, 90));
+    // m_turret.getCommandsLayout().add("0 degrees", new MoveTurretProfiled(m_turret, 0));
+    // m_turret.getCommandsLayout().add("-90 degrees", new MoveTurretProfiled(m_turret, -90));
     m_turret.getCommandsLayout().add("Reset encoders", new InstantCommand(m_turret::resetEncoders, m_turret));
   }
 
@@ -212,13 +212,11 @@ public class RobotContainer {
 
     // Configure default commands
     // m_flywheel.setDefaultCommand(new RunCommand(m_flywheel::setVelocity, m_flywheel));
-    m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
-    //m_operatorOI.getAdjustFlywheelButton().whenHeld(new AdjustFlywheel(m_flywheel));
-
+    
     // Configure button commands
-    // m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
-    // m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
-    // m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
+    m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
+    m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
+    m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
 
     // Configure Shuffleboard commands
     m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
