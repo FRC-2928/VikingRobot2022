@@ -160,7 +160,7 @@ public class Flywheel extends SubsystemBase {
   public void setVelocity(double velocity){
 
     //turn change in ticks per sec to change in ticks per 100 ms
-    m_flywheelTalon.set(ControlMode.Velocity, velocity/10);
+    m_flywheelTalon.set(ControlMode.Velocity, velocity);
   }
 
   public void setVelocity(){
@@ -189,8 +189,8 @@ public class Flywheel extends SubsystemBase {
     }
   }
 
-  public double calculateFlywheelTicksPerSecond(double distance) {
-    double ticks = DistanceMap.getInstance().getFlywheelTicksPerSecond(distance);
+  public int calculateFlywheelTicksPerSecond(int distance) {
+    int ticks = DistanceMap.getInstance().getFlywheelTicksPerSecond(distance);
     return ticks;
   }
 
