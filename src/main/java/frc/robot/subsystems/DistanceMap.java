@@ -23,19 +23,19 @@ public class DistanceMap {
 
     public void loadMaps() {
         m_tickspersecond.put(0, 0);
-        m_tickspersecond.put(1, 1000);
-        m_tickspersecond.put(2, 2000);
-        m_tickspersecond.put(3, 3000);
-        m_tickspersecond.put(4, 4000);
-        m_tickspersecond.put(5, 5000);
-        m_tickspersecond.put(6, 6000);
-        m_tickspersecond.put(7, 7000);
-        m_tickspersecond.put(8, 8000);
-        m_tickspersecond.put(9, 9000);
+        m_tickspersecond.put(1, 10000);
+        m_tickspersecond.put(2, 10000);
+        m_tickspersecond.put(3, 10000);
+        m_tickspersecond.put(4, 10000);
+        m_tickspersecond.put(5, 10000);
+        m_tickspersecond.put(6, 10000);
+        m_tickspersecond.put(7, 10000);
+        m_tickspersecond.put(8, 10000);
+        m_tickspersecond.put(9, 10000);
         m_tickspersecond.put(10, 10000); 
-        m_tickspersecond.put(11, 11000);
-        m_tickspersecond.put(12, 12000);
-        m_tickspersecond.put(13, 13000);
+        m_tickspersecond.put(11, 10000);
+        m_tickspersecond.put(12, 10000);
+        m_tickspersecond.put(13, 10000);
     }
 
     public double getFlywheelTicksPerSecond(double distance) {
