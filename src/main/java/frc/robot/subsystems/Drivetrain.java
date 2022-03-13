@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -28,6 +29,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -109,6 +111,9 @@ public class Drivetrain extends SubsystemBase {
           DrivetrainConstants.kTrackWidthMeters, 
           DrivetrainConstants.kWheelDiameterMeters, 
           null);
+    
+    //acceleration for Arcade Drive (higher number = faster)
+    SlewRateLimiter filter = new SlewRateLimiter(1);
 
     // -----------------------------------------------------------
     // Initialization
@@ -341,7 +346,9 @@ public class Drivetrain extends SubsystemBase {
 
     public void drive(double move, double rotate, boolean squaredInputs){
         SmartDashboard.putNumber("Output", rotate);
-        m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
+        //m_differentialDrive.arcadeDrive(move, rotate);
+        m_differentialDrive.arcadeDrive(filter.calculate(move), -.8* rotate, squaredInputs);
+        //m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
     }
 
     public void drive(double move, double rotate){
