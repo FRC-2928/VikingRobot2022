@@ -35,6 +35,7 @@ public class Flywheel extends SubsystemBase {
 
   private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(Constants.CANBusIDs.kFlywheelTalonFX);
   double m_velocity;
+  double m_adjustableVelocity;
 
   //simulation
   TalonFXSimCollection m_flywheelMotorSim = m_flywheelTalon.getSimCollection();
@@ -58,6 +59,7 @@ public class Flywheel extends SubsystemBase {
     setFlywheelPIDF();
     setupShuffleboard();
     DistanceMap.getInstance().loadMaps();
+    m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
   }
 
   public void configMotors(){
@@ -74,7 +76,7 @@ public class Flywheel extends SubsystemBase {
     m_flywheelTalon.configPeakOutputForward(1);
     m_flywheelTalon.configPeakOutputReverse(-1);
 
-    m_flywheelTalon.configOpenloopRamp(0.1);
+    m_flywheelTalon.configOpenloopRamp(0.2);
   
 
     //Setting deadband(area required to start moving the motor) to 1%
@@ -166,7 +168,7 @@ public class Flywheel extends SubsystemBase {
   public void setVelocity(){
 
     //sets as ticks per 100 ms
-    m_flywheelTalon.set(ControlMode.Velocity, FlywheelConstants.kIdealVelocity);
+    m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity);
   }
 
   public void setPower(double power) {
@@ -192,6 +194,11 @@ public class Flywheel extends SubsystemBase {
     int ticks = DistanceMap.getInstance().getFlywheelTicksPer100ms(distance);
     return ticks;
   }
+
+  public void setAdjustableVelocity(double velocity){
+    m_adjustableVelocity = velocity;
+  }
+
 
   // -----------------------------------------------------------
   // System State

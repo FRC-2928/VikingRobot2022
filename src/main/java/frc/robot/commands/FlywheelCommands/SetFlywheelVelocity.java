@@ -17,7 +17,7 @@ public class SetFlywheelVelocity extends InstantCommand {
   
   public SetFlywheelVelocity(Flywheel flywheel, Turret turret) {
   
-    addRequirements(flywheel);
+    //addRequirements(flywheel);
     m_flywheel = flywheel;
     m_turret = turret;
     
@@ -31,7 +31,7 @@ public class SetFlywheelVelocity extends InstantCommand {
     System.out.println("distance: " + distance);
     System.out.println("ticks: " + flywheelTicksPer100ms);
 
-    m_flywheel.setVelocity(flywheelTicksPer100ms);
+    m_flywheel.setAdjustableVelocity(flywheelTicksPer100ms);
   }
 
   public void end(boolean interrupted) {}

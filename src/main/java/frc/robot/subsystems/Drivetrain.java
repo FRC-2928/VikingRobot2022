@@ -113,7 +113,7 @@ public class Drivetrain extends SubsystemBase {
           null);
     
     //acceleration for Arcade Drive (higher number = faster)
-    SlewRateLimiter filter = new SlewRateLimiter(1);
+    SlewRateLimiter filter = new SlewRateLimiter(4);
 
     // -----------------------------------------------------------
     // Initialization

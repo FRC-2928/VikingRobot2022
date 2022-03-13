@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -53,6 +54,7 @@ public class Turret extends SubsystemBase {
   private NetworkTableEntry m_turretOffsetEntry, m_targetOffsetEntry;
   private NetworkTableEntry m_targetLockedEntry, m_targetFoundEntry, m_estimatedTargetRotationEntry;
   LinearFilter m_filter = LinearFilter.movingAverage(5);
+  MedianFilter m_verticalFilter = new MedianFilter(10);
   private final Field2d m_field2d = new Field2d();
   private Pose2d m_turretPose;
 
@@ -362,9 +364,9 @@ public class Turret extends SubsystemBase {
   }
 
   public int getTargetVerticalOffset(){
-    int offset = (int) m_turretLimelight.getVerticalOffset();
+    double offset = m_turretLimelight.getVerticalOffset();
     System.out.println("Vertical Offset" + offset);
-    return (offset);
+    return (int)(m_verticalFilter.calculate(offset));
   }
 
   /**

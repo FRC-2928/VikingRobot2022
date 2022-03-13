@@ -25,6 +25,6 @@ public class ShootTwice extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SetFlywheelVelocity(flywheel, turret),
-    new WaitCommand(1), new ShootBall(intake), new WaitCommand(0.5), new ShootBall(intake));
+    new WaitCommand(2), new ShootBall(intake), new WaitCommand(4), new ShootBall(intake));
   }
 }

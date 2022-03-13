@@ -93,8 +93,8 @@ public class Climber extends SubsystemBase {
     }
 
     //TODO...
-    m_climberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
-                                                  LimitSwitchNormal.NormallyClosed, 0);
+    m_climberMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+                                                  LimitSwitchNormal.NormallyOpen, 0);
     
     m_climberFollower.follow(m_climberMotor, FollowerType.PercentOutput);
 
