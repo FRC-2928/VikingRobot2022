@@ -9,6 +9,8 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
@@ -90,6 +92,10 @@ public class Climber extends SubsystemBase {
       // m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
     }
 
+    //TODO...
+    m_climberMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
+                                                  LimitSwitchNormal.NormallyClosed, 0);
+    
     m_climberFollower.follow(m_climberMotor, FollowerType.PercentOutput);
 
   }

@@ -511,9 +511,9 @@ public class Intake extends SubsystemBase {
   
   public boolean isRampOpen(){
     // Simulate this return if not running on the real robot
-    // if (RobotBase.isReal()) {
-    //   return (m_rampSolenoid.get());
-    // }  
+    if (RobotBase.isReal()) {
+      return (m_rampSolenoid.get());
+    }  
     return m_rampOpenSim;
   }
 

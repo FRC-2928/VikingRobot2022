@@ -19,38 +19,38 @@ public class DistanceMap {
         return m_instance;
     }
 
-    private final Map<Integer, Integer> m_tickspersecond = new HashMap<>();
+    private final Map<Integer, Integer> m_ticksPer100ms = new HashMap<>();
 
     public void loadMaps() {
-        m_tickspersecond.put(0, 10000);
-        m_tickspersecond.put(1, 10000);
-        m_tickspersecond.put(2, 10000);
-        m_tickspersecond.put(3, 10000);
-        m_tickspersecond.put(4, 10000);
-        m_tickspersecond.put(5, 10000);
-        m_tickspersecond.put(6, 10000);
-        m_tickspersecond.put(7, 10000);
-        m_tickspersecond.put(8, 10000);
-        m_tickspersecond.put(9, 10000);
-        m_tickspersecond.put(10, 10000); 
-        m_tickspersecond.put(11, 10000);
-        m_tickspersecond.put(12, 10000);
-        m_tickspersecond.put(13, 10000);
+        m_ticksPer100ms.put(0, 10000);
+        m_ticksPer100ms.put(1, 10000);
+        m_ticksPer100ms.put(2, 10000);
+        m_ticksPer100ms.put(3, 10000);
+        m_ticksPer100ms.put(4, 10000);
+        m_ticksPer100ms.put(5, 10000);
+        m_ticksPer100ms.put(6, 10000);
+        m_ticksPer100ms.put(7, 10000);
+        m_ticksPer100ms.put(8, 10000);
+        m_ticksPer100ms.put(9, 10000);
+        m_ticksPer100ms.put(10, 10000); 
+        m_ticksPer100ms.put(11, 10000);
+        m_ticksPer100ms.put(12, 10000);
+        m_ticksPer100ms.put(13, 10000);
     }
 
-    public int getFlywheelTicksPerSecond(int distance) {
+    public int getFlywheelTicksPer100ms(int distance) {
       
-       int closestTicksPerSecond = 0;
+       int closestTicksPer100ms = 0;
 
-        for(var entry : m_tickspersecond.entrySet()){
+        for(var entry : m_ticksPer100ms.entrySet()){
             //not printing
             System.out.println("INSIDE FOR LOOP");
             double entryDistance = entry.getKey();
             if(entryDistance == distance){
-                closestTicksPerSecond = entry.getValue();
+                closestTicksPer100ms = entry.getValue();
             }
         }
-        return closestTicksPerSecond;
+        return closestTicksPer100ms;
         
     }
 }    
