@@ -36,7 +36,7 @@ public class Flywheel extends SubsystemBase {
   private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(Constants.CANBusIDs.kFlywheelTalonFX);
   double m_velocity;
   double m_adjustableVelocity;
-  boolean m_isFlywheelSpunUp;
+  boolean m_isFlywheelSpunUp = false;
 
   //simulation
   TalonFXSimCollection m_flywheelMotorSim = m_flywheelTalon.getSimCollection();
@@ -228,7 +228,7 @@ public class Flywheel extends SubsystemBase {
 
   public boolean isFlyWheelUpToSpeed(){
 
-    if(Math.abs(m_adjustableVelocity - getVelocity()) <= 1000){
+    if(Math.abs(m_adjustableVelocity - getVelocity()) < 300.0){
       return true;
 
     }else{
@@ -266,10 +266,10 @@ public class Flywheel extends SubsystemBase {
 
   /**
    * 
-   * @return velocity in ticks per sec
+   * @return velocity in ticks per 100ms
    */
   public double getVelocity(){
-    return (m_flywheelTalon.getSelectedSensorVelocity() * 10); 
+    return (m_flywheelTalon.getSelectedSensorVelocity()); 
   }
 
   public boolean isFlywheelMotorOn(){

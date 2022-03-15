@@ -27,17 +27,19 @@ public class ShootBall extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_intake.readyToShoot() && m_flywheel.isFlyWheelUpToSpeed()) {
+    if (m_intake.readyToShoot()) {
       // Override all brakes
       System.out.println("Ready to shoot...");
       m_intake.setFeederBrakeDisabled();
       //m_intake.setIntakeBrakeDisabled();
 
+      if(m_flywheel.isFlyWheelUpToSpeed()){
       // Start feeder motor at high power
-      m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
-      //m_shootTimer.reset();
-      //m_shootTimer.start();
-      
+        m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
+        System.out.println("SHOT BALL");
+        //m_shootTimer.reset();
+        //m_shootTimer.start();
+      }
     } 
   }
 
@@ -50,11 +52,11 @@ public class ShootBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    
     m_intake.setFeederBrakeEnabled();
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);
-  
+    
   }
 
   // Returns true when the command should end.
