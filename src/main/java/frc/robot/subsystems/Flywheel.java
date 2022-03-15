@@ -172,10 +172,10 @@ public class Flywheel extends SubsystemBase {
    * @param flywheelTicksPer100ms flywheel speed in tick per/100ms
    */
   public void setPidGains(int flywheelTicksPer100ms) {
-    if (flywheelTicksPer100ms > 9999) {
-      m_flywheelTalon.selectProfileSlot(0, 0);
-    } else if (flywheelTicksPer100ms > 7000) {
+    if (flywheelTicksPer100ms > 13000) {
       m_flywheelTalon.selectProfileSlot(1, 0);
+    } else if (flywheelTicksPer100ms > 8500) {
+      m_flywheelTalon.selectProfileSlot(0, 0);
     } else {
       m_flywheelTalon.selectProfileSlot(2, 0);
     }

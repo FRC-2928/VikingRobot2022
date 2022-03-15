@@ -19,7 +19,8 @@ public class EjectBall extends SequentialCommandGroup {
   public EjectBall(Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new OpenRamp(intake), 
+    addCommands(new OpenRamp(intake),  
+                new WaitCommand(.1),
                 new TriggerEjectBall(intake), 
                 new WaitCommand(1),
                 new CloseRamp(intake),
