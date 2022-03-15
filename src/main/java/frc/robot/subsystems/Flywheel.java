@@ -100,10 +100,21 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void setFlywheelPIDF() {
-    m_flywheelTalon.config_kP(0, FlywheelConstants.kGainsVelocity.kP, 0);
-    m_flywheelTalon.config_kI(0, FlywheelConstants.kGainsVelocity.kI, 0);
-    m_flywheelTalon.config_kD(0, FlywheelConstants.kGainsVelocity.kD, 0);
-    m_flywheelTalon.config_kF(0, FlywheelConstants.kGainsVelocity.kF, 0);
+    m_flywheelTalon.config_kP(0, FlywheelConstants.kGainsVelocity1.kP, 0);
+    m_flywheelTalon.config_kI(0, FlywheelConstants.kGainsVelocity1.kI, 0);
+    m_flywheelTalon.config_kD(0, FlywheelConstants.kGainsVelocity1.kD, 0);
+    m_flywheelTalon.config_kF(0, FlywheelConstants.kGainsVelocity1.kF, 0);
+
+    m_flywheelTalon.config_kP(1, FlywheelConstants.kGainsVelocity2.kP, 0);
+    m_flywheelTalon.config_kI(1, FlywheelConstants.kGainsVelocity2.kI, 0);
+    m_flywheelTalon.config_kD(1, FlywheelConstants.kGainsVelocity2.kD, 0);
+    m_flywheelTalon.config_kF(1, FlywheelConstants.kGainsVelocity2.kF, 0);
+
+    m_flywheelTalon.config_kP(2, FlywheelConstants.kGainsVelocity3.kP, 0);
+    m_flywheelTalon.config_kI(2, FlywheelConstants.kGainsVelocity3.kI, 0);
+    m_flywheelTalon.config_kD(2, FlywheelConstants.kGainsVelocity3.kD, 0);
+    m_flywheelTalon.config_kF(2, FlywheelConstants.kGainsVelocity3.kF, 0);
+
   }
 
   public void setupShuffleboard() {
