@@ -31,6 +31,7 @@ public class SetFlywheelVelocity extends InstantCommand {
     System.out.println("distance: " + distance);
     System.out.println("ticks: " + flywheelTicksPer100ms);
 
+    // m_flywheel.setPidGains(flywheelTicksPer100ms);
     m_flywheel.setAdjustableVelocity(flywheelTicksPer100ms);
   }
 
