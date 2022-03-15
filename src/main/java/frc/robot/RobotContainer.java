@@ -137,7 +137,7 @@ public class RobotContainer {
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     
     // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret),
+    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
     m_autoChooser.addOption("2-Ball Auto #1", new SequentialCommandGroup( new WaitCommand(1), 
