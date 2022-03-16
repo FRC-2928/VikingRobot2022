@@ -228,7 +228,7 @@ public class Flywheel extends SubsystemBase {
 
   public boolean isFlyWheelUpToSpeed(){
 
-    if(Math.abs(m_adjustableVelocity - getVelocity()) < 500.0){
+    if(Math.abs(m_adjustableVelocity - getVelocity()) <= 500.0){
       return true;
 
     }else{
