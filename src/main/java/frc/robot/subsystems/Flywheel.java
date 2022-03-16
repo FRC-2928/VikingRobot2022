@@ -128,7 +128,7 @@ public class Flywheel extends SubsystemBase {
           m_flywheelSpeedEntry = m_flywheelLayout.add("Speed in Ticks", getVelocity()).getEntry();
           m_flywheelPercentEntry = m_flywheelLayout.add
             ("Percent Output", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();       
-    m_flywheelTicksEntry = m_flywheelTab.add("Ticks Per Second", getVelocity())
+    m_flywheelTicksEntry = m_flywheelTab.add("Ticks Per 100 MS", getVelocity())
             .withSize(3,3)
             .withWidget(BuiltInWidgets.kGraph)
             .withPosition(5, 0)
@@ -228,7 +228,7 @@ public class Flywheel extends SubsystemBase {
 
   public boolean isFlyWheelUpToSpeed(){
 
-    if(Math.abs(m_adjustableVelocity - getVelocity()) < 300.0){
+    if(Math.abs(m_adjustableVelocity - getVelocity()) < 500.0){
       return true;
 
     }else{

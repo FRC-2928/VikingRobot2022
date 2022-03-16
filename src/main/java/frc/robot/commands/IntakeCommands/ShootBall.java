@@ -6,6 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
 import frc.robot.Constants.IntakeConstants;
@@ -33,12 +34,16 @@ public class ShootBall extends CommandBase {
       m_intake.setFeederBrakeDisabled();
       //m_intake.setIntakeBrakeDisabled();
 
+      boolean flywheelSpun = false;
+      while(!flywheelSpun){
       if(m_flywheel.isFlyWheelUpToSpeed()){
       // Start feeder motor at high power
+        flywheelSpun = true;
         m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
         System.out.println("SHOT BALL");
-        //m_shootTimer.reset();
-        //m_shootTimer.start();
+      }else{
+        System.out.println("Still Spinning");
+      }
       }
     } 
   }
