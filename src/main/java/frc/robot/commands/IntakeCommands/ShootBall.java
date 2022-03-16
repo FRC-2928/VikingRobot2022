@@ -36,14 +36,14 @@ public class ShootBall extends CommandBase {
 
       boolean flywheelSpun = false;
       while(!flywheelSpun){
-      if(m_flywheel.isFlyWheelUpToSpeed()){
-      // Start feeder motor at high power
-        flywheelSpun = true;
-        m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
-        System.out.println("SHOT BALL");
-      }else{
-        System.out.println("Still Spinning");
-      }
+        if(m_flywheel.isFlyWheelUpToSpeed()){
+        // Start feeder motor at high power
+          flywheelSpun = true;
+          m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
+          System.out.println("SHOT BALL");
+        }else{
+          System.out.println("Still Spinning");
+        }
       }
     } 
   }
