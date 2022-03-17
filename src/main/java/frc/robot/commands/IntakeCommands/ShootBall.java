@@ -6,7 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
 import frc.robot.Constants.IntakeConstants;
@@ -42,6 +42,7 @@ public class ShootBall extends CommandBase {
           m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
           System.out.println("SHOT BALL");
         }else{
+          new WaitCommand(.25);
           System.out.println("Still Spinning");
         }
       }
