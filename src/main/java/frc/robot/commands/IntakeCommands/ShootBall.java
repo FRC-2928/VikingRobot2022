@@ -35,7 +35,7 @@ public class ShootBall extends CommandBase {
       //m_intake.setIntakeBrakeDisabled();
 
       boolean flywheelSpun = false;
-      while(!flywheelSpun){
+      while(flywheelSpun == false){
         if(m_flywheel.isFlyWheelUpToSpeed()){
         // Start feeder motor at high power
           flywheelSpun = true;
