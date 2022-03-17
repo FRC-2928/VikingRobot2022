@@ -7,6 +7,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -49,6 +50,10 @@ public class Flywheel extends SubsystemBase {
   NetworkTableEntry m_flywheelTicksEntry;
   private ShuffleboardLayout m_commandsLayout;
 
+  Timer m_shootTimer = new Timer();
+
+  
+
 
   // -----------------------------------------------------------
   // Initialization
@@ -61,6 +66,8 @@ public class Flywheel extends SubsystemBase {
     setupShuffleboard();
     DistanceMap.getInstance().loadMaps();
     m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
+    m_shootTimer.reset();
+    m_shootTimer.start();
   }
 
   public void configMotors(){
@@ -152,8 +159,12 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {   
     publishTelemetry();
-    // System.out.println(getVelocity());
-    // System.out.println(m_adjustableVelocity);
+    if(m_shootTimer.hasElapsed(2)){
+    System.out.println(getVelocity());
+    System.out.println(m_adjustableVelocity);
+    m_shootTimer.reset();
+    m_shootTimer.start();
+    }
   }
 
   public void publishTelemetry() {
