@@ -97,6 +97,7 @@ public class RobotContainer {
 
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
+    new InstantCommand(m_climber::tiltBack);
     
     // new InstantCommand(m_intake::startMotors, m_intake); 
   }
@@ -105,7 +106,9 @@ public class RobotContainer {
     
   }
 
-
+  public void onRobotInit(){
+    new InstantCommand(m_climber::tiltForward);
+  }
   /**
    * Configure all subsystems with their default command, button commands,
    * and Shuffleboard output
