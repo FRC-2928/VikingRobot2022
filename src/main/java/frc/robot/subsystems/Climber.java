@@ -158,6 +158,10 @@ public class Climber extends SubsystemBase {
   // System State
   // -----------------------------------------------------------
 
+  public boolean isClimberForward(){
+    return m_climberSolenoid.get();
+  }
+
   // -----------------------------------------------------------
   // Simulation
   // -----------------------------------------------------------

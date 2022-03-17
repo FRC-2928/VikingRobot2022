@@ -105,6 +105,14 @@ public class RobotContainer {
     
   }
 
+  public void onDisabledInit(){
+    if(m_climber.isClimberForward()){
+      m_climber.tiltForward();
+    } else {
+      m_climber.tiltBack();
+    }
+  }
+
 
   /**
    * Configure all subsystems with their default command, button commands,
@@ -304,6 +312,14 @@ public class RobotContainer {
 
   public Drivetrain getDrivetrain() {
     return m_drivetrain;
+  }
+
+  public Climber getClimber(){
+    return m_climber;
+  }
+
+  public boolean isClimberForward(){
+    return m_climber.isClimberForward();
   }
     
 }
