@@ -15,7 +15,7 @@ public class ShootBall extends CommandBase {
   
   Intake m_intake;
   Flywheel m_flywheel;
-  //Timer m_shootTimer;
+  Timer m_shootTimer = new Timer();
 
   /** Creates a new ShootBall. */
   public ShootBall(Intake intake, Flywheel flywheel) {
@@ -31,28 +31,37 @@ public class ShootBall extends CommandBase {
     if (m_intake.readyToShoot()) {
       // Override all brakes
       System.out.println("Ready to shoot...");
-      m_intake.setFeederBrakeDisabled();
+      
       //m_intake.setIntakeBrakeDisabled();
 
-      boolean flywheelSpun = false;
-      while(flywheelSpun == false){
-        if(m_flywheel.isFlyWheelUpToSpeed()){
-        // Start feeder motor at high power
-          flywheelSpun = true;
-          m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
-          System.out.println("SHOT BALL");
-        }else{
-          new WaitCommand(.25);
-          System.out.println("Still Spinning");
-        }
-      }
+      // boolean flywheelSpun = false;
+      // while(flywheelSpun == false){
+      //   if(m_flywheel.isFlyWheelUpToSpeed()){
+      //   // Start feeder motor at high power
+      //     flywheelSpun = true;
+      //     m_intake.setFeederBrakeDisabled();
+      //     m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
+      //     System.out.println("SHOT BALL");
+      //   }else{
+      //     new WaitCommand(.25);
+      //     System.out.println("Still Spinning");
+      //   }
+      // }
     } 
+
+    m_shootTimer.reset();
+    m_shootTimer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    if(m_flywheel.isFlyWheelUpToSpeed()){
+      // Start feeder motor at high power
+      m_intake.setFeederBrakeDisabled();
+      m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
+      System.out.println("SHOT BALL");
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -69,6 +78,6 @@ public class ShootBall extends CommandBase {
   @Override
   public boolean isFinished() {
     //return m_intake.intakeCleared() && m_intake.feederCleared();
-    return (m_intake.feederCleared());
+    return (m_intake.feederCleared() || m_shootTimer.hasElapsed(10.0));
   }
 }

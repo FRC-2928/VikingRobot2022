@@ -152,6 +152,8 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {   
     publishTelemetry();
+    // System.out.println(getVelocity());
+    // System.out.println(m_adjustableVelocity);
   }
 
   public void publishTelemetry() {

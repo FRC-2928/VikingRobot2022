@@ -106,13 +106,13 @@ public class RobotContainer {
     new InstantCommand(m_climber::tiltBack);
   }
 
-  public void onDisabledInit(){
-    if(m_climber.isClimberForward()){
-      m_climber.tiltForward();
-    } else {
-      m_climber.tiltBack();
-    }
-  }
+  // public void onDisabledInit(){
+  //   if(m_climber.isClimberForward()){
+  //     m_climber.tiltForward();
+  //   } else {
+  //     m_climber.tiltBack();
+  //   }
+  // }
 
 
   public void onRobotInit(){
@@ -149,7 +149,8 @@ public class RobotContainer {
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     
     // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(new ShootOnce(m_intake, m_flywheel, m_turret),
+    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(new WaitCommand(1), 
+                                            new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
     m_autoChooser.addOption("2-Ball Auto #1", new SequentialCommandGroup( new WaitCommand(1), 
@@ -202,7 +203,7 @@ public class RobotContainer {
 
     m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
-    m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake, m_flywheel, m_turret));
+    m_operatorOI.getShootBall().whenPressed(new ShootOnce(m_intake, m_flywheel, m_turret));
     //m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake, m_flywheel, m_turret));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
     m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
