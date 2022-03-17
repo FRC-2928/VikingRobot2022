@@ -52,6 +52,7 @@ public class Climber extends SubsystemBase {
     configMotors();
     setupShuffleboard();
     setClimberPIDF();
+    tiltBack();
   }
 
 
@@ -146,11 +147,11 @@ public class Climber extends SubsystemBase {
   }
   
   public void tiltForward(){
-    m_climberSolenoid.set(true);
+    m_climberSolenoid.set(false);
   }
 
   public void tiltBack(){
-    m_climberSolenoid.set(false);
+    m_climberSolenoid.set(true);
   }
 
 

@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Climber;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,6 +24,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private Climber m_climber;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -32,6 +36,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     m_robotContainer = new RobotContainer();
+    m_robotContainer.onRobotInit();
   }
 
   /**
@@ -64,7 +69,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_robotContainer.onAutoInit();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

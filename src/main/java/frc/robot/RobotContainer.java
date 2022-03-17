@@ -97,12 +97,13 @@ public class RobotContainer {
 
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
+    new InstantCommand(m_climber::tiltBack);
     
     // new InstantCommand(m_intake::startMotors, m_intake); 
   }
 
   public void onTeleopInit() {  
-    
+    new InstantCommand(m_climber::tiltBack);
   }
 
   public void onDisabledInit(){
@@ -114,6 +115,9 @@ public class RobotContainer {
   }
 
 
+  public void onRobotInit(){
+    new InstantCommand(m_climber::tiltForward);
+  }
   /**
    * Configure all subsystems with their default command, button commands,
    * and Shuffleboard output
@@ -198,7 +202,7 @@ public class RobotContainer {
 
     m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
-    m_operatorOI.getShootBall().whenPressed(new ShootOnce(m_intake, m_flywheel, m_turret));
+    m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake, m_flywheel, m_turret));
     //m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake, m_flywheel, m_turret));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
     m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
