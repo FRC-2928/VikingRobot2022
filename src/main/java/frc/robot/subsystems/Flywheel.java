@@ -63,7 +63,7 @@ public class Flywheel extends SubsystemBase {
     configMotors();
     resetEncoders();
     setFlywheelPIDF();
-    setupShuffleboard();
+    //setupShuffleboard();
     DistanceMap.getInstance().loadMaps();
     m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
     m_shootTimer.reset();
@@ -158,7 +158,7 @@ public class Flywheel extends SubsystemBase {
   // -----------------------------------------------------------
   @Override
   public void periodic() {   
-    publishTelemetry();
+    //publishTelemetry();
     if(m_shootTimer.hasElapsed(2)){
     System.out.println(getVelocity());
     System.out.println(m_adjustableVelocity);
@@ -239,6 +239,11 @@ public class Flywheel extends SubsystemBase {
     m_adjustableVelocity = velocity;
   }
 
+  public void stopFlywheel(){
+    setAdjustableVelocity(0);
+    setPower(0);
+  }
+
   public boolean isFlyWheelUpToSpeed(){
 
     if(Math.abs(m_adjustableVelocity - getVelocity()) <= 500.0){
@@ -255,7 +260,7 @@ public class Flywheel extends SubsystemBase {
 
   // -----------------------------------------------------------
   // System State
-  // -----------------------------------------------------------
+  // --------------------P---------------------------------------
   public double getRPM(){
     double ticksPerSec = m_flywheelTalon.getSelectedSensorVelocity() * 10;
     return (ticksToRotations(ticksPerSec) * 60);

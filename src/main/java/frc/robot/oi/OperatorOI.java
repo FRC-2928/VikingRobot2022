@@ -26,6 +26,7 @@ public class OperatorOI {
     private JoystickButton m_turnTurretRight;
     private JoystickButton m_reverseFeederButton;
     private Button m_reverseIntakeButton;
+    private Button m_timeToClimb;
 
     public OperatorOI(XboxController controller) {
         m_controller = controller;
@@ -52,6 +53,8 @@ public class OperatorOI {
 
         m_turretTrackButton = new Button(() -> m_controller.getLeftTriggerAxis() > 0.1);
         m_adjustFlywheelButton = new Button(() -> m_controller.getLeftBumperPressed());
+
+        m_timeToClimb = new Button(() -> m_controller.getStartButtonPressed());
         
     }
 
@@ -134,4 +137,7 @@ public class OperatorOI {
 
     // ---------------- Drivetrain ----------------------------
 
+    public Button timeToClimb(){
+        return m_timeToClimb;
+    }
 }

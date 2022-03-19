@@ -3,6 +3,7 @@ package frc.robot;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -186,7 +187,7 @@ public class RobotContainer {
     // m_turret.getCommandsLayout().add("90 degrees", new MoveTurretProfiled(m_turret, 90));
     // m_turret.getCommandsLayout().add("0 degrees", new MoveTurretProfiled(m_turret, 0));
     // m_turret.getCommandsLayout().add("-90 degrees", new MoveTurretProfiled(m_turret, -90));
-    m_turret.getCommandsLayout().add("Reset encoders", new InstantCommand(m_turret::resetEncoders, m_turret));
+    //m_turret.getCommandsLayout().add("Reset encoders", new InstantCommand(m_turret::resetEncoders, m_turret));
   }
 
   /**
@@ -210,14 +211,14 @@ public class RobotContainer {
     m_operatorOI.getReverseIntakeButton().whenPressed(new ReverseFeederAndIntake(m_intake));
 
     // Configure Shuffleboard commands
-    m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
-    m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake));  
+    // m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
+    // m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake));  
     // m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
-    m_intake.getCommandsLayout().add(new ShootOnce(m_intake, m_flywheel, m_turret)); 
-    m_intake.getCommandsLayout().add(new ShootBall(m_intake, m_flywheel)); 
-    m_intake.getCommandsLayout().add(new EjectBall(m_intake));
-    m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
-    m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
+    // m_intake.getCommandsLayout().add(new ShootOnce(m_intake, m_flywheel, m_turret)); 
+    // m_intake.getCommandsLayout().add(new ShootBall(m_intake, m_flywheel)); 
+    // m_intake.getCommandsLayout().add(new EjectBall(m_intake));
+    // m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
+    // m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
   }
 
   /**
@@ -232,12 +233,14 @@ public class RobotContainer {
     m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
     m_driverOI.getIncrementFlywheelButton().whileHeld(new IncrementFlywheel(m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whileHeld(new DecrementFlywheel(m_flywheel));
+    m_operatorOI.timeToClimb().whenPressed(new InstantCommand(m_flywheel::stopFlywheel,m_flywheel));
+                                             
 
     // Configure Shuffleboard commands
-    m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
-    m_flywheel.getCommandsLayout().add(new IncrementFlywheel(m_flywheel));
-    m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
-    m_flywheel.getCommandsLayout().add(new SetFlywheelVelocity(m_flywheel, m_turret));
+    // m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
+    // m_flywheel.getCommandsLayout().add(new IncrementFlywheel(m_flywheel));
+    // m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
+    // m_flywheel.getCommandsLayout().add(new SetFlywheelVelocity(m_flywheel, m_turret));
     
   }
 

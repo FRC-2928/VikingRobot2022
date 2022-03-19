@@ -101,7 +101,7 @@ public class Turret extends SubsystemBase {
     configMotors();
     setTurretPIDF();
     resetEncoders();
-    setupShuffleboard();
+    //setupShuffleboard();
     m_turretPose = new Pose2d(0,0,getTargetToHeadingOffset());
   }
 
@@ -212,7 +212,7 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
-    
+    SmartDashboard.putBoolean("Is Target in Range (High)",inRange());
     // get the offset from the target heading to the robot heading,
     // but only if we have found the target.
     if(getTargetFound()) {
@@ -229,7 +229,7 @@ public class Turret extends SubsystemBase {
                                   .plus(m_lastHeading)
                                   .minus(currentHeading);
 
-    publishTelemetry();
+    //publishTelemetry();
   }
 
   public void publishTelemetry() {   
@@ -262,6 +262,10 @@ public class Turret extends SubsystemBase {
     m_turretMotor.setSelectedSensorPosition(0);
   }
 
+  public boolean inRange(){
+
+    return (getTargetVerticalOffset()< 20 && getTargetVerticalOffset() > 40);
+  }
   /**
    * Moves the turret to the specified angle
    * @param angleDegrees the absolute position to move the turret to. 
@@ -275,6 +279,8 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("Turret angleDegrees", angleDegrees);
     SmartDashboard.putNumber("Turret ticks", encoderTicks);      
   }
+
+  
 
   public boolean motionProfileFinished() {
     return m_turretMotor.isMotionProfileFinished();
@@ -365,7 +371,7 @@ public class Turret extends SubsystemBase {
 
   public int getTargetVerticalOffset(){
     double offset = m_turretLimelight.getVerticalOffset();
-    System.out.println("Vertical Offset" + offset);
+    //System.out.println("Vertical Offset" + offset);
     return (int)(m_verticalFilter.calculate(offset));
   }
 

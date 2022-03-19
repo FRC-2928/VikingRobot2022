@@ -50,7 +50,7 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     configMotors();
-    setupShuffleboard();
+    //setupShuffleboard();
     setClimberPIDF();
     tiltBack();
   }
@@ -123,7 +123,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_climberPowerEntry.setNumber(m_climberMotor.getMotorOutputPercent());
+    //m_climberPowerEntry.setNumber(m_climberMotor.getMotorOutputPercent());
   }
 
 

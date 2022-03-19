@@ -91,7 +91,7 @@ public class Intake extends SubsystemBase {
     configMotors();
     setIntakePIDF();
     resetEncoders();
-    setupShuffleboard();
+    //setupShuffleboard();
 
     // m_colorMatcher.addColorMatch(kBlueTarget);
     // m_colorMatcher.addColorMatch(kRedTarget);
@@ -204,10 +204,11 @@ public class Intake extends SubsystemBase {
   }
 
   public void startMotors(){
+    if(intakeMotorStopRequired() == false){
     startFeederMotor(IntakeConstants.kFeederSpeed);
     startIntakeMotor(IntakeConstants.kIntakeSpeed);
+    }
   }
-
 
   // -----------------------------------------------------------
   // Control Input
@@ -253,7 +254,7 @@ public class Intake extends SubsystemBase {
     // }
 
 
-    publishTelemetry();
+    //publishTelemetry();
 
   }
 
