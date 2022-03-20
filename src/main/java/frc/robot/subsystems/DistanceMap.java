@@ -34,41 +34,41 @@ public class DistanceMap {
         m_ticksPer100ms.put(18, 20000);
         m_ticksPer100ms.put(19, 20000);
         m_ticksPer100ms.put(20, 17000); //verified
-        m_ticksPer100ms.put(21, 16450);
-        m_ticksPer100ms.put(22, 15900);
-        m_ticksPer100ms.put(23, 15300);//
+        m_ticksPer100ms.put(21, 17000);
+        m_ticksPer100ms.put(22, 17000);
+        m_ticksPer100ms.put(23, 17000);//
         m_ticksPer100ms.put(20, 17000); //verified <20 : OUT OF RANGE
-        m_ticksPer100ms.put(21, 16400);
-        m_ticksPer100ms.put(22, 15800);
-        m_ticksPer100ms.put(23, 15200);
-        m_ticksPer100ms.put(24, 14600); 
-        m_ticksPer100ms.put(25, 14000); //verified
-        m_ticksPer100ms.put(26, 13200);
-        m_ticksPer100ms.put(27, 12400);
-        m_ticksPer100ms.put(28, 11600);
-        m_ticksPer100ms.put(29, 10800);
-        m_ticksPer100ms.put(30, 10000); //verified
-        m_ticksPer100ms.put(31, 9600);
-        m_ticksPer100ms.put(32, 9200);//verified
-        m_ticksPer100ms.put(33, 8800); 
-        m_ticksPer100ms.put(34, 8400);
-        m_ticksPer100ms.put(35, 8000); //verified
-        m_ticksPer100ms.put(36, 7800);
-        m_ticksPer100ms.put(37, 7600);
-        m_ticksPer100ms.put(38, 7400);
-        m_ticksPer100ms.put(39, 7200);
-        m_ticksPer100ms.put(40, 7000); //verified 40< : OUT OF RANGE
-        m_ticksPer100ms.put(41, 6000);
-        m_ticksPer100ms.put(42, 6000);
-        m_ticksPer100ms.put(43, 6000);
-        m_ticksPer100ms.put(44, 6000);
-        m_ticksPer100ms.put(45, 6000);
-        m_ticksPer100ms.put(46, 6000);
-        m_ticksPer100ms.put(47, 6000);
-        m_ticksPer100ms.put(48, 6000);
-        m_ticksPer100ms.put(49, 6000);
-        m_ticksPer100ms.put(50, 6000);
-        m_ticksPer100ms.put(0, 4500);
+        m_ticksPer100ms.put(21, 17000);
+        m_ticksPer100ms.put(22, 16400);
+        m_ticksPer100ms.put(23, 15800);
+        m_ticksPer100ms.put(24, 15200); 
+        m_ticksPer100ms.put(25, 14600); //verified
+        m_ticksPer100ms.put(26, 14000);
+        m_ticksPer100ms.put(27, 13200);
+        m_ticksPer100ms.put(28, 12400);
+        m_ticksPer100ms.put(29, 11600);
+        m_ticksPer100ms.put(30, 10800); //verified
+        m_ticksPer100ms.put(31, 10000);
+        m_ticksPer100ms.put(32, 9600);//verified
+        m_ticksPer100ms.put(33, 9200); 
+        m_ticksPer100ms.put(34, 8600);
+        m_ticksPer100ms.put(35, 8200); //verified
+        m_ticksPer100ms.put(36, 8000);
+        m_ticksPer100ms.put(37, 7800);
+        m_ticksPer100ms.put(38, 7600);
+        m_ticksPer100ms.put(39, 7400);
+        m_ticksPer100ms.put(40, 7200); //verified 40< : OUT OF RANGE
+        m_ticksPer100ms.put(41, 7000);
+        m_ticksPer100ms.put(42, 7000);
+        m_ticksPer100ms.put(43, 7000);
+        m_ticksPer100ms.put(44, 7000);
+        m_ticksPer100ms.put(45, 7000);
+        m_ticksPer100ms.put(46, 7000);
+        m_ticksPer100ms.put(47, 7000);
+        m_ticksPer100ms.put(48, 7000);
+        m_ticksPer100ms.put(49, 7000);
+        m_ticksPer100ms.put(50, 7000);
+        m_ticksPer100ms.put(0, 4650);
 
     }
 

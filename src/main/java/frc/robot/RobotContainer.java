@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
@@ -99,6 +100,7 @@ public class RobotContainer {
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
     new InstantCommand(m_climber::tiltBack);
+    //new RunCommand(m_intake::startIntakeMotor);
     
     // new InstantCommand(m_intake::startMotors, m_intake); 
   }
@@ -154,11 +156,15 @@ public class RobotContainer {
                                             new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
-    m_autoChooser.addOption("2-Ball Auto #1", new SequentialCommandGroup( new WaitCommand(1), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto1")), new ShootTwice(m_intake, m_flywheel, m_turret)             
+    m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup( new WaitCommand(1), new ToggleIntakeMotor(m_intake),
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Red")), new WaitCommand(1),
+                                              new ShootBall(m_intake, m_flywheel), new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret)          
                                             ));
-    m_autoChooser.addOption("2-Ball Auto #2", new SequentialCommandGroup( new WaitCommand(1), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto2")), new ShootTwice(m_intake, m_flywheel, m_turret)             
+    m_autoChooser.addOption("2-Ball Auto Left Curve", new SequentialCommandGroup( new WaitCommand(1), new ToggleIntakeMotor(m_intake),
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Blue")), new WaitCommand(1),
+                                              new ShootBall(m_intake, m_flywheel), new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret)           
                                             ));
     m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallAuto")), new ShootTwice(m_intake, m_flywheel, m_turret)
@@ -242,7 +248,7 @@ public class RobotContainer {
     // m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
     // m_flywheel.getCommandsLayout().add(new SetFlywheelVelocity(m_flywheel, m_turret));
     
-  }
+  } 
 
   /**
    * Configure Climber

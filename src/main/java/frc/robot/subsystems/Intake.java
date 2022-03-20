@@ -204,10 +204,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void startMotors(){
-    if(intakeMotorStopRequired() == false){
     startFeederMotor(IntakeConstants.kFeederSpeed);
     startIntakeMotor(IntakeConstants.kIntakeSpeed);
-    }
   }
 
   // -----------------------------------------------------------
@@ -341,6 +339,10 @@ public class Intake extends SubsystemBase {
    */
   public void startIntakeMotor(double output){
     m_intakeMotor.set(ControlMode.PercentOutput, output);
+  }
+
+  public void startIntakeMotor(){
+    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakeSpeed);
   }
 
   public void setIntakeMotorStop(boolean state) {
