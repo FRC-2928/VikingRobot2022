@@ -159,12 +159,12 @@ public class RobotContainer {
     m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup( new WaitCommand(1), new ToggleIntakeMotor(m_intake),
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Red")), new WaitCommand(1),
-                                              new ShootBall(m_intake, m_flywheel), new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret)          
+                                              new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(5), new ShootOnce(m_intake, m_flywheel, m_turret)          
                                             ));
     m_autoChooser.addOption("2-Ball Auto Left Curve", new SequentialCommandGroup( new WaitCommand(1), new ToggleIntakeMotor(m_intake),
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Blue")), new WaitCommand(1),
-                                              new ShootBall(m_intake, m_flywheel), new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret)           
+                                              new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(5), new ShootOnce(m_intake, m_flywheel, m_turret)           
                                             ));
     m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallAuto")), new ShootTwice(m_intake, m_flywheel, m_turret)
@@ -204,6 +204,7 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
 
     // Configure button commands
+
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
     m_driverOI.getIsAtHighSpeed().whileHeld(new setLowIntakePower(m_intake, m_drivetrain));
@@ -267,20 +268,20 @@ public class RobotContainer {
   }
 
 
-  public Trajectory calibrateTrajectory() {
+  // public Trajectory calibrateTrajectory() {
     
-    // Note that all coordinates are in meters, and follow NWU conventions.
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(1.0, 0.0)
-        ),
-        new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
-        AutoConstants.kTrajectoryConfig);
+  //   // Note that all coordinates are in meters, and follow NWU conventions.
+  //   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+  //       // Start at the origin facing the +X direction
+  //       new Pose2d(0, 0, new Rotation2d(0)),
+  //       List.of(
+  //           new Translation2d(1.0, 0.0)
+  //       ),
+  //       new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
+  //       AutoConstants.kTrajectoryConfig);
 
-    return trajectory;
-  }
+  //   return trajectory;
+  // }
 
   // public Trajectory navigateConesTrajectory() {
 
