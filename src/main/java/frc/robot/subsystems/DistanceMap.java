@@ -32,12 +32,9 @@ public class DistanceMap {
         m_ticksPer100ms.put(17, 20000);
         m_ticksPer100ms.put(18, 20000);
         m_ticksPer100ms.put(19, 20000); //verified
-        m_ticksPer100ms.put(21, 19300);
-        m_ticksPer100ms.put(22, 18600);
-        m_ticksPer100ms.put(23, 17900);//
-        m_ticksPer100ms.put(20, 17200); //verified <20 : OUT OF RANGE
-        m_ticksPer100ms.put(21, 17000);
-        m_ticksPer100ms.put(22, 16400);
+        m_ticksPer100ms.put(20, 19000); //verified <20 : OUT OF RANGE
+        m_ticksPer100ms.put(21, 18000);
+        m_ticksPer100ms.put(22, 17000);
         m_ticksPer100ms.put(23, 16000);
         m_ticksPer100ms.put(24, 15200); 
         m_ticksPer100ms.put(25, 14400); //verified
