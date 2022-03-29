@@ -152,22 +152,30 @@ public class RobotContainer {
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     
     // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(new WaitCommand(1), 
+    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(
                                             new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
-    m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup( new WaitCommand(1), new ToggleIntakeMotor(m_intake),
+    m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup(
+                                              new ToggleIntakeMotor(m_intake),
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Red")), new WaitCommand(1),
-                                              new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(5), new ShootOnce(m_intake, m_flywheel, m_turret)          
+                                              new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)          
                                             ));
-    m_autoChooser.addOption("2-Ball Auto Left Curve", new SequentialCommandGroup( new WaitCommand(1), new ToggleIntakeMotor(m_intake),
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Blue")), new WaitCommand(1),
-                                              new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(5), new ShootOnce(m_intake, m_flywheel, m_turret)           
+    m_autoChooser.addOption("2-Ball Auto Left Curve", new SequentialCommandGroup(
+                                            new ToggleIntakeMotor(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Blue")), new WaitCommand(1),
+                                            new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)           
                                             ));
-    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallAuto")), new ShootTwice(m_intake, m_flywheel, m_turret)
+    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup(new ToggleIntakeMotor(m_intake), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP1")), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP2")), 
+                                            new ShootOnce(m_intake, m_flywheel, m_turret), 
+                                            new ShootOnce(m_intake, m_flywheel, m_turret),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP3")), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP4")), 
+                                            new ShootOnce(m_intake, m_flywheel, m_turret)
                                             ));
   }
 

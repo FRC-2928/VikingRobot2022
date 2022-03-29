@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
     m_compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     m_robotContainer = new RobotContainer();
     m_robotContainer.onRobotInit();
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.getVideo();
   }
 
   /**
