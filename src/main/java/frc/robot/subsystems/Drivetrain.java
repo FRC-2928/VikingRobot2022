@@ -344,6 +344,15 @@ public class Drivetrain extends SubsystemBase {
         drive(move.getAsDouble(), rotate.getAsDouble(), true);
     }
 
+    /**
+     * drives at 90% instead of 80% to speed up auto
+     * @param move
+     * @param rotate
+     */
+    public void driveAuto(DoubleSupplier move, DoubleSupplier rotate){
+        drive(move.getAsDouble(), rotate.getAsDouble() / (.8/.9), true);
+    }
+
     public void drive(double move, double rotate, boolean squaredInputs){
         SmartDashboard.putNumber("Output", rotate);
         //m_differentialDrive.arcadeDrive(move, rotate);
