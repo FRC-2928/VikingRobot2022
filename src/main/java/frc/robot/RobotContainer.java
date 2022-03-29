@@ -101,12 +101,26 @@ public class RobotContainer {
     new InstantCommand(m_drivetrain::zeroGyro);
     new InstantCommand(m_climber::tiltBack);
     //new RunCommand(m_intake::startIntakeMotor);
+
+    //sets the drivetrain to 90% for auto
+    m_drivetrain.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(() -> m_drivetrain.driveAuto(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
+            m_drivetrain));
     
     // new InstantCommand(m_intake::startMotors, m_intake); 
   }
 
   public void onTeleopInit() {  
     new InstantCommand(m_climber::tiltBack);
+
+    //sets the drivetrain to 80% for teleop
+    m_drivetrain.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
+            m_drivetrain));
   }
 
   // public void onDisabledInit(){
