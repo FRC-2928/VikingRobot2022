@@ -59,7 +59,7 @@ public final class Constants {
         public static final int kClimberSolenoid = 2;
 
         //TODO: change to correct value
-        public static final int kIntakeSolenoid = 22;
+        public static final int kIntakeSolenoid = 3;
 
         // public static final int kDrivetrainShiftSolenoidLow = 0;
         // public static final int kDrivetrainShiftSolenoidHigh = 1;
