@@ -48,6 +48,7 @@ import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
 import frc.robot.commands.FlywheelCommands.SetFlywheelVelocity;
 import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
+import frc.robot.commands.IntakeCommands.HoldIntakeUp;
 import frc.robot.commands.IntakeCommands.OpenRamp;
 import frc.robot.commands.IntakeCommands.ReverseFeeder;
 import frc.robot.commands.IntakeCommands.ReverseFeederAndIntake;
@@ -230,6 +231,8 @@ public class RobotContainer {
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
     m_driverOI.getIsAtHighSpeed().whileHeld(new setLowIntakePower(m_intake, m_drivetrain));
+
+    m_driverOI.getIntakeOutButton().whileHeld(new HoldIntakeUp(m_intake));
 
     m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));

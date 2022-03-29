@@ -23,6 +23,7 @@ public class DriverOI {
     private Button m_turnTurretLeft;
     private Button m_turnTurretRight;
     private Button m_shiftButton;
+    private Button m_intakeOutButton;
 
     public DriverOI(XboxController controller) {
         m_controller = controller;
@@ -44,6 +45,8 @@ public class DriverOI {
         
         m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
         m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
+
+        m_intakeOutButton = new Button(() -> m_controller.getRightTriggerAxis() > 0.1);
     }
 
     // ---------------- Intake ----------------------------
@@ -54,6 +57,10 @@ public class DriverOI {
 
     public Button getToggleFeederMotorButton(){
         return m_toggleFeederMotor;
+    }
+
+    public Button getIntakeOutButton(){
+        return m_intakeOutButton;
     }
 
     // public Button getReverseFeederButton(){

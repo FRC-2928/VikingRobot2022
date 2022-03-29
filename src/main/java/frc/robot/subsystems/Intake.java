@@ -39,6 +39,7 @@ public class Intake extends SubsystemBase {
 
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoid);
+  Solenoid m_intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kIntakeSolenoid);
   
   private final Drivetrain m_drivetrain;
  
@@ -431,6 +432,16 @@ public class Intake extends SubsystemBase {
 
   public void setRampUnstable() {
     m_rampStable = false;
+  }
+
+  // ------ Intake Stage 0 ------------------
+
+  public void setIntakeOut(){
+    m_intakeSolenoid.set(true);
+  }
+
+  public void setIntakeUp(){
+    m_intakeSolenoid.set(false);
   }
 
   // -----------------------------------------------------------

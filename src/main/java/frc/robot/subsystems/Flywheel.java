@@ -37,6 +37,7 @@ public class Flywheel extends SubsystemBase {
   private final WPI_TalonFX m_flywheelTalon = new WPI_TalonFX(Constants.CANBusIDs.kFlywheelTalonFX);
   double m_velocity;
   double m_adjustableVelocity;
+  double m_velocityChange;
   boolean m_isFlywheelSpunUp = false;
 
   //simulation
@@ -63,6 +64,7 @@ public class Flywheel extends SubsystemBase {
     configMotors();
     resetEncoders();
     setFlywheelPIDF();
+    m_velocityChange = 1;
     //setupShuffleboard();
     DistanceMap.getInstance().loadMaps();
     m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
@@ -215,7 +217,7 @@ public class Flywheel extends SubsystemBase {
   public void setVelocity(){
 
     //sets as ticks per 100 ms
-    m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity);
+    m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity * m_velocityChange);
   }
 
   public void setPower(double power) {
