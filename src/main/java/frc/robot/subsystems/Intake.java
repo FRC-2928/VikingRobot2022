@@ -60,6 +60,8 @@ public class Intake extends SubsystemBase {
   private boolean m_ejectInProgress = false;
   private boolean m_intakeMotorStop = false;
   private boolean m_rampStable = true;
+
+  private boolean m_letIntakeMove = true;
   
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -232,6 +234,12 @@ public class Intake extends SubsystemBase {
       setIntakeBrakeDisabled();
     }
 
+    if(intakeHasBall()){
+      setIntakeOut();
+    } else if (m_letIntakeMove){
+      setIntakeUp();
+    }
+
     //if either the feeder or intake is empty..
     // if(!(isIntakeSensorActivated() && feederHasBall())){
     //   // Check if we commanded a stop from Operator Input
@@ -296,6 +304,7 @@ public class Intake extends SubsystemBase {
         m_ejectInProgress = false;
       }
     }
+
   }
 
   public ShuffleboardLayout getCommandsLayout() {
@@ -442,6 +451,10 @@ public class Intake extends SubsystemBase {
 
   public void setIntakeUp(){
     m_intakeSolenoid.set(false);
+  }
+
+  public void allowIntakeUp(boolean allow){
+    m_letIntakeMove = allow;
   }
 
   // -----------------------------------------------------------
