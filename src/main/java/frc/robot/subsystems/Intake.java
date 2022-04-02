@@ -64,8 +64,6 @@ public class Intake extends SubsystemBase {
   
 
   // ------- Shuffleboard variables ----------------------------------------
-  private static NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  private static NetworkTable table = inst.getTable("Shuffleboard/Intake");
   private ShuffleboardTab m_intakeTab;
   private ShuffleboardLayout m_commandsLayout;
   // NetworkTableEntry m_intakeBrakeEnabledEntry;
@@ -175,7 +173,7 @@ public class Intake extends SubsystemBase {
     m_intakeTab = Shuffleboard.getTab("Intake"); 
 
     // Intake
-    m_intakeMotorSpeedEntry = m_intakeTab.add("Intake Motor Speed", IntakeConstants.kFeederSpeed)
+    m_intakeMotorSpeedEntry = m_intakeTab.add("Intake Motor Speed", IntakeConstants.kIntakeSpeed)
       .withPosition(3, 5)
       .getEntry();  
     ShuffleboardLayout intakeLayout = Shuffleboard.getTab("Intake")
@@ -213,7 +211,7 @@ public class Intake extends SubsystemBase {
 
   public void startMotors(){
     startFeederMotor(IntakeConstants.kFeederSpeed);
-    startIntakeMotor(IntakeConstants.kIntakeSpeed);
+    startIntakeMotor(m_intakeMotorSpeed);
   }
 
   // -----------------------------------------------------------
@@ -260,9 +258,8 @@ public class Intake extends SubsystemBase {
     // }
 
 
-    //publishTelemetry();
-    double intakeMotorSpeed = table.getEntry("Intake Motor Speed").getDouble(IntakeConstants.kFeederSpeed);
-    startIntakeMotor(intakeMotorSpeed);
+    publishTelemetry();
+    m_intakeMotorSpeed = m_intakeMotorSpeedEntry.getNumber(IntakeConstants.kIntakeSpeed).doubleValue(); 
   }
 
   public void publishTelemetry() {
@@ -351,7 +348,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void startIntakeMotor(){
-    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakeSpeed);
+    m_intakeMotor.set(ControlMode.PercentOutput, m_intakeMotorSpeed);
   }
 
   public void setIntakeMotorStop(boolean state) {
