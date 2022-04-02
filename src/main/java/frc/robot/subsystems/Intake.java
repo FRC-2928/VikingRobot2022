@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -62,6 +64,8 @@ public class Intake extends SubsystemBase {
   
 
   // ------- Shuffleboard variables ----------------------------------------
+  private static NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  private static NetworkTable table = inst.getTable("Shuffleboard/Intake");
   private ShuffleboardTab m_intakeTab;
   private ShuffleboardLayout m_commandsLayout;
   // NetworkTableEntry m_intakeBrakeEnabledEntry;
@@ -72,6 +76,7 @@ public class Intake extends SubsystemBase {
   NetworkTableEntry m_intakeMotorEntry, m_feederMotorEntry;
   NetworkTableEntry m_rampEntry; 
   NetworkTableEntry m_allianceEntry, m_ballColorEntry, m_ballValidEntry;
+  NetworkTableEntry m_intakeMotorSpeedEntry;
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_intakeMotorSim = m_intakeMotor.getSimCollection();
@@ -91,7 +96,7 @@ public class Intake extends SubsystemBase {
     configMotors();
     setIntakePIDF();
     resetEncoders();
-    //setupShuffleboard();
+    setupShuffleboard();
 
     // m_colorMatcher.addColorMatch(kBlueTarget);
     // m_colorMatcher.addColorMatch(kRedTarget);
@@ -170,6 +175,9 @@ public class Intake extends SubsystemBase {
     m_intakeTab = Shuffleboard.getTab("Intake"); 
 
     // Intake
+    m_intakeMotorSpeedEntry = m_intakeTab.add("Intake Motor Speed", IntakeConstants.kFeederSpeed)
+      .withPosition(3, 5)
+      .getEntry();  
     ShuffleboardLayout intakeLayout = Shuffleboard.getTab("Intake")
       .getLayout("Intake", BuiltInLayouts.kList)
       .withSize(2, 5)
@@ -253,7 +261,8 @@ public class Intake extends SubsystemBase {
 
 
     //publishTelemetry();
-
+    double intakeMotorSpeed = table.getEntry("Intake Motor Speed").getDouble(IntakeConstants.kFeederSpeed);
+    startIntakeMotor(intakeMotorSpeed);
   }
 
   public void publishTelemetry() {
