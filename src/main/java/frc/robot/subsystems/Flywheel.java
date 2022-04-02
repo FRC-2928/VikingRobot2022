@@ -217,7 +217,11 @@ public class Flywheel extends SubsystemBase {
   public void setVelocity(){
 
     //sets as ticks per 100 ms
-    m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity * m_velocityChange);
+    if(m_adjustableVelocity * m_velocityChange >= 20000){
+      m_flywheelTalon.set(ControlMode.Velocity, 20000);
+    } else {
+      m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity * m_velocityChange);
+    }
   }
 
   public void setPower(double power) {
@@ -264,7 +268,13 @@ public class Flywheel extends SubsystemBase {
     }
   }
 
+  public void increaseFlywheelChange(){
+    m_velocityChange += .02;
+  }
 
+  public void decreaseFlywheelChange(){
+    m_velocityChange -= .02;
+  }
 
 
   // -----------------------------------------------------------

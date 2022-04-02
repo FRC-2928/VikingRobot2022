@@ -20,6 +20,7 @@ public class DriverOI {
     private JoystickButton m_incrementFlywheel;
     private JoystickButton m_decrementFlywheel;
     private JoystickButton m_toggleFlywheel;
+    private JoystickButton m_increaseFlywheelButton;
     private Button m_turnTurretLeft;
     private Button m_turnTurretRight;
     private Button m_shiftButton;
@@ -35,7 +36,7 @@ public class DriverOI {
         // m_shiftHigh = new JoystickButton(m_controller, XboxController.Button.kY.value);
         m_shiftButton = new Button(() -> m_controller.getLeftStickButtonPressed());
 
-        m_moveToShootingDistance = new JoystickButton(m_controller, XboxController.Button.kX.value);
+        // m_moveToShootingDistance = new JoystickButton(m_controller, XboxController.Button.kX.value);
         m_incrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kStart.value);
         m_decrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
@@ -47,6 +48,8 @@ public class DriverOI {
         m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
 
         m_intakeOutButton = new Button(() -> m_controller.getRightTriggerAxis() > 0.1);
+
+        m_increaseFlywheelButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
     }
 
     // ---------------- Intake ----------------------------
@@ -84,6 +87,10 @@ public class DriverOI {
         return m_toggleFlywheel;
     }
 
+    // public JoystickButton getIncreaseFlywheelButton(){
+    //     return m_increaseFlywheelButton;
+    // }
+
     // ---------------- Turret ---------------------------
 
     public DoubleSupplier getRotateTurretLeftSupplier() {
@@ -106,9 +113,9 @@ public class DriverOI {
         return m_turnTurretToTarget;
     }
 
-    public JoystickButton moveToShootingDistance(){
-        return m_moveToShootingDistance;
-    }
+    // public JoystickButton moveToShootingDistance(){
+    //     return m_moveToShootingDistance;
+    // }
 
     // ---------------- Drivetrain ----------------------------
 
