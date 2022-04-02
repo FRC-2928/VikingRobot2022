@@ -6,7 +6,6 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Turret;
 
 import frc.robot.Constants.IntakeConstants;
 

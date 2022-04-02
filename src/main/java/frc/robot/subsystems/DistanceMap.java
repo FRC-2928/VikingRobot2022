@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  * Class for storing LimelightData
  */

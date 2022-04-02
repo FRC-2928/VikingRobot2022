@@ -58,7 +58,6 @@ public final class Constants {
         public static final int kRampSolenoid = 1;
         public static final int kClimberSolenoid = 2;
 
-        //TODO: change to correct value
         public static final int kIntakeSolenoid = 3;
 
         // public static final int kDrivetrainShiftSolenoidLow = 0;
@@ -107,7 +106,6 @@ public final class Constants {
 
         public static final double kUnitsPerRevolution = 2048;
 
-        //TODO change to correct values
         public static final double kHighGearRatio = 4.4;
         public static final double kLowGearRatio = 8.82;
 
@@ -161,8 +159,6 @@ public final class Constants {
             LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerRadian, kaVoltSecondsSquaredPerRadian);
         // public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem2 = 
         //     LinearSystemId.createFlywheelSystem(motor, jKgMetersSquared, G)
-
-        //TODO: change to correct values
         
         /**
          * PID Gains may have to be adjusted based on the responsiveness of control loop.
@@ -211,7 +207,6 @@ public final class Constants {
         public static final double kTurretLeftLimit = 120;
         public static final double kTurretRightLimit = -120;
 
-        //TODO: set to actual desired value
         public static final double kTurretMaxTicks = 1;
 
         public static final double kTurretTicksPerDegree = 61; // Need to confirm
@@ -247,7 +242,6 @@ public final class Constants {
 
     public static final class ClimberConstants {
 
-        //TODO: change to correct values
         public static final Gains kGainsClimber = new Gains(0,  0,   0,   0,   0,  1.00);
 
         public static final double kGearRatio = 1;
@@ -260,7 +254,6 @@ public final class Constants {
         // public static final double kDeployedPositionSetpoint = 1.016; // Meters
         // public static final double kClimberPower = 0.4; // Power Percent
 
-        // // TODO figure number of clicks per meter (assuming meters are used in above Setpoints)
         // public static final double kClimberEncoderTicksPerRotation = 2048; // correct!
         // public static final double kClimberGearRatio = 35 / 1; // moter to intermediate pulley, correct!
         // // meters climber movement per intermediate pulley rev, correct!
@@ -304,7 +297,6 @@ public final class Constants {
         // public static final int kHighLimelightTrackingPipeline = 0;
         // public static final int kHighLimelightDrivePipeline = 1;
 
-        //TODO: set to correct values
         public static final double kHighLimelightMountAngle = 17.5;
         public static final double kHighLimelightHeight = 37.5;
         public static final double kHighGoalHeight = 90;

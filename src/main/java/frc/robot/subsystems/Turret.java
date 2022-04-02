@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.LimelightData;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.simulation.TurretSim;
@@ -35,7 +33,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -264,7 +261,7 @@ public class Turret extends SubsystemBase {
 
   public boolean inRange(){
 
-    return (getTargetVerticalOffset()< 20 && getTargetVerticalOffset() > 40);
+    return ((getTargetVerticalOffset() > 20 && getTargetVerticalOffset() < 40) || getTargetVerticalOffset() == 0);
   }
   /**
    * Moves the turret to the specified angle

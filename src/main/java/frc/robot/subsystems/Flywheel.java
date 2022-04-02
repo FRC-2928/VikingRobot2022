@@ -3,9 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -19,12 +17,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants.FlywheelConstants;
@@ -229,19 +225,7 @@ public class Flywheel extends SubsystemBase {
     m_flywheelTalon.set(ControlMode.PercentOutput, power);
   }
 
-  public void incrementVelocity(double increment){
-    m_velocity += increment;
-    setPower(m_velocity);    
-  }
-
-  public void decrementVelocity(double decrement){
-    if(m_velocity <= 0){
-      setPower(0);
-    } else{
-      m_velocity -= decrement;
-      setPower(m_velocity);
-    }
-  }
+  
 
   public int calculateFlywheelTicksPer100ms(int distance) {
     int ticks = DistanceMap.getInstance().getFlywheelTicksPer100ms(distance);
@@ -259,7 +243,7 @@ public class Flywheel extends SubsystemBase {
 
   public boolean isFlyWheelUpToSpeed(){
 
-    if(Math.abs(m_adjustableVelocity - getVelocity()) <= 200.0){
+    if(Math.abs((m_adjustableVelocity * m_velocityChange) - getVelocity()) <= 200.0){
       return true;
 
     }else{

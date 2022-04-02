@@ -5,13 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -218,14 +216,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
-    // if (isIntakeSensorActivated() && feederHasBall()) {
-    //   stopIntakeMotor();
-    // } else {
-    //   // Check if we commanded a stop from Operator Input
-    //   if (intakeMotorStopRequired() == false) {      
-    //     startIntakeMotor(m_intakeMotorSpeed);
-    //   }     
-    // }
 
     //if feeder has a ball, set intake brake enabled, otherwise set disabled
     if(feederHasBall()){
@@ -240,26 +230,7 @@ public class Intake extends SubsystemBase {
       setIntakeUp();
     }
 
-    //if either the feeder or intake is empty..
-    // if(!(isIntakeSensorActivated() && feederHasBall())){
-    //   // Check if we commanded a stop from Operator Input
-    //   if (intakeMotorStopRequired() == false) {      
-    //     startIntakeMotor(m_intakeMotorSpeed);
-    //   }
-    // }
-
-    // if(m_drivetrain.getMotorOutputPercent() > -0.2){
-    //     m_intakeMotorSpeed = 0;
-    // } else {
-    //     m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
-    // }
     
-
-    // Intake motor will run at normal speed unless a low-speed timer has just been set
-    // if (m_motorLowSpeedTimer.hasElapsed(2)) {
-    //   m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
-    // }
-
 
     //publishTelemetry();
 
@@ -318,29 +289,6 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  // /**
-  //  * Delays the stopping of the intake motor for 0.1 seconds
-  //  * This must be run in a periodic loop.
-  //  */
-  // public void stopIntakeMotorDelayed(){
-  //   System.out.println("in stop intake motor delayed");
-
-  //   if (m_startIntakeTimer) {
-  //     m_intakeTimer.reset();
-  //     m_intakeTimer.start();  // Tested in else below
-  //     m_startIntakeTimer = false;
-  //   } 
-  //   else if (m_intakeTimer.hasElapsed(1)) {
-  //       stopIntakeMotor();
-  //       m_startIntakeTimer = true;
-        
-  //       // Now lower the intake speed for a short period in case the 
-  //       // intake sensor bounces.
-  //       m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
-  //       m_motorLowSpeedTimer.reset();
-  //       m_motorLowSpeedTimer.start(); // Tested in periodic()
-  //     }  
-  //   }    
   
 
   /**
@@ -363,9 +311,6 @@ public class Intake extends SubsystemBase {
     return m_intakeMotorStop;
   }
 
-  public void setLowIntakePower(){
-    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakeLowSpeed);
-  }
 
   public void setIntakeBrakeEnabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(true);
@@ -485,21 +430,11 @@ public class Intake extends SubsystemBase {
     return (Math.abs(m_intakeMotor.getMotorOutputPercent()) > .1);
   }
 
-  // public boolean isLeftIntakeSensorTripped(){
-  //   return !m_leftIntakeSensor.get();
-  // }
-
-  // public boolean isRightIntakeSensorTripped(){
-  //   return !m_rightIntakeSensor.get();
-  // }
 
   public boolean isIntakeSensorActivated(){
     return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
-  // public boolean isIntakeSensorTripped() {
-  //   return isLeftIntakeSensorTripped() || isRightIntakeSensorTripped();
-  // }
 
 
   // --------- Feeder ------------------------------
@@ -512,9 +447,6 @@ public class Intake extends SubsystemBase {
     return m_intakeSim.isFeederSwitchClosed();
   }
 
-  // public boolean isFeederBrakeDeactivated(){
-  //   return !(isFeederBrakeActivated());
-  // }
    
   public boolean feederHasBall(){
     return isFeederSwitchActivated();  
