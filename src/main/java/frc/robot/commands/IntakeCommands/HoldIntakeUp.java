@@ -22,7 +22,7 @@ public class HoldIntakeUp extends CommandBase {
   @Override
   public void initialize() {
     m_intake.setIntakeOut();
-    m_intake.allowIntakeUp(false);
+    m_intake.dontAllowIntakeUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +33,7 @@ public class HoldIntakeUp extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_intake.setIntakeUp();
-    m_intake.allowIntakeUp(true);
+    m_intake.allowIntakeUp();
   }
 
   // Returns true when the command should end.

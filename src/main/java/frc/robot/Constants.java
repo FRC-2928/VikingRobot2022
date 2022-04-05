@@ -167,7 +167,7 @@ public final class Constants {
          * 	                                    			    kP 	 kI     kD   kF    Iz    PeakOut */
         public final static Gains kGainsVelocity1  = new Gains( 0.1, 0.0001, 0, .047,  300,  1.00);
 
-        public final static Gains kGainsVelocity2  = new Gains( .15,      0, 0, .049,  300,  1.00);
+        public final static Gains kGainsVelocity2  = new Gains( .15,.0001, 0, .049,  300,  1.00);
         public final static Gains kGainsVelocity3  = new Gains( .08,  .0001, 0, .045,  300,  1.00);
         public final static Gains kGainsVelocity4 = new Gains(.2, .0001, 0, .051, 300, 1.0);
 

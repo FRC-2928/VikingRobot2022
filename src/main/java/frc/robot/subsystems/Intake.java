@@ -398,8 +398,12 @@ public class Intake extends SubsystemBase {
     m_intakeSolenoid.set(false);
   }
 
-  public void allowIntakeUp(boolean allow){
-    m_letIntakeMove = allow;
+  public void allowIntakeUp(){
+    m_letIntakeMove = true;
+  }
+
+  public void dontAllowIntakeUp(){
+    m_letIntakeMove = false;
   }
 
   // -----------------------------------------------------------
