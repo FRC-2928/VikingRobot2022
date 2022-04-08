@@ -261,7 +261,7 @@ public class Turret extends SubsystemBase {
 
   public boolean inRange(){
 
-    return ((getTargetVerticalOffset() > 20 && getTargetVerticalOffset() < 40) || getTargetVerticalOffset() == 0);
+    return ((getTargetVerticalOffset() > 20 && getTargetVerticalOffset() < 40));
   }
   /**
    * Moves the turret to the specified angle

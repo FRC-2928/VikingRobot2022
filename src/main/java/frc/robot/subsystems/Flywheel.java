@@ -163,8 +163,8 @@ public class Flywheel extends SubsystemBase {
   public void periodic() {   
     //publishTelemetry();
     if(m_shootTimer.hasElapsed(2)){
-    System.out.println(getVelocity());
-    System.out.println(m_adjustableVelocity);
+    //System.out.println(getVelocity());
+    //System.out.println(m_adjustableVelocity);
     m_shootTimer.reset();
     m_shootTimer.start();
     }

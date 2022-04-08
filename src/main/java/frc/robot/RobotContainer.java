@@ -36,6 +36,7 @@ import frc.robot.commands.IntakeCommands.HoldIntakeUp;
 import frc.robot.commands.IntakeCommands.OpenRamp;
 import frc.robot.commands.IntakeCommands.ReverseFeeder;
 import frc.robot.commands.IntakeCommands.ReverseFeederAndIntake;
+import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ShootOnce;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
@@ -148,6 +149,7 @@ public class RobotContainer {
     
     // Configure Shuffleboard commands
     m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(
+                                            new WaitCommand(1.0),
                                             new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
@@ -225,14 +227,14 @@ public class RobotContainer {
     m_operatorOI.getReverseIntakeButton().whenPressed(new ReverseFeederAndIntake(m_intake));
 
     // Configure Shuffleboard commands
-    // m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
-    // m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake));  
-    // m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
-    // m_intake.getCommandsLayout().add(new ShootOnce(m_intake, m_flywheel, m_turret)); 
-    // m_intake.getCommandsLayout().add(new ShootBall(m_intake, m_flywheel)); 
-    // m_intake.getCommandsLayout().add(new EjectBall(m_intake));
-    // m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
-    // m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
+    m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
+    m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake));  
+    m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
+    m_intake.getCommandsLayout().add(new ShootOnce(m_intake, m_flywheel, m_turret)); 
+    m_intake.getCommandsLayout().add(new ShootBall(m_intake, m_flywheel)); 
+    m_intake.getCommandsLayout().add(new EjectBall(m_intake));
+    m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
+    m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
   }
 
   /**

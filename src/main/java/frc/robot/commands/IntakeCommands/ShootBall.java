@@ -59,7 +59,6 @@ public class ShootBall extends CommandBase {
       // Start feeder motor at high power
       m_intake.setFeederBrakeDisabled();
       m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
-      System.out.println("SHOT BALL");
     }
   }                                                           
 
@@ -68,6 +67,7 @@ public class ShootBall extends CommandBase {
   public void end(boolean interrupted) {
     
     m_intake.setFeederBrakeEnabled();
+    m_intake.setIntakeBrakeDisabled();
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);
     
@@ -77,6 +77,6 @@ public class ShootBall extends CommandBase {
   @Override
   public boolean isFinished() {
     //return m_intake.intakeCleared() && m_intake.feederCleared();
-    return (m_intake.feederCleared() || m_shootTimer.hasElapsed(6.0));
+    return (m_intake.feederCleared());
   }
 }

@@ -25,32 +25,32 @@ public class DistanceMap {
         m_ticksPer100ms.put(12, 20000);
         m_ticksPer100ms.put(13, 20000);
         m_ticksPer100ms.put(14, 20000);
-        m_ticksPer100ms.put(15, 20000);
-        m_ticksPer100ms.put(16, 20000);
-        m_ticksPer100ms.put(17, 20000);
-        m_ticksPer100ms.put(18, 20000);
-        m_ticksPer100ms.put(19, 20000); //verified
-        m_ticksPer100ms.put(20, 19000); //verified <20 : OUT OF RANGE
-        m_ticksPer100ms.put(21, 18000);
-        m_ticksPer100ms.put(22, 17000);
-        m_ticksPer100ms.put(23, 16000);
-        m_ticksPer100ms.put(24, 15200); 
-        m_ticksPer100ms.put(25, 14400); //verified
-        m_ticksPer100ms.put(26, 13600);
-        m_ticksPer100ms.put(27, 12800);
-        m_ticksPer100ms.put(28, 12200);
-        m_ticksPer100ms.put(29, 11600);
-        m_ticksPer100ms.put(30, 11000); //verified
-        m_ticksPer100ms.put(31, 10500);
-        m_ticksPer100ms.put(32, 10000);//verified
-        m_ticksPer100ms.put(33, 9600); 
-        m_ticksPer100ms.put(34, 9400);
-        m_ticksPer100ms.put(35, 9200); //verified
-        m_ticksPer100ms.put(36, 9000);
-        m_ticksPer100ms.put(37, 8800);
-        m_ticksPer100ms.put(38, 8600);
-        m_ticksPer100ms.put(39, 8400);
-        m_ticksPer100ms.put(40, 8200); //verified 40< : OUT OF RANGE
+        m_ticksPer100ms.put(15, 18000);
+        m_ticksPer100ms.put(16, 14000);
+        m_ticksPer100ms.put(17, 12000);
+        m_ticksPer100ms.put(18, 11000);
+        m_ticksPer100ms.put(19, 10000); //verified
+        m_ticksPer100ms.put(20, 9800); //verified <20 : OUT OF RANGE
+        m_ticksPer100ms.put(21, 9600);
+        m_ticksPer100ms.put(22, 9400);
+        m_ticksPer100ms.put(23, 9200);
+        m_ticksPer100ms.put(24, 9000); 
+        m_ticksPer100ms.put(25, 8900); //verified
+        m_ticksPer100ms.put(26, 8800);
+        m_ticksPer100ms.put(27, 8600);
+        m_ticksPer100ms.put(28, 8400);
+        m_ticksPer100ms.put(29, 8200);
+        m_ticksPer100ms.put(30, 8100); //verified
+        m_ticksPer100ms.put(31, 8000);
+        m_ticksPer100ms.put(32, 8000);//verified
+        m_ticksPer100ms.put(33, 8000); 
+        m_ticksPer100ms.put(34, 8000);
+        m_ticksPer100ms.put(35, 8000); //verified
+        m_ticksPer100ms.put(36, 8000);
+        m_ticksPer100ms.put(37, 8000);
+        m_ticksPer100ms.put(38, 8000);
+        m_ticksPer100ms.put(39, 8000);
+        m_ticksPer100ms.put(40, 8000); //verified 40< : OUT OF RANGE
         m_ticksPer100ms.put(41, 8000);
         m_ticksPer100ms.put(42, 8000);
         m_ticksPer100ms.put(43, 8000);

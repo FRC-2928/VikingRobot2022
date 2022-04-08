@@ -92,7 +92,7 @@ public class Intake extends SubsystemBase {
     configMotors();
     setIntakePIDF();
     resetEncoders();
-    //setupShuffleboard();
+    setupShuffleboard();
 
     // m_colorMatcher.addColorMatch(kBlueTarget);
     // m_colorMatcher.addColorMatch(kRedTarget);
@@ -222,6 +222,8 @@ public class Intake extends SubsystemBase {
       setIntakeBrakeEnabled();
     } else {
       setIntakeBrakeDisabled();
+      startIntakeMotor();
+
     }
 
     if(intakeHasBall()){
@@ -232,7 +234,7 @@ public class Intake extends SubsystemBase {
 
     
 
-    //publishTelemetry();
+    publishTelemetry();
 
   }
 
@@ -251,32 +253,32 @@ public class Intake extends SubsystemBase {
     m_rampEntry.setBoolean(isRampOpen());
   }
 
-  public void ejectBall() {
-    if (feederHasBall() && m_ejectInProgress == false) {
-      m_ejectInProgress = true;
-      openRamp();
-      // Set the timer to wait until the ramp is open
-      m_ejectDuration = 0.2;
-      m_ejectTimer.reset();
-      m_ejectTimer.start();
-    }
+  // public void ejectBall() {
+  //   if (feederHasBall() && m_ejectInProgress == false) {
+  //     m_ejectInProgress = true;
+  //     openRamp();
+  //     // Set the timer to wait until the ramp is open
+  //     m_ejectDuration = 0.2;
+  //     m_ejectTimer.reset();
+  //     m_ejectTimer.start();
+  //   }
   
-    if (m_ejectTimer.hasElapsed(m_ejectDuration) && m_ejectInProgress) {
-      if (isRampOpen() && isFeederBrakeEnabled()) {
-        setFeederBrakeDisabled();
-        startFeederMotor(IntakeConstants.kFeederSpeed);
-        // Reset the timer to wait for the ball to leave
-        m_ejectDuration = 1.0;
-        m_ejectTimer.reset();
-        m_ejectTimer.start();
-      } else {
-        closeRamp();
-        setFeederBrakeEnabled();
-        m_ejectInProgress = false;
-      }
-    }
+  //   if (m_ejectTimer.hasElapsed(m_ejectDuration) && m_ejectInProgress) {
+  //     if (isRampOpen() && isFeederBrakeEnabled()) {
+  //       setFeederBrakeDisabled();
+  //       startFeederMotor(IntakeConstants.kFeederSpeed);
+  //       // Reset the timer to wait for the ball to leave
+  //       m_ejectDuration = 1.0;
+  //       m_ejectTimer.reset();
+  //       m_ejectTimer.start();
+  //     } else {
+  //       closeRamp();
+  //       setFeederBrakeEnabled();
+  //       m_ejectInProgress = false;
+  //     }
+  //   }
 
-  }
+  // }
 
   public ShuffleboardLayout getCommandsLayout() {
     return m_commandsLayout;
