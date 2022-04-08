@@ -67,7 +67,7 @@ public class ShootBall extends CommandBase {
   public void end(boolean interrupted) {
     
     m_intake.setFeederBrakeEnabled();
-    m_intake.setIntakeBrakeDisabled();
+    // 4/7 m_intake.setIntakeBrakeDisabled();
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);
     

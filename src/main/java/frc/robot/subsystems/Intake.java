@@ -216,14 +216,15 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
+    // 4/8 to check - did separating out intake functions to either in periodic or not in periodic help
+                  // hasBall on shuffleboard - does we think ball is still there or is it just not moving
 
     //if feeder has a ball, set intake brake enabled, otherwise set disabled
     if(feederHasBall()){
       setIntakeBrakeEnabled();
     } else {
       setIntakeBrakeDisabled();
-      startIntakeMotor();
-
+      // 4/7 startIntakeMotor();
     }
 
     if(intakeHasBall()){
