@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.simulation.TurretSim;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -50,7 +49,6 @@ public class Turret extends SubsystemBase {
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
-  TurretSim m_turretSim = new TurretSim(TurretConstants.kTurretLinearSystem);
 
   // Simulated Vision System.
   // Configure these to match your PhotonVision Camera,

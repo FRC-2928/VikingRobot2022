@@ -18,7 +18,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants.FlywheelConstants;
 import frc.robot.Constants;
-import frc.robot.simulation.FlywheelSim;
 
 
 public class Flywheel extends SubsystemBase {
@@ -31,8 +30,6 @@ public class Flywheel extends SubsystemBase {
 
   //simulation
   TalonFXSimCollection m_flywheelMotorSim = m_flywheelTalon.getSimCollection();
-  
-  FlywheelSim m_flywheelSim = new FlywheelSim(FlywheelConstants.kFlywheelLinearSystem);
 
   ShuffleboardLayout m_flywheelLayout;
   NetworkTableEntry m_flywheelSpeedEntry;
