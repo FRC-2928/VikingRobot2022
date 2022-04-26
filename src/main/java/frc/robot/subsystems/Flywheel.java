@@ -200,16 +200,12 @@ public class Flywheel extends SubsystemBase {
     }
   }
 
+
+  // ---------------- Velocity --------------------
+
   /**
-   * 
-   * @param velocity change in ticks per 100 ms
+   * sets velocity to whatever is stored as the velocity variable, multiplied by the change in velocity
    */
-  public void setVelocity(double velocity){
-
-    //turn change in ticks per sec to change in ticks per 100 ms
-    m_flywheelTalon.set(ControlMode.Velocity, velocity);
-  }
-
   public void setVelocity(){
 
     //sets as ticks per 100 ms
@@ -219,37 +215,17 @@ public class Flywheel extends SubsystemBase {
       m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity * m_velocityChange);
     }
   }
-
-  public void setPower(double power) {
-    System.out.println("Power " + power);
-    m_flywheelTalon.set(ControlMode.PercentOutput, power);
-  }
-
   
-
-  public int calculateFlywheelTicksPer100ms(int distance) {
-    int ticks = DistanceMap.getInstance().getFlywheelTicksPer100ms(distance);
-    return ticks;
+  public void turnFlywheelOff() {
+    m_flywheelTalon.set(ControlMode.PercentOutput, 0);
   }
 
+  /**
+   * 
+   * @param velocity resets the velocity for flywheel to go to
+   */
   public void setAdjustableVelocity(double velocity){
     m_adjustableVelocity = velocity;
-  }
-
-  public void stopFlywheel(){
-    setAdjustableVelocity(0);
-    setPower(0);
-  }
-
-  public boolean isFlyWheelUpToSpeed(){
-
-    if(Math.abs((m_adjustableVelocity * m_velocityChange) - getVelocity()) <= 200.0){
-      return true;
-
-    }else{
-
-      return false;
-    }
   }
 
   public void increaseFlywheelChange(){
@@ -264,26 +240,6 @@ public class Flywheel extends SubsystemBase {
   // -----------------------------------------------------------
   // System State
   // --------------------P---------------------------------------
-  public double getRPM(){
-    double ticksPerSec = m_flywheelTalon.getSelectedSensorVelocity() * 10;
-    return (ticksToRotations(ticksPerSec) * 60);
-  }
-
-  public double rotationsToTicks(double rotations){
-    return ((rotations * FlywheelConstants.kEncoderCPR) * FlywheelConstants.kGearRatio);
-  }
-
-  public double ticksToRotations(double ticks){
-    return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.kGearRatio);
-  }
-
-  /**
-   * 
-   * @return the percent output of the motor (-1 to 1)
-   */
-  public double getPower(){
-    return(m_flywheelTalon.getMotorOutputPercent());
-  }
 
   /**
    * 
@@ -297,6 +253,18 @@ public class Flywheel extends SubsystemBase {
     return(m_flywheelTalon.getMotorOutputPercent() > 0);
   }
 
+  /**
+   * 
+   * @return whether flywheel is within 200 ticks/100ms of desired velocity
+   */
+  public boolean isFlyWheelUpToSpeed(){
+
+    if(Math.abs((m_adjustableVelocity * m_velocityChange) - getVelocity()) <= 200.0){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
 
   // -----------------------------------------------------------
