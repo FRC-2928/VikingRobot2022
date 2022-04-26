@@ -225,18 +225,15 @@ public class Intake extends SubsystemBase {
 
     m_feederSensorActivated = !(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
 
-    // 4/8 to check - did separating out intake functions to either in periodic or not in periodic help
-                  // hasBall on shuffleboard - does we think ball is still there or is it just not moving
-
-
-      if(!(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed())){
+    // if limit switch is not closed (intake stage 2 has ball) enable stage 1 intake brake
+    if(!(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed())){
         setIntakeBrakeEnabled();
 
-      //  if feeder is empty, set intake brake disabled
-      } else if (m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed()) {
+      //  if feeder is empty, set intake brake disabled and start motor
+    } else if (m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed()) {
         setIntakeBrakeDisabled();
         startIntakeMotor();
-      }
+    }
 
   
 
@@ -245,8 +242,6 @@ public class Intake extends SubsystemBase {
     } else if (m_letIntakeMove){
       setIntakeUp();
     }
-
-    
 
     publishTelemetry();
 
