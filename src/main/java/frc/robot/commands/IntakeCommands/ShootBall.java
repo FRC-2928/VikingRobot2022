@@ -31,7 +31,7 @@ public class ShootBall extends CommandBase {
       // Override all brakes
       System.out.println("Ready to shoot...");
       
-      //m_intake.setIntakeBrakeDisabled();
+     //m_intake.setIntakeBrakeDisabled();
 
       // boolean flywheelSpun = false;
       // while(flywheelSpun == false){
@@ -49,7 +49,6 @@ public class ShootBall extends CommandBase {
     } 
 
     m_shootTimer.reset();
-    m_shootTimer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,7 +57,8 @@ public class ShootBall extends CommandBase {
     if(m_flywheel.isFlyWheelUpToSpeed()){
       // Start feeder motor at high power
       m_intake.setFeederBrakeDisabled();
-      m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);
+      m_intake.startFeederMotor(IntakeConstants.kFeederHighSpeed);    
+      m_shootTimer.start();
     }
   }                                                           
 
@@ -67,7 +67,8 @@ public class ShootBall extends CommandBase {
   public void end(boolean interrupted) {
     
     m_intake.setFeederBrakeEnabled();
-    // 4/7 m_intake.setIntakeBrakeDisabled();
+    m_intake.setOverrideIntakeBrakePeriodic(true);
+    m_intake.setIntakeBrakeDisabled();
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);
     
@@ -77,6 +78,6 @@ public class ShootBall extends CommandBase {
   @Override
   public boolean isFinished() {
     //return m_intake.intakeCleared() && m_intake.feederCleared();
-    return (m_intake.feederCleared());
+    return (!(m_intake.isFeederSwitchActivated()) || m_shootTimer.hasElapsed(1));
   }
 }
