@@ -12,8 +12,6 @@ public class DriverOI {
 
     private JoystickButton m_toggleIntakeMotor;
     private JoystickButton m_toggleFeederMotor;
-    private JoystickButton m_moveToShootingDistance;
-    //private JoystickButton m_reverseFeederButton;
     private JoystickButton m_shiftLow;
     private JoystickButton m_shiftHigh;
     private JoystickButton m_turnTurretToTarget;
@@ -31,19 +29,13 @@ public class DriverOI {
 
         m_toggleIntakeMotor = new JoystickButton(m_controller, XboxController.Button.kA.value);
         m_toggleFeederMotor = new JoystickButton(m_controller, XboxController.Button.kB.value);
-        //m_reverseFeederButton = new JoystickButton(m_controller, XboxController.Button.kX.value);
-        // m_shiftLow = new JoystickButton(m_controller, XboxController.Button.kX.value);
-        // m_shiftHigh = new JoystickButton(m_controller, XboxController.Button.kY.value);
         m_shiftButton = new Button(() -> m_controller.getLeftStickButtonPressed());
 
-        // m_moveToShootingDistance = new JoystickButton(m_controller, XboxController.Button.kX.value);
         m_incrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kStart.value);
         m_decrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kBack.value);
-
         m_toggleFlywheel = new JoystickButton(m_controller, XboxController.Button.kY.value);
         
         m_turnTurretToTarget = new JoystickButton(m_controller, XboxController.Button.kRightBumper.value);
-        
         m_turnTurretRight = new Button(() -> m_controller.getPOV() == 90);
         m_turnTurretLeft = new Button(() -> m_controller.getPOV() == 270);
 
@@ -66,13 +58,6 @@ public class DriverOI {
         return m_intakeOutButton;
     }
 
-    // public Button getReverseFeederButton(){
-    //     return m_reverseFeederButton;
-    // }
-
-    // ---------------- Climber ----------------------------
-
-
     // ---------------- Flywheel ----------------------------
 
     public Button getIncrementFlywheelButton(){
@@ -86,10 +71,6 @@ public class DriverOI {
     public Button getToggleFlywheelButton(){
         return m_toggleFlywheel;
     }
-
-    // public JoystickButton getIncreaseFlywheelButton(){
-    //     return m_increaseFlywheelButton;
-    // }
 
     // ---------------- Turret ---------------------------
 
@@ -113,20 +94,7 @@ public class DriverOI {
         return m_turnTurretToTarget;
     }
 
-    // public JoystickButton moveToShootingDistance(){
-    //     return m_moveToShootingDistance;
-    // }
-
     // ---------------- Drivetrain ----------------------------
-
-    // public Button getShiftLowButton() {
-    //     return m_shiftLow;
-    // }
-
-
-    // public Button getShiftHighButton() {
-    //     return m_shiftHigh;
-    // }
 
     public Button getShiftButton(){
         return m_shiftButton;
@@ -142,7 +110,5 @@ public class DriverOI {
 
     public DoubleSupplier getRotateSupplier() {
         return () -> m_controller.getRightX();
-    }
-
-    
+    }  
 }
