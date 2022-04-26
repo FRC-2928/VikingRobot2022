@@ -98,11 +98,7 @@ public class OperatorOI {
     public DoubleSupplier getExtendRetractSupplier() {
         return () -> m_controller.getLeftY();
     }
-
-    // public DoubleSupplier getRetractSupplier() {
-    //     return () -> m_controller.getRightTriggerAxis();
-    // }
-
+    
     public Button getTiltForward() {
         return m_tiltForward;
     }
