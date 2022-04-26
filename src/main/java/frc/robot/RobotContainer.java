@@ -158,14 +158,14 @@ public class RobotContainer {
                                               new InstantCommand(m_intake::setIntakeOut, m_intake),
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
                                               new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Red")), new WaitCommand(1),
-                                              new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(0.5), new ShootOnce(m_intake, m_flywheel, m_turret)          
+                                              new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(0.5), new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)           
                                             ));
     m_autoChooser.addOption("2-Ball Auto Left Curve", new SequentialCommandGroup(
                                             new ToggleIntakeMotor(m_intake), new InstantCommand (m_intake::dontAllowIntakeUp, m_intake), 
                                             new InstantCommand(m_intake::setIntakeOut, m_intake),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Blue")), new WaitCommand(1),
-                                            new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(0.5), new ShootOnce(m_intake, m_flywheel, m_turret)           
+                                            new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(0.5), new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)             
                                             ));
     m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup(new ToggleIntakeMotor(m_intake), 
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP1")), 

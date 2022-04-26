@@ -54,12 +54,17 @@ public class Intake extends SubsystemBase {
   private double m_ejectDuration = 0;
   private double m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
 
+  private boolean m_intakeBrakeEnabled;
+  private boolean m_feederSensorActivated;
+
   private boolean m_startIntakeTimer = true;
   private boolean m_ejectInProgress = false;
   private boolean m_intakeMotorStop = false;
   private boolean m_rampStable = true;
 
   private boolean m_letIntakeMove = true;
+
+  private boolean m_overrideIntakeBrakePeriodic = false;
   
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -93,6 +98,9 @@ public class Intake extends SubsystemBase {
     setIntakePIDF();
     resetEncoders();
     setupShuffleboard();
+
+    m_intakeBrakeEnabled = false;
+    m_feederSensorActivated = true;
 
     // m_colorMatcher.addColorMatch(kBlueTarget);
     // m_colorMatcher.addColorMatch(kRedTarget);
@@ -216,16 +224,37 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
+    m_feederSensorActivated = !(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
+
     // 4/8 to check - did separating out intake functions to either in periodic or not in periodic help
                   // hasBall on shuffleboard - does we think ball is still there or is it just not moving
 
-    //if feeder has a ball, set intake brake enabled, otherwise set disabled
-    if(feederHasBall()){
-      setIntakeBrakeEnabled();
-    } else {
-      setIntakeBrakeDisabled();
-      // 4/7 startIntakeMotor();
+
+    if (!m_overrideIntakeBrakePeriodic){
+      //if feeder has a ball, set intake brake enabled
+
+//System.out.println("got into non-override periodic if statement");
+      if(!(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed())){
+        setIntakeBrakeEnabled();
+        // System.out.println("got through to enable");
+
+      //  if feeder is empty, set intake brake disabled
+      } else if (m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed()) {
+        setIntakeBrakeDisabled();
+      //System.out.println("got through to disable");
+        startIntakeMotor();
+      }
+
     }
+
+
+
+    System.out.print(isFeederSwitchActivated() + "   ");
+    System.out.print(m_feederSensorActivated + "   ");
+    System.out.print(isFeederBrakeEnabled() + "   ");
+    System.out.print(m_overrideIntakeBrakePeriodic + "   ");
+    System.out.println(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
+  
 
     if(intakeHasBall()){
       setIntakeOut();
@@ -317,10 +346,12 @@ public class Intake extends SubsystemBase {
 
   public void setIntakeBrakeEnabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(true);
+    m_intakeBrakeEnabled = true;
   }
 
   public void setIntakeBrakeDisabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(false);
+    m_intakeBrakeEnabled = false;
   }
 
   // --------- Feeder Motor ------------------------------
@@ -442,16 +473,24 @@ public class Intake extends SubsystemBase {
     return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
+  public boolean isIntakeBrakeEnabled(){
+    return m_intakeBrakeEnabled;
+  }
+
+  public void setOverrideIntakeBrakePeriodic(boolean isOverridden){
+    m_overrideIntakeBrakePeriodic = isOverridden;
+  }
+
 
 
   // --------- Feeder ------------------------------
 
   public boolean isFeederSwitchActivated() {
     // Simulate this return if not running on the real robot
-    if (RobotBase.isReal()) {
-      return !(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
-    }
-    return m_intakeSim.isFeederSwitchClosed();
+    //if (RobotBase.isReal()) {
+      return m_feederSensorActivated;
+    //}
+    //return m_intakeSim.isFeederSwitchClosed();
   }
 
    
