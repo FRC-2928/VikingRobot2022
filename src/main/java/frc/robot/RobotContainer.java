@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
@@ -28,7 +26,6 @@ import frc.robot.subsystems.Transmission;
 import frc.robot.subsystems.Turret;
 import frc.robot.commands.ClimberCommands.ExtendClimberBars;
 import frc.robot.commands.ClimberCommands.RetractClimberBars;
-import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
 import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
@@ -36,7 +33,6 @@ import frc.robot.commands.IntakeCommands.HoldIntakeUp;
 import frc.robot.commands.IntakeCommands.OpenRamp;
 import frc.robot.commands.IntakeCommands.ReverseFeeder;
 import frc.robot.commands.IntakeCommands.ReverseFeederAndIntake;
-import frc.robot.commands.IntakeCommands.ShootBall;
 import frc.robot.commands.IntakeCommands.ShootOnce;
 import frc.robot.commands.IntakeCommands.ToggleFeederMotor;
 import frc.robot.commands.IntakeCommands.ToggleIntakeMotor;
@@ -58,9 +54,7 @@ public class RobotContainer {
   // XBox Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
-  // private final Joystick m_driverController2 = new Joystick(OIConstants.kDriver2ControllerPort);
   private final DriverOI m_driverOI = new DriverOI(m_driverController);
-  // private final LogiTechDriverOI m_driverOI = new LogiTechDriverOI(m_driverController2);
   private final OperatorOI m_operatorOI = new OperatorOI(m_operatorController);
   
   // Shuffleboard 
@@ -81,7 +75,6 @@ public class RobotContainer {
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
     new InstantCommand(m_climber::tiltBack);
-    //new RunCommand(m_intake::startIntakeMotor);
 
     //sets the drivetrain to 90% for auto
     m_drivetrain.setDefaultCommand(
@@ -89,8 +82,6 @@ public class RobotContainer {
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain.driveAuto(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
-    
-    // new InstantCommand(m_intake::startMotors, m_intake); 
   }
 
   public void onTeleopInit() {  
@@ -104,15 +95,6 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
   }
-
-  // public void onDisabledInit(){
-  //   if(m_climber.isClimberForward()){
-  //     m_climber.tiltForward();
-  //   } else {
-  //     m_climber.tiltBack();
-  //   }
-  // }
-
 
   public void onRobotInit(){
     new InstantCommand(m_climber::tiltForward);
@@ -141,41 +123,7 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
             m_drivetrain));
 
-    // Configure button commands
-    // m_driverOI.getShiftLowButton().whenPressed(new InstantCommand(m_transmission::setLow, m_transmission));
-    // m_driverOI.getShiftHighButton().whenPressed(new InstantCommand(m_transmission::setHigh, m_transmission));
-
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
-    
-    // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(
-                                            new WaitCommand(1.0),
-                                            new ShootOnce(m_intake, m_flywheel, m_turret),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
-                                            ));
-    m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup(
-                                              new ToggleIntakeMotor(m_intake), new InstantCommand (m_intake::dontAllowIntakeUp, m_intake), 
-                                              new InstantCommand(m_intake::setIntakeOut, m_intake),
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Red")), new WaitCommand(1),
-                                              new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(0.5), new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)           
-                                            ));
-    m_autoChooser.addOption("2-Ball Auto Left Curve", new SequentialCommandGroup(
-                                            new ToggleIntakeMotor(m_intake), new InstantCommand (m_intake::dontAllowIntakeUp, m_intake), 
-                                            new InstantCommand(m_intake::setIntakeOut, m_intake),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Blue")), new WaitCommand(1),
-                                            new ShootOnce(m_intake, m_flywheel, m_turret), new WaitCommand(0.5), new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)             
-                                            ));
-    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup(new ToggleIntakeMotor(m_intake), 
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP1")), 
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP2")), 
-                                            new ShootOnce(m_intake, m_flywheel, m_turret), 
-                                            new ShootOnce(m_intake, m_flywheel, m_turret),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP3")), 
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP4")), 
-                                            new ShootOnce(m_intake, m_flywheel, m_turret)
-                                            ));
   }
 
   /**
@@ -185,22 +133,11 @@ public class RobotContainer {
     
     // Configure default commands
     m_turret.setDefaultCommand(new TurnTurretToTarget(m_turret));
-    // m_turret.setDefaultCommand(
-    //     new RunCommand(() -> m_turret.rotateTurret(m_driverOI.getRotateTurretLeftSupplier(), 
-    //                                                m_driverOI.getRotateTurretRightSupplier()),
-    //                                                m_turret));
-
+  
     // Configure button commands   
     m_operatorOI.getTrackTurretButton().whileHeld(new TurnTurretToTarget(m_turret));
     m_operatorOI.getTurnTurretLeftButton().whileHeld(new MoveTurret(m_turret, 1));
     m_operatorOI.getTurnTurretRightButton().whileHeld(new MoveTurret(m_turret, -1));
-    // m_driverOI.moveToShootingDistance().whenPressed(new MoveToShootingDistance(m_turret, m_drivetrain));
-
-    // Configure Shuffleboard commands    
-    // m_turret.getCommandsLayout().add("90 degrees", new MoveTurretProfiled(m_turret, 90));
-    // m_turret.getCommandsLayout().add("0 degrees", new MoveTurretProfiled(m_turret, 0));
-    // m_turret.getCommandsLayout().add("-90 degrees", new MoveTurretProfiled(m_turret, -90));
-    //m_turret.getCommandsLayout().add("Reset encoders", new InstantCommand(m_turret::resetEncoders, m_turret));
   }
 
   /**
@@ -215,26 +152,14 @@ public class RobotContainer {
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
     m_driverOI.getIsAtHighSpeed().whileHeld(new setLowIntakePower(m_intake, m_drivetrain));
-
     m_driverOI.getIntakeOutButton().whileHeld(new HoldIntakeUp(m_intake));
 
     m_operatorOI.getCloseRamp().whenPressed(new CloseRamp(m_intake));
     m_operatorOI.getOpenRamp().whenPressed(new OpenRamp(m_intake));
     m_operatorOI.getShootBall().whenPressed(new ShootOnce(m_intake, m_flywheel, m_turret));
-    //m_operatorOI.getShootBall().whenPressed(new ShootTwice(m_intake, m_flywheel, m_turret));
     m_operatorOI.getEjectBall().whenPressed(new EjectBall(m_intake));
     m_operatorOI.getReverseFeederButton().whenPressed(new ReverseFeeder(m_intake));
     m_operatorOI.getReverseIntakeButton().whenPressed(new ReverseFeederAndIntake(m_intake));
-
-    // Configure Shuffleboard commands
-    m_intake.getCommandsLayout().add(new ToggleIntakeMotor(m_intake)); 
-    m_intake.getCommandsLayout().add(new ToggleFeederMotor(m_intake));  
-    m_intake.getCommandsLayout().add(new InstantCommand(m_intake::triggerCloseIntakeSwitchSim, m_intake));
-    m_intake.getCommandsLayout().add(new ShootOnce(m_intake, m_flywheel, m_turret)); 
-    m_intake.getCommandsLayout().add(new ShootBall(m_intake, m_flywheel)); 
-    m_intake.getCommandsLayout().add(new EjectBall(m_intake));
-    m_intake.getCommandsLayout().add(new OpenRamp(m_intake));
-    m_intake.getCommandsLayout().add(new CloseRamp(m_intake));
   }
 
   /**
@@ -249,15 +174,7 @@ public class RobotContainer {
     m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
     m_driverOI.getIncrementFlywheelButton().whenPressed(new InstantCommand(m_flywheel::increaseFlywheelChange, m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whenPressed(new InstantCommand(m_flywheel::decreaseFlywheelChange, m_flywheel));
-    //m_driverOI.getIncreaseFlywheelButton().whenPressed (new InstantCommand(m_flywheel::adjustFlywheelChange, m_flywheel));
     m_operatorOI.timeToClimb().whenPressed(new InstantCommand(m_flywheel::turnFlywheelOff,m_flywheel));
-                                             
-
-    // Configure Shuffleboard commands
-    // m_flywheel.getCommandsLayout().add(new DecrementFlywheel(m_flywheel));
-    // m_flywheel.getCommandsLayout().add(new IncrementFlywheel(m_flywheel));
-    // m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
-    // m_flywheel.getCommandsLayout().add(new SetFlywheelVelocity(m_flywheel, m_turret));
     
   } 
 
@@ -276,43 +193,6 @@ public class RobotContainer {
     m_operatorOI.getTiltForward().whenPressed(new InstantCommand(m_climber::tiltForward,m_climber));
     m_operatorOI.getTiltBack().whenPressed(new InstantCommand(m_climber::tiltBack,m_climber));
   }
-
-
-  // public Trajectory calibrateTrajectory() {
-    
-  //   // Note that all coordinates are in meters, and follow NWU conventions.
-  //   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-  //       // Start at the origin facing the +X direction
-  //       new Pose2d(0, 0, new Rotation2d(0)),
-  //       List.of(
-  //           new Translation2d(1.0, 0.0)
-  //       ),
-  //       new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
-  //       AutoConstants.kTrajectoryConfig);
-
-  //   return trajectory;
-  // }
-
-  // public Trajectory navigateConesTrajectory() {
-
-  //   // Note that all coordinates are in meters, and follow NWU conventions.
-  //   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-  //       // Start at the origin facing the +X direction
-  //       new Pose2d(0, 4, new Rotation2d(0)),
-  //       List.of(
-  //           new Translation2d(3.0, 5.0),
-  //           new Translation2d(6.0, 3.0),
-  //           new Translation2d(9.0, 5.0),
-  //           new Translation2d(12.0, 4.0),
-  //           new Translation2d(9.0, 3.0),
-  //           new Translation2d(6.0, 5.0),
-  //           new Translation2d(3.0, 3.0)
-  //       ),
-  //       new Pose2d(0, 4, new Rotation2d(180)), // left
-  //       AutoConstants.kTrajectoryConfig);
-
-  //   return trajectory;
-  // }
 
   public Trajectory loadTrajectory(String trajectoryJSON) {
     Trajectory trajectory = new Trajectory();
@@ -345,6 +225,5 @@ public class RobotContainer {
 
   public boolean isClimberForward(){
     return m_climber.isClimberForward();
-  }
-    
+  }    
 }
