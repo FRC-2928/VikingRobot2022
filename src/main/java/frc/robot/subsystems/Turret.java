@@ -165,7 +165,7 @@ public class Turret extends SubsystemBase {
                                   .plus(m_lastHeading)
                                   .minus(currentHeading);
 
-    //publishTelemetry();
+    publishTelemetry();
   }
 
   public void publishTelemetry() {   
@@ -339,7 +339,6 @@ public class Turret extends SubsystemBase {
     }
     return false;
   }
-
 
   public boolean isLimitSwitchClosed(){
     return m_turretMotor.getSensorCollection().isFwdLimitSwitchClosed();

@@ -4,17 +4,10 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -49,9 +42,6 @@ public class Flywheel extends SubsystemBase {
 
   Timer m_shootTimer = new Timer();
 
-  
-
-
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
@@ -61,7 +51,6 @@ public class Flywheel extends SubsystemBase {
     resetEncoders();
     setFlywheelPIDF();
     m_velocityChange = 1;
-    //setupShuffleboard();
     DistanceMap.getInstance().loadMaps();
     m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
     m_shootTimer.reset();
@@ -128,43 +117,13 @@ public class Flywheel extends SubsystemBase {
 
   }
 
-  public void setupShuffleboard() {
-    ShuffleboardTab m_flywheelTab = Shuffleboard.getTab("Flywheel"); 
-
-    m_flywheelLayout = Shuffleboard.getTab("Flywheel")
-            .getLayout("Flywheels", BuiltInLayouts.kList)
-            .withSize(2, 2)
-            .withPosition(0, 0);
-          m_flywheelSpeedEntry = m_flywheelLayout.add("Speed in Ticks", getVelocity()).getEntry();
-          m_flywheelPercentEntry = m_flywheelLayout.add
-            ("Percent Output", m_flywheelMotorSim.getMotorOutputLeadVoltage()).getEntry();       
-    m_flywheelTicksEntry = m_flywheelTab.add("Ticks Per 100 MS", getVelocity())
-            .withSize(3,3)
-            .withWidget(BuiltInWidgets.kGraph)
-            .withPosition(5, 0)
-            .getEntry();
-
-    m_commandsLayout = Shuffleboard.getTab("Flywheel")
-            .getLayout("Commands", BuiltInLayouts.kList)
-            .withSize(3, 3)
-            .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
-            .withPosition(2, 0);
-  }
-
-  public ShuffleboardLayout getCommandsLayout() {
-    return m_commandsLayout;
-  }
-
-
   // -----------------------------------------------------------
   // Control Input
   // -----------------------------------------------------------
   @Override
   public void periodic() {   
-    //publishTelemetry();
+    publishTelemetry();
     if(m_shootTimer.hasElapsed(2)){
-    //System.out.println(getVelocity());
-    //System.out.println(m_adjustableVelocity);
     m_shootTimer.reset();
     m_shootTimer.start();
     }
@@ -239,7 +198,7 @@ public class Flywheel extends SubsystemBase {
 
   // -----------------------------------------------------------
   // System State
-  // --------------------P---------------------------------------
+  // -----------------------------------------------------------
 
   /**
    * 
@@ -264,26 +223,5 @@ public class Flywheel extends SubsystemBase {
     }else{
       return false;
     }
-  }
-
-
-  // -----------------------------------------------------------
-  // Simulation
-  // -----------------------------------------------------------
-
-  public void simulationPeriodic(){
-
-    //set voltage from voltage from robot controller
-    m_flywheelMotorSim.setBusVoltage(RobotController.getInputVoltage());
-
-    //set input to simulator as output voltage from sim motor
-    m_flywheelSim.setInput(m_flywheelMotorSim.getMotorOutputLeadVoltage());
-
-    //update time by 20 ms
-    m_flywheelSim.update(0.02);
-
-    //set the encoder values from the sim motor's output
-    m_flywheelMotorSim.setIntegratedSensorVelocity((int)m_flywheelSim.getOutput(0));
-  
   }
 }
