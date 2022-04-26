@@ -8,25 +8,17 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.simulation.TurretSim;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import org.photonvision.SimVisionSystem;
-
-import java.util.Map;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -57,7 +49,6 @@ public class Turret extends SubsystemBase {
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_turretMotorSim = m_turretMotor.getSimCollection();
-  TurretSim m_turretSim = new TurretSim(TurretConstants.kTurretLinearSystem);
 
   // Simulated Vision System.
   // Configure these to match your PhotonVision Camera,
@@ -83,8 +74,6 @@ public class Turret extends SubsystemBase {
                   minTargetArea);
 
   // instance variables for handling targeting.
-  // private double m_lastHeading = 0.0;
-  // private double m_targetHeadingOffset = 0.0;
   private Rotation2d m_lastHeading = new Rotation2d();
   private Rotation2d m_targetHeadingOffset = new Rotation2d();
   private Rotation2d m_estimatedTargetRotation = new Rotation2d();
@@ -98,7 +87,6 @@ public class Turret extends SubsystemBase {
     configMotors();
     setTurretPIDF();
     resetEncoders();
-    //setupShuffleboard();
     m_turretPose = new Pose2d(0,0,getTargetToHeadingOffset());
   }
 
@@ -157,76 +145,25 @@ public class Turret extends SubsystemBase {
     m_turretMotor.config_kF(0, TurretConstants.kGainsTurret.kF, 0);
   }
 
-  public void setupShuffleboard() {
-    ShuffleboardTab m_turretTab = Shuffleboard.getTab("Turret"); 
-    m_targetHOEntry = m_turretTab.add("Target Horizontal Offset", getTargetHorizontalOffset())
-      .withSize(3,3)
-      .withWidget(BuiltInWidgets.kGraph)
-      .withPosition(0, 0)
-      .getEntry(); 
-    m_turretPowerEntry = m_turretTab.add("Motor Power", m_turretMotor.getMotorOutputPercent())
-      .withSize(3,3)
-      .withWidget(BuiltInWidgets.kGraph)
-      .withPosition(3, 0)
-      .getEntry();
-    m_turretOffsetEntry = m_turretTab.add("Turret Offset", getTurretToRobotOffset().getDegrees())
-      .withSize(2,1)
-      .withPosition(1, 4)
-      .getEntry();  
-    m_headingOffsetEntry = m_turretTab.add("Heading Offset", getTurretToHeadingOffset().getDegrees())
-      .withSize(2,1)
-      .withPosition(3, 4)
-      .getEntry(); 
-    m_targetOffsetEntry = m_turretTab.add("Target Offset", getTargetToHeadingOffset().getDegrees())
-      .withSize(2,1)
-      .withPosition(5, 4)
-      .getEntry(); 
-    m_estimatedTargetRotationEntry = m_turretTab.add("Estimated Offset", getEstimatedTargetRotation().getDegrees())
-      .withSize(2,1)
-      .withPosition(7, 4)
-      .getEntry();   
-      
-    ShuffleboardLayout targetLayout = Shuffleboard.getTab("Turret")
-      .getLayout("Target", BuiltInLayouts.kList)
-      .withSize(2, 3)
-      .withPosition(7, 0);  
-    m_targetLockedEntry = targetLayout.add("Locked", getTargetLocked()).getEntry();
-    m_targetFoundEntry = targetLayout.add("Found", getTargetFound()).getEntry();
-
-    m_commandsLayout = Shuffleboard.getTab("Turret")
-      .getLayout("Commands", BuiltInLayouts.kList)
-      .withSize(3, 6)
-      .withProperties(Map.of("Label position", "HIDDEN")) // hide labels for commands
-      .withPosition(9, 0);  
-
-    // SmartDashboard.putData("Target Pose", m_field2d);  
-  }
-
   // -----------------------------------------------------------
   // Control Input
   // -----------------------------------------------------------
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run 
     SmartDashboard.putBoolean("Is Target in Range (High)",inRange());
-    // get the offset from the target heading to the robot heading,
-    // but only if we have found the target.
     if(getTargetFound()) {
-      // m_lastHeading = m_drivetrain.getRotation().getDegrees();
-      // m_targetHeadingOffset = getTargetToHeadingOffset().getDegrees();
       m_lastHeading = m_drivetrain.getRotation();
       m_targetHeadingOffset = getTargetToHeadingOffset();
     }
 
     // calculate the estimated target rotation.                           
-    // m_estimatedTargetRotation = Rotation2d.fromDegrees((m_targetHeadingOffset + m_lastHeading) - m_drivetrain.getRotation().getDegrees());
     Rotation2d currentHeading = m_drivetrain.getRotation();
     m_estimatedTargetRotation = m_targetHeadingOffset
                                   .plus(m_lastHeading)
                                   .minus(currentHeading);
 
-    //publishTelemetry();
+    publishTelemetry();
   }
 
   public void publishTelemetry() {   
@@ -239,16 +176,13 @@ public class Turret extends SubsystemBase {
 
     m_targetLockedEntry.setBoolean(getTargetLocked());
     m_targetFoundEntry.setBoolean(getTargetFound());
-    
-    // Using this to display the angle of the target from the robot heading
-    // m_field2d.setRobotPose(getTargetPose());
 
-    // SmartDashboard.putBoolean("Target found", m_turretLimelight.isTargetFound());
+    
     SmartDashboard.putNumber("Target X", m_turretLimelight.getHorizontalOffset());
     SmartDashboard.putNumber("Target Y", m_turretLimelight.getVerticalOffset());
     SmartDashboard.putNumber("Target Skew", m_turretLimelight.getSkew());
     SmartDashboard.putNumber("Target Area", m_turretLimelight.getArea());
-    // SmartDashboard.putNumber("Turret Degrees", encoderTicksToDegrees( m_turretMotor.getSelectedSensorPosition()));
+    
   }
 
   public ShuffleboardLayout getCommandsLayout() {
@@ -269,15 +203,11 @@ public class Turret extends SubsystemBase {
    */
   public void setTurretDegrees(double angleDegrees) {
     double encoderTicks = getDegreesToEncoderTicks(angleDegrees);
-    // m_turretMotor.set(ControlMode.Position, encoderTicks);
     m_turretMotor.set(ControlMode.MotionMagic, encoderTicks);
-   
- 
+  
     SmartDashboard.putNumber("Turret angleDegrees", angleDegrees);
     SmartDashboard.putNumber("Turret ticks", encoderTicks);      
   }
-
-  
 
   public boolean motionProfileFinished() {
     return m_turretMotor.isMotionProfileFinished();
@@ -362,13 +292,11 @@ public class Turret extends SubsystemBase {
    */
   public double getTargetHorizontalOffset() {
     double offset = m_turretLimelight.getHorizontalOffset();
-    // pass it though an averaging filter
     return m_filter.calculate(offset);
   }
 
   public int getTargetVerticalOffset(){
     double offset = m_turretLimelight.getVerticalOffset();
-    //System.out.println("Vertical Offset" + offset);
     return (int)(m_verticalFilter.calculate(offset));
   }
 
@@ -410,39 +338,8 @@ public class Turret extends SubsystemBase {
     return false;
   }
 
-
   public boolean isLimitSwitchClosed(){
     return m_turretMotor.getSensorCollection().isFwdLimitSwitchClosed();
-  }
-
-  // -----------------------------------------------------------
-  // Simulation
-  // -----------------------------------------------------------
-  public void simulationPeriodic() {
-    /* Pass the robot battery voltage to the simulated Talon FXs */
-    m_turretMotorSim.setBusVoltage(RobotController.getInputVoltage());
-    SmartDashboard.putNumber("Sim Turret output voltage", m_turretMotorSim.getMotorOutputLeadVoltage());
-    // System.out.println("Input Voltage " + m_turretMotorSim.getMotorOutputLeadVoltage());
-
-    m_turretSim.setInput(m_turretMotorSim.getMotorOutputLeadVoltage());  
-    
-    /*
-      * Advance the model by 20 ms. Note that if you are running this
-      * subsystem in a separate thread or have changed the nominal
-      * timestep of TimedRobot, this value needs to match it.
-      */
-    m_turretSim.update(0.02);
-
-    // /*
-    //  * Update all of the sensors.
-    //  *
-    //  * Since WPILib's simulation class is assuming +V is forward,
-    //  * but -V is forward for the right motor, we need to negate the
-    //  * position reported by the simulation class. Basically, we
-    //  * negated the input, so we need to negate the output.
-    //  */
-    m_turretMotorSim.setQuadratureRawPosition((int)m_turretSim.getOutput(0));
-    
   }
 
 }

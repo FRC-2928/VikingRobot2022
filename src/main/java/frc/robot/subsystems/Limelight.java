@@ -71,7 +71,6 @@ public class Limelight{
   public double getHorizontalOffset(){
     NetworkTableEntry tx = m_limelightNI.getEntry("tx");
     m_horizontalOffset = tx.getDouble(0.0);
-    //System.out.println(m_horizontalOffset);
     return m_horizontalOffset;
   }
 

@@ -94,11 +94,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    // if (m_robotContainer.getButtonA()) {
-    //   System.out.println("Button A pressed");
-    // }
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
