@@ -350,7 +350,7 @@ public class Drivetrain extends SubsystemBase {
     public void drive(double move, double rotate, boolean squaredInputs){
         SmartDashboard.putNumber("Output", rotate);
         //m_differentialDrive.arcadeDrive(move, rotate);
-        m_differentialDrive.arcadeDrive(filter.calculate(move), -.8* rotate, squaredInputs);
+        m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
         //m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
     }
 
@@ -416,7 +416,7 @@ public class Drivetrain extends SubsystemBase {
         m_differentialDrive.feed();
     }
 
-    public void zeroGyro(){
+    public void zeroGyro(){ 
         m_pigeon.reset();
     }
 
