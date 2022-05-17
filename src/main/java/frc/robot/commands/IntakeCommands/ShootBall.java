@@ -27,7 +27,7 @@ public class ShootBall extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_intake.readyToShoot()) {
+    if (m_intake.isRampClosed()) {
       // Override all brakes
       System.out.println("Ready to shoot...");
       
@@ -67,7 +67,6 @@ public class ShootBall extends CommandBase {
   public void end(boolean interrupted) {
     
     m_intake.setFeederBrakeEnabled();
-    m_intake.setOverrideIntakeBrakePeriodic(true);
     m_intake.setIntakeBrakeDisabled();
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);

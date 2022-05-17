@@ -4,17 +4,10 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -26,7 +19,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.Constants.FlywheelConstants;
 import frc.robot.Constants;
-import frc.robot.simulation.FlywheelSim;
 
 
 public class Flywheel extends SubsystemBase {
@@ -46,9 +38,6 @@ public class Flywheel extends SubsystemBase {
 
   Timer m_shootTimer = new Timer();
 
-  
-
-
   // -----------------------------------------------------------
   // Initialization
   // -----------------------------------------------------------
@@ -58,7 +47,6 @@ public class Flywheel extends SubsystemBase {
     resetEncoders();
     setFlywheelPIDF();
     m_velocityChange = 1;
-    //setupShuffleboard();
     DistanceMap.getInstance().loadMaps();
     m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
     m_shootTimer.reset();
@@ -100,9 +88,8 @@ public class Flywheel extends SubsystemBase {
 
     //Either using the integrated Falcon sensor or an external one, will change if needed
     fx.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); 
-
-    fx.setInverted(true);
     }
+    m_flywheelTalon.setInverted(true);
   }
 
   public void setFlywheelPIDF() {
@@ -181,10 +168,8 @@ public class Flywheel extends SubsystemBase {
   // -----------------------------------------------------------
   @Override
   public void periodic() {   
-    //publishTelemetry();
+    publishTelemetry();
     if(m_shootTimer.hasElapsed(2)){
-    //System.out.println(getVelocity());
-    //System.out.println(m_adjustableVelocity);
     m_shootTimer.reset();
     m_shootTimer.start();
     }
@@ -197,9 +182,9 @@ public class Flywheel extends SubsystemBase {
 
 
 
-    m_flywheelPercentEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
-    m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
-    m_flywheelTicksEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
+    // m_flywheelPercentEntry.setNumber(m_flywheelTalon.getMotorOutputPercent());
+    // m_flywheelSpeedEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
+    // m_flywheelTicksEntry.setNumber(m_flywheelTalon.getSelectedSensorVelocity());
   }
 
   public void resetEncoders(){
@@ -228,17 +213,8 @@ public class Flywheel extends SubsystemBase {
     }
   }
 
-  /**
-   * 
-   * @param velocity change in ticks per 100 ms
+   /* sets velocity to whatever is stored as the velocity variable, multiplied by the change in velocity
    */
-  public void setVelocity(double velocity){
-
-    //turn change in ticks per sec to change in ticks per 100 ms
-    m_flywheelTalon.set(ControlMode.Velocity, velocity);
-    m_flywheelTalonUpper.set(ControlMode.Velocity, velocity);
-  }
-
   public void setVelocity(){
 
     //sets as ticks per 100 ms
@@ -247,7 +223,7 @@ public class Flywheel extends SubsystemBase {
       m_flywheelTalonUpper.set(ControlMode.Velocity, 20000);
     } else {
       m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity * m_velocityChange);
-      m_flywheelTalonUpper.set(ControlMode.Velocity, m_adjustableVelocity * m_velocityChange);
+      m_flywheelTalonUpper.set(ControlMode.Velocity, m_adjustableVelocity*.5 * m_velocityChange);
     }
   }
 
@@ -258,30 +234,16 @@ public class Flywheel extends SubsystemBase {
   }
 
   
-
-  public int calculateFlywheelTicksPer100ms(int distance) {
-    int ticks = DistanceMap.getInstance().getFlywheelTicksPer100ms(distance);
-    return ticks;
+  public void turnFlywheelOff() {
+    m_flywheelTalon.set(ControlMode.PercentOutput, 0);
   }
 
+  /**
+   * 
+   * @param velocity resets the velocity for flywheel to go to
+   */
   public void setAdjustableVelocity(double velocity){
     m_adjustableVelocity = velocity;
-  }
-
-  public void stopFlywheel(){
-    setAdjustableVelocity(0);
-    setPower(0);
-  }
-
-  public boolean isFlyWheelUpToSpeed(){
-
-    if(Math.abs((m_adjustableVelocity * m_velocityChange) - getVelocity()) <= 200.0){
-      return true;
-
-    }else{
-
-      return false;
-    }
   }
 
   public void increaseFlywheelChange(){
@@ -295,27 +257,7 @@ public class Flywheel extends SubsystemBase {
 
   // -----------------------------------------------------------
   // System State
-  // --------------------P---------------------------------------
-  public double getRPM(){
-    double ticksPerSec = m_flywheelTalon.getSelectedSensorVelocity() * 10;
-    return (ticksToRotations(ticksPerSec) * 60);
-  }
-
-  public double rotationsToTicks(double rotations){
-    return ((rotations * FlywheelConstants.kEncoderCPR) * FlywheelConstants.kGearRatio);
-  }
-
-  public double ticksToRotations(double ticks){
-    return ((ticks / FlywheelConstants.kEncoderCPR) / FlywheelConstants.kGearRatio);
-  }
-
-  /**
-   * 
-   * @return the percent output of the motor (-1 to 1)
-   */
-  public double getPower(){
-    return(m_flywheelTalon.getMotorOutputPercent());
-  }
+  // -----------------------------------------------------------
 
   /**
    * 
@@ -329,25 +271,16 @@ public class Flywheel extends SubsystemBase {
     return(m_flywheelTalon.getMotorOutputPercent() > 0);
   }
 
+  /**
+   * 
+   * @return whether flywheel is within 200 ticks/100ms of desired velocity
+   */
+  public boolean isFlyWheelUpToSpeed(){
 
-
-  // -----------------------------------------------------------
-  // Simulation
-  // -----------------------------------------------------------
-
-  // public void simulationPeriodic(){
-
-  //   //set voltage from voltage from robot controller
-  //   m_flywheelMotorSim.setBusVoltage(RobotController.getInputVoltage());
-
-  //   //set input to simulator as output voltage from sim motor
-  //   m_flywheelSim.setInput(m_flywheelMotorSim.getMotorOutputLeadVoltage());
-
-  //   //update time by 20 ms
-  //   m_flywheelSim.update(0.02);
-
-  //   //set the encoder values from the sim motor's output
-  //   m_flywheelMotorSim.setIntegratedSensorVelocity((int)m_flywheelSim.getOutput(0));
-  
-  //}
+    if(Math.abs((m_adjustableVelocity * m_velocityChange) - getVelocity()) <= 200.0){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

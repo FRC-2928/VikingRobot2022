@@ -60,12 +60,6 @@ public final class Constants {
         public static final int kClimberSolenoid = 2;
 
         public static final int kIntakeSolenoid = 3;
-
-        // public static final int kDrivetrainShiftSolenoidLow = 0;
-        // public static final int kDrivetrainShiftSolenoidHigh = 1;
-        // public static final int kRampSolenoidOpen = 2;
-        // public static final int kRampSolenoidClosed = 3;
-       
     }
 
     public static final class OIConstants {
@@ -132,9 +126,6 @@ public final class Constants {
         public final static Gains kGainsTurning = new Gains( 0.10, 0.0,  0.0, 0.0,            200,  1.00 );
         public final static Gains kGainsVelocity = new Gains( 0.1, 0.001, 5, 1023.0/20660.0,  300,  1.00);
         public final static Gains kGainsMotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/20660.0,  400,  1.00 );
-
-        //public static final double kDistanceToleranceMeters = 0.1;
-        //public static final double kVelocityToleranceMeters = 0.1;
     }
 
     public static final class AutoConstants {
@@ -158,8 +149,6 @@ public final class Constants {
 
         public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem = 
             LinearSystemId.identifyVelocitySystem(kvVoltSecondsPerRadian, kaVoltSecondsSquaredPerRadian);
-        // public static final LinearSystem<N1, N1, N1> kFlywheelLinearSystem2 = 
-        //     LinearSystemId.createFlywheelSystem(motor, jKgMetersSquared, G)
         
         /**
          * PID Gains may have to be adjusted based on the responsiveness of control loop.
@@ -175,16 +164,9 @@ public final class Constants {
         public static final double kGearRatio = 1;
 
         public static final double kEncoderCPR = 2048;
-
-        // public static final double kMotorLimit = .9;
-
-        // public static final double kIdealMotorPower = .9;
         
         //velocity in ticks per 100 ms
         public static final double kIdealVelocity = 8000;
-
-        // public static final double kFlywheelMass = 1;
-        // public static final double kFlywheelRadius = 1;
     }
 
     
@@ -197,20 +179,16 @@ public final class Constants {
          * 
          * 	                                    			  kP   kI   kD   kF               Iz    PeakOut */
         public final static Gains kGainsTurret = new Gains( 0.01, 0.0,  0.0, 0.0,            100,  0.50 );
-        // public final static Gains kGainsTurning = new Gains( 2.0, 0.0,  4.0, 0.0,            200,  1.00 );
-        // public final static Gains kGainsVelocity = new Gains( 0.1, 0.0, 20.0, 1023.0/6800.0,  300,  0.75 );
-	    // public final static Gains kGainsMotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 
         public static final double kTurretGearRatio = 9.08;
         public static final double kTurretDegreesPerRotation = 360;
 
-        // public static final double kTurretErrorThreshold = 1;
         public static final double kTurretLeftLimit = 120;
         public static final double kTurretRightLimit = -120;
 
         public static final double kTurretMaxTicks = 1;
 
-        public static final double kTurretTicksPerDegree = 61; // Need to confirm
+        public static final double kTurretTicksPerDegree = 61;
         
         public static final int kEncoderCPR = 4096;
         public static final double kGearRatio = (50/9);
@@ -230,17 +208,6 @@ public final class Constants {
             new TrapezoidProfile.Constraints(kMaxSpeedRotationsPerSecond, kMaxAccelRotationsPerSecondSquared);    
     }
 
-    public static final class FeederConstants {
-
-        // Motor control constants
-        // public static final double kIndexFastForwardPower = 0.8;
-        // public static final double kIndexPower = 0.5;
-        // public static final double kIndexReversePower = -0.8;
-        // public static final double kHopperFastForwardPower = 0.7;
-        // public static final double kHopperPower = 0.55;
-        // public static final double kHopperReversePower = -0.8;
-    }
-
     public static final class ClimberConstants {
 
         public static final Gains kGainsClimber = new Gains(0,  0,   0,   0,   0,  1.00);
@@ -250,16 +217,6 @@ public final class Constants {
         public static final double kEncoderCPR = 4096;
 
         public static final double kClimberPower = 0.3;
-
-        // public static final double kStowedPositionSetpoint = 0.025; // Meters - Test this before use
-        // public static final double kDeployedPositionSetpoint = 1.016; // Meters
-        // public static final double kClimberPower = 0.4; // Power Percent
-
-        // public static final double kClimberEncoderTicksPerRotation = 2048; // correct!
-        // public static final double kClimberGearRatio = 35 / 1; // moter to intermediate pulley, correct!
-        // // meters climber movement per intermediate pulley rev, correct!
-        // public static final double kDistancePerPullyRotation = 0.0762; // 7.62 
-		// public static double kClimberErrorThreshold = 0.5; // 5 cm
     }
 
     public static final class IntakeConstants {
@@ -292,17 +249,10 @@ public final class Constants {
         public static final String kDriverLimelight = "limelight-driver";
         public static final String kTurretLimelight = "limelight-turret";
 
-        // //Pipelines
-        // public static final int kLowLimelightTrackingPipeline = 0;
-        // public static final int kLowLimelightDrivePipeline = 1;
-        // public static final int kHighLimelightTrackingPipeline = 0;
-        // public static final int kHighLimelightDrivePipeline = 1;
-
         public static final double kHighLimelightMountAngle = 17.5;
         public static final double kHighLimelightHeight = 37.5;
         public static final double kHighGoalHeight = 90;
     }
-
     public static final class ConversionConstants{
         public static final double kMetersToFeet = 3.281;
     
@@ -318,11 +268,4 @@ public final class Constants {
         public static final double kTurretGearRatio = 169.155; 
         public static final double kTurretDegreesPerRotation = 360; 
     }
-
-    //Color Panel for Intake
-    public enum ControlPanelColor {
-
-        RED, BLUE, GREEN, YELLOW, UNKNOWN;
-    }
-  
 }

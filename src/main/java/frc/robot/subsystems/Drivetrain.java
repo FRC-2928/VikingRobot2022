@@ -15,12 +15,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -74,7 +71,6 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDriveWheelSpeeds m_prevSpeeds;
     private double m_targetVelocityRotationsPerSecond;
 
-    //private double m_leftPosition, m_rightPosition;
     private Supplier<Transmission.GearState> m_gearStateSupplier;
     private double m_prevLeftEncoder, m_prevRightEncoder;
     private double m_prevSetOutputTime; 
@@ -145,8 +141,6 @@ public class Drivetrain extends SubsystemBase {
 
         m_field2d.setRobotPose(getPose());
         SmartDashboard.putData("Field", m_field2d);
-
-        setupShuffleboard();
     }        
 
     public void configmotors() {
@@ -208,63 +202,12 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
-    private void setupShuffleboard() {
-
-        // Create a tab for the Drivetrain
-        ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drivetrain");
-        m_headingEntry = m_driveTab.add("Heading Deg.", getRotation().getDegrees())
-            .withWidget(BuiltInWidgets.kGraph)      
-            .withSize(3,3)
-            .withPosition(0, 0)
-            .getEntry();  
-        m_leftWheelPositionEntry = m_driveTab.add("Left Wheel Pos.", getLeftDistanceMeters())
-            .withWidget(BuiltInWidgets.kGraph)      
-            .withSize(3,3)  
-            .withPosition(4, 0)
-            .getEntry();  
-        m_rightWheelPositionEntry = m_driveTab.add("Right Wheel Pos.", getRightDistanceMeters())
-            .withWidget(BuiltInWidgets.kGraph)      
-            .withSize(3,3)
-            .withPosition(7, 0)
-            .getEntry(); 
-        m_leftFFEntry=m_driveTab.add("Left FF", 0)
-            .withWidget(BuiltInWidgets.kGraph)      
-            .withSize(3,3)            
-            .withPosition(4, 3)
-            .getEntry();  
-        m_rightFFEntry=m_driveTab.add("Right FF", 0)
-            .withWidget(BuiltInWidgets.kGraph)            
-            .withSize(3,3)
-            .withPosition(7, 3)
-            .getEntry();   
-            
-        ShuffleboardTab m_odometryTab = Shuffleboard.getTab("Odometry");    
-        m_odometryXEntry = m_odometryTab.add("X Odometry", 0)
-            .withWidget(BuiltInWidgets.kGraph)            
-            .withSize(2,2)
-            .withPosition(7, 0)
-            .getEntry();
-        m_odometryYEntry = m_odometryTab.add("Y Odometry", 0)
-            .withWidget(BuiltInWidgets.kGraph)            
-            .withSize(2,2)
-            .withPosition(9, 0)
-            .getEntry();
-        m_odometryHeadingEntry = m_odometryTab.add("Heading Odometry", 0)
-            .withWidget(BuiltInWidgets.kGraph)            
-            .withSize(2,2)
-            .withPosition(8, 3)
-            .getEntry();
-                   
-    }
-
     // -----------------------------------------------------------
     // Process Logic
     // -----------------------------------------------------------
     @Override
     public void periodic() {
-
-        publishTelemetry();   
-        
+        //publishTelemetry();     
     }
 
     public void publishTelemetry() {
@@ -349,9 +292,8 @@ public class Drivetrain extends SubsystemBase {
 
     public void drive(double move, double rotate, boolean squaredInputs){
         SmartDashboard.putNumber("Output", rotate);
-        //m_differentialDrive.arcadeDrive(move, rotate);
-        m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
-        //m_differentialDrive.arcadeDrive(move, -.8* rotate, squaredInputs);
+        m_differentialDrive.arcadeDrive(filter.calculate(move), -.8* rotate, squaredInputs);
+        
     }
 
     public void drive(double move, double rotate){
@@ -480,52 +422,4 @@ public class Drivetrain extends SubsystemBase {
     public double getAvgDistanceMeters(){
         return (getLeftDistanceMeters() + getRightDistanceMeters()) /2;
     }
-
-
-    // -----------------------------------------------------------
-    // Simulation
-    // -----------------------------------------------------------
-    public void simulationPeriodic() {
-        /* Pass the robot battery voltage to the simulated Talon FXs */
-        m_leftDriveSim.setBusVoltage(RobotController.getInputVoltage());
-        m_rightDriveSim.setBusVoltage(RobotController.getInputVoltage());
-          
-        m_drivetrainSimulator.setInputs(m_leftDriveSim.getMotorOutputLeadVoltage(),
-                                        -m_rightDriveSim.getMotorOutputLeadVoltage());
-    
-        /*
-         * Advance the model by 20 ms. Note that if you are running this
-         * subsystem in a separate thread or have changed the nominal
-         * timestep of TimedRobot, this value needs to match it.
-         */
-        m_drivetrainSimulator.update(0.02);
-    
-        /*
-         * Update all of the sensors.
-         *
-         * Since WPILib's simulation class is assuming +V is forward,
-         * but -V is forward for the right motor, we need to negate the
-         * position reported by the simulation class. Basically, we
-         * negated the input, so we need to negate the output.
-         */
-        m_leftDriveSim.setIntegratedSensorRawPosition(
-                        (int)metersToEncoderTicks(
-                            m_drivetrainSimulator.getLeftPositionMeters()
-                        ));
-        m_leftDriveSim.setIntegratedSensorVelocity(
-                        (int)metersToEncoderTicks(
-                            m_drivetrainSimulator.getLeftVelocityMetersPerSecond() / 10
-                        ));
-        m_rightDriveSim.setIntegratedSensorRawPosition(
-                        (int)metersToEncoderTicks(
-                            -m_drivetrainSimulator.getRightPositionMeters()
-                        ));
-        m_rightDriveSim.setIntegratedSensorVelocity(
-                        (int)metersToEncoderTicks(
-                            -m_drivetrainSimulator.getRightVelocityMetersPerSecond() / 10
-                        ));
-
-        m_pigeonSim.setRawHeading(m_drivetrainSimulator.getHeading().getDegrees());
-      }
-
 }
