@@ -23,8 +23,8 @@ public class DistanceMap {
         m_ticksPer100ms.put(10, 20000);
         m_ticksPer100ms.put(11, 20000);
         m_ticksPer100ms.put(12, 20000);
-        m_ticksPer100ms.put(13, 20000);
-        m_ticksPer100ms.put(14, 20000);
+        m_ticksPer100ms.put(13, 18000);
+        m_ticksPer100ms.put(14, 18000);
         m_ticksPer100ms.put(15, 18000);
         m_ticksPer100ms.put(16, 14000);
         m_ticksPer100ms.put(17, 12000);
@@ -61,7 +61,7 @@ public class DistanceMap {
         m_ticksPer100ms.put(48, 8000);
         m_ticksPer100ms.put(49, 8000);
         m_ticksPer100ms.put(50, 8000);
-        m_ticksPer100ms.put(0, 4650);
+        m_ticksPer100ms.put(0, 15000);
 
     }
 

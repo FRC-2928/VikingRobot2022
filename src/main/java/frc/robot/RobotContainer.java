@@ -204,7 +204,9 @@ public class RobotContainer {
     m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
     m_driverOI.getIncrementFlywheelButton().whenPressed(new InstantCommand(m_flywheel::increaseFlywheelChange, m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whenPressed(new InstantCommand(m_flywheel::decreaseFlywheelChange, m_flywheel));
-    m_operatorOI.timeToClimb().whenPressed(new InstantCommand(m_flywheel::turnFlywheelOff,m_flywheel));
+    m_operatorOI.timeToClimb().whenPressed(new InstantCommand(m_flywheel::turnFlywheelOff, m_flywheel));
+    m_operatorOI.getIncrementUpperFlywheelButton().whenPressed(new InstantCommand(m_flywheel::increaseUpperFlywheelChange));
+    m_operatorOI.getDecrementUpperFlywheelButton().whenPressed(new InstantCommand(m_flywheel::decreaseUpperFlywheelChange));
     
   } 
 

@@ -71,6 +71,7 @@ public class ShootBall extends CommandBase {
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     m_intake.startIntakeMotor(IntakeConstants.kIntakeSpeed);
     
+    
   }
 
   // Returns true when the command should end.
@@ -78,5 +79,6 @@ public class ShootBall extends CommandBase {
   public boolean isFinished() {
     //return m_intake.intakeCleared() && m_intake.feederCleared();
     return (!(m_intake.isFeederSwitchActivated()) || m_shootTimer.hasElapsed(1));
+    
   }
 }

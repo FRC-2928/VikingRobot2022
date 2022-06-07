@@ -28,6 +28,7 @@ public class Flywheel extends SubsystemBase {
   double m_velocity;
   double m_adjustableVelocity;
   double m_velocityChange;
+  double m_upperVelocityChange;
   boolean m_isFlywheelSpunUp = false;
 
   ShuffleboardLayout m_flywheelLayout;
@@ -46,7 +47,8 @@ public class Flywheel extends SubsystemBase {
     configMotors();
     resetEncoders();
     setFlywheelPIDF();
-    m_velocityChange = 1;
+    m_velocityChange = .8;
+    m_upperVelocityChange = 1;
     DistanceMap.getInstance().loadMaps();
     m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
     m_shootTimer.reset();
@@ -113,25 +115,25 @@ public class Flywheel extends SubsystemBase {
     m_flywheelTalon.config_kD(3, FlywheelConstants.kGainsVelocity4.kD, 0);
     m_flywheelTalon.config_kF(3, FlywheelConstants.kGainsVelocity4.kF, 0);
 
-    m_flywheelTalonUpper.config_kP(0, FlywheelConstants.kGainsVelocity1.kP, 0);
-    m_flywheelTalonUpper.config_kI(0, FlywheelConstants.kGainsVelocity1.kI, 0);
-    m_flywheelTalonUpper.config_kD(0, FlywheelConstants.kGainsVelocity1.kD, 0);
-    m_flywheelTalonUpper.config_kF(0, FlywheelConstants.kGainsVelocity1.kF, 0);
+    m_flywheelTalonUpper.config_kP(0, .02, 0);
+    m_flywheelTalonUpper.config_kI(0, 0, 0);
+    m_flywheelTalonUpper.config_kD(0, 0, 0);
+    m_flywheelTalonUpper.config_kF(0, .2, 0);
 
-    m_flywheelTalonUpper.config_kP(1, FlywheelConstants.kGainsVelocity2.kP, 0);
-    m_flywheelTalonUpper.config_kI(1, FlywheelConstants.kGainsVelocity2.kI, 0);
-    m_flywheelTalonUpper.config_kD(1, FlywheelConstants.kGainsVelocity2.kD, 0);
-    m_flywheelTalonUpper.config_kF(1, FlywheelConstants.kGainsVelocity2.kF, 0);
+    m_flywheelTalonUpper.config_kP(1, .02, 0);
+    m_flywheelTalonUpper.config_kI(1, 0, 0);
+    m_flywheelTalonUpper.config_kD(1, 0, 0);
+    m_flywheelTalonUpper.config_kF(1, .2, 0);
 
-    m_flywheelTalonUpper.config_kP(2, FlywheelConstants.kGainsVelocity3.kP, 0);
-    m_flywheelTalonUpper.config_kI(2, FlywheelConstants.kGainsVelocity3.kI, 0);
-    m_flywheelTalonUpper.config_kD(2, FlywheelConstants.kGainsVelocity3.kD, 0);
-    m_flywheelTalonUpper.config_kF(2, FlywheelConstants.kGainsVelocity3.kF, 0);
+    m_flywheelTalonUpper.config_kP(2, .02, 0);
+    m_flywheelTalonUpper.config_kI(2, 0, 0);
+    m_flywheelTalonUpper.config_kD(2, 0, 0);
+    m_flywheelTalonUpper.config_kF(2, .2, 0);
 
-    m_flywheelTalonUpper.config_kP(3, FlywheelConstants.kGainsVelocity4.kP, 0);
-    m_flywheelTalonUpper.config_kI(3, FlywheelConstants.kGainsVelocity4.kI, 0);
-    m_flywheelTalonUpper.config_kD(3, FlywheelConstants.kGainsVelocity4.kD, 0);
-    m_flywheelTalonUpper.config_kF(3, FlywheelConstants.kGainsVelocity4.kF, 0);
+    m_flywheelTalonUpper.config_kP(3, .02, 0);
+    m_flywheelTalonUpper.config_kI(3, 0, 0);
+    m_flywheelTalonUpper.config_kD(3, 0, 0);
+    m_flywheelTalonUpper.config_kF(3, .2, 0);
 
   }
 
@@ -169,6 +171,7 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {   
     publishTelemetry();
+    System.out.println(getVelocity());
     if(m_shootTimer.hasElapsed(2)){
     m_shootTimer.reset();
     m_shootTimer.start();
@@ -223,7 +226,7 @@ public class Flywheel extends SubsystemBase {
       m_flywheelTalonUpper.set(ControlMode.Velocity, 20000);
     } else {
       m_flywheelTalon.set(ControlMode.Velocity, m_adjustableVelocity * m_velocityChange);
-      m_flywheelTalonUpper.set(ControlMode.Velocity, m_adjustableVelocity*.5 * m_velocityChange);
+      m_flywheelTalonUpper.set(ControlMode.Velocity, m_adjustableVelocity * m_upperVelocityChange * m_velocityChange);
     }
   }
 
@@ -235,7 +238,7 @@ public class Flywheel extends SubsystemBase {
 
   
   public void turnFlywheelOff() {
-    m_flywheelTalon.set(ControlMode.PercentOutput, 0);
+    m_flywheelTalon.set(ControlMode.Velocity, 0);
   }
 
   /**
@@ -248,10 +251,22 @@ public class Flywheel extends SubsystemBase {
 
   public void increaseFlywheelChange(){
     m_velocityChange += .02;
+    System.out.println(m_velocityChange);
   }
 
   public void decreaseFlywheelChange(){
     m_velocityChange -= .02;
+    System.out.println(m_velocityChange);
+  }
+
+  public void increaseUpperFlywheelChange(){
+    m_upperVelocityChange += .05;
+    System.out.println(m_upperVelocityChange);
+  }
+
+  public void decreaseUpperFlywheelChange(){
+    m_upperVelocityChange -= .05;
+    System.out.println(m_upperVelocityChange);
   }
 
 
@@ -268,7 +283,7 @@ public class Flywheel extends SubsystemBase {
   }
 
   public boolean isFlywheelMotorOn(){
-    return(m_flywheelTalon.getMotorOutputPercent() > 0);
+    return(m_flywheelTalon.getMotorOutputPercent() > .05);
   }
 
   /**

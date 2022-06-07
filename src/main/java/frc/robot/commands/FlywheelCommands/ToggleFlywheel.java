@@ -26,10 +26,10 @@ public class ToggleFlywheel extends InstantCommand {
   public void initialize() {
     if(m_flywheel.isFlywheelMotorOn()){
       System.out.println("Flywheel was on..");
-      m_flywheel.turnFlywheelOff();
+      m_flywheel.setAdjustableVelocity(0);
     } else {
       System.out.println("Flywheel was off..");
-      m_flywheel.setVelocity();
+      m_flywheel.setAdjustableVelocity(5000);
     }
   }
 }
