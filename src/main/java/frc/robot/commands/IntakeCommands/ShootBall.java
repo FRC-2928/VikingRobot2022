@@ -78,6 +78,6 @@ public class ShootBall extends CommandBase {
   @Override
   public boolean isFinished() {
     //return m_intake.intakeCleared() && m_intake.feederCleared();
-    return (m_intake.feederCleared() || m_shootTimer));
+    return (m_intake.feederCleared());
   }
 }
