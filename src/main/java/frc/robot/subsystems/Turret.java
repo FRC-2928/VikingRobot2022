@@ -163,7 +163,7 @@ public class Turret extends SubsystemBase {
                                   .plus(m_lastHeading)
                                   .minus(currentHeading);
 
-    publishTelemetry();
+    //publishTelemetry();
   }
 
   public void publishTelemetry() {   

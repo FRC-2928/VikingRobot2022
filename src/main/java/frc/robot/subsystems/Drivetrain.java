@@ -207,7 +207,7 @@ public class Drivetrain extends SubsystemBase {
     // -----------------------------------------------------------
     @Override
     public void periodic() {
-        publishTelemetry();     
+        //publishTelemetry();     
     }
 
     public void publishTelemetry() {
@@ -358,7 +358,7 @@ public class Drivetrain extends SubsystemBase {
         m_differentialDrive.feed();
     }
 
-    public void zeroGyro(){
+    public void zeroGyro(){ 
         m_pigeon.reset();
     }
 

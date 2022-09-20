@@ -128,7 +128,7 @@ public class RobotContainer {
 
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
 
-    m_autoChooser.setDefaultOption("Do Nothing", new SequentialCommandGroup(new WaitCommand(1.0)));
+    m_autoChooser.setDefaultOption("Do Nothing", new SequentialCommandGroup(new WaitCommand(0.1)));
     m_autoChooser.addOption("1-Ball Auto", new SequentialCommandGroup(new WaitCommand(1.0),
                                                                       new ShootOnce(m_intake, m_flywheel, m_turret), 
                                                                       new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
@@ -204,7 +204,9 @@ public class RobotContainer {
     m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
     m_driverOI.getIncrementFlywheelButton().whenPressed(new InstantCommand(m_flywheel::increaseFlywheelChange, m_flywheel));
     m_driverOI.getDecrementFlywheelButton().whenPressed(new InstantCommand(m_flywheel::decreaseFlywheelChange, m_flywheel));
-    m_operatorOI.timeToClimb().whenPressed(new InstantCommand(m_flywheel::turnFlywheelOff,m_flywheel));
+    m_operatorOI.timeToClimb().whenPressed(new InstantCommand(m_flywheel::turnFlywheelOff, m_flywheel));
+    m_operatorOI.getIncrementUpperFlywheelButton().whenPressed(new InstantCommand(m_flywheel::increaseUpperFlywheelChange));
+    m_operatorOI.getDecrementUpperFlywheelButton().whenPressed(new InstantCommand(m_flywheel::decreaseUpperFlywheelChange));
     
   } 
 

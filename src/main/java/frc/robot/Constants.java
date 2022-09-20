@@ -28,7 +28,8 @@ public final class Constants {
         public static final int kDrivetrainRightFrontTalonFX = 1;
 
         //Shooter
-        public static final int kFlywheelTalonFX = 2;
+        public static final int kFlywheelTalonLower = 2;
+        public static final int kFlywheelTalonUpper = 3;
 
         //Sensors
         public static final int kPigeonIMU = 0;

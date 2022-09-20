@@ -27,8 +27,8 @@ public class DriverOI {
     public DriverOI(XboxController controller) {
         m_controller = controller;
 
-        m_toggleIntakeMotor = new JoystickButton(m_controller, XboxController.Button.kA.value);
-        m_toggleFeederMotor = new JoystickButton(m_controller, XboxController.Button.kB.value);
+        m_toggleIntakeMotor = new JoystickButton(m_controller, XboxController.Button.kY.value);
+        m_toggleFeederMotor = new JoystickButton(m_controller, XboxController.Button.kY.value);
         m_shiftButton = new Button(() -> m_controller.getLeftStickButtonPressed());
 
         m_incrementFlywheel = new JoystickButton(m_controller, XboxController.Button.kStart.value);
