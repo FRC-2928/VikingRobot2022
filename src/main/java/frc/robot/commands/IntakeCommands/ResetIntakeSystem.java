@@ -27,6 +27,7 @@ public class ResetIntakeSystem extends InstantCommand {
   @Override
   public void initialize() {
 
+    
     m_intake.setFeederBrakeEnabled();
     m_intake.startFeederMotor(IntakeConstants.kFeederSpeed);
     m_intake.setIntakeBrakeDisabled();

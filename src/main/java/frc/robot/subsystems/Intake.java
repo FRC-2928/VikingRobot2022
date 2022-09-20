@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -72,6 +74,7 @@ public class Intake extends SubsystemBase {
   NetworkTableEntry m_intakeMotorEntry, m_feederMotorEntry;
   NetworkTableEntry m_rampEntry; 
   NetworkTableEntry m_allianceEntry, m_ballColorEntry, m_ballValidEntry;
+  NetworkTableEntry m_intakeMotorSpeedEntry;
 
   // ------ Simulation classes to help us simulate our robot ----------------
   TalonSRXSimCollection m_intakeMotorSim = m_intakeMotor.getSimCollection();
@@ -91,7 +94,7 @@ public class Intake extends SubsystemBase {
     configMotors();
     setIntakePIDF();
     resetEncoders();
-    //setupShuffleboard();
+    setupShuffleboard();
 
     // m_colorMatcher.addColorMatch(kBlueTarget);
     // m_colorMatcher.addColorMatch(kRedTarget);
@@ -170,6 +173,9 @@ public class Intake extends SubsystemBase {
     m_intakeTab = Shuffleboard.getTab("Intake"); 
 
     // Intake
+    m_intakeMotorSpeedEntry = m_intakeTab.add("Intake Motor Speed", IntakeConstants.kIntakeSpeed)
+      .withPosition(3, 5)
+      .getEntry();  
     ShuffleboardLayout intakeLayout = Shuffleboard.getTab("Intake")
       .getLayout("Intake", BuiltInLayouts.kList)
       .withSize(2, 5)
@@ -204,10 +210,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void startMotors(){
-    if(intakeMotorStopRequired() == false){
     startFeederMotor(IntakeConstants.kFeederSpeed);
-    startIntakeMotor(IntakeConstants.kIntakeSpeed);
-    }
+    startIntakeMotor(m_intakeMotorSpeed);
   }
 
   // -----------------------------------------------------------
@@ -254,8 +258,8 @@ public class Intake extends SubsystemBase {
     // }
 
 
-    //publishTelemetry();
-
+    publishTelemetry();
+    m_intakeMotorSpeed = m_intakeMotorSpeedEntry.getNumber(IntakeConstants.kIntakeSpeed).doubleValue(); 
   }
 
   public void publishTelemetry() {
@@ -341,6 +345,10 @@ public class Intake extends SubsystemBase {
    */
   public void startIntakeMotor(double output){
     m_intakeMotor.set(ControlMode.PercentOutput, output);
+  }
+
+  public void startIntakeMotor(){
+    m_intakeMotor.set(ControlMode.PercentOutput, m_intakeMotorSpeed);
   }
 
   public void setIntakeMotorStop(boolean state) {

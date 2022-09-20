@@ -123,6 +123,11 @@ public class Flywheel extends SubsystemBase {
     m_flywheelTalon.config_kD(2, FlywheelConstants.kGainsVelocity3.kD, 0);
     m_flywheelTalon.config_kF(2, FlywheelConstants.kGainsVelocity3.kF, 0);
 
+    m_flywheelTalon.config_kP(3, FlywheelConstants.kGainsVelocity4.kP, 0);
+    m_flywheelTalon.config_kI(3, FlywheelConstants.kGainsVelocity4.kI, 0);
+    m_flywheelTalon.config_kD(3, FlywheelConstants.kGainsVelocity4.kD, 0);
+    m_flywheelTalon.config_kF(3, FlywheelConstants.kGainsVelocity4.kF, 0);
+
   }
 
   public void setupShuffleboard() {
@@ -186,7 +191,9 @@ public class Flywheel extends SubsystemBase {
    * @param flywheelTicksPer100ms flywheel speed in tick per/100ms
    */
   public void setPidGains(int flywheelTicksPer100ms) {
-    if (flywheelTicksPer100ms > 13000) {
+    if(flywheelTicksPer100ms > 16000){
+      m_flywheelTalon.selectProfileSlot(3, 0);
+    } else if (flywheelTicksPer100ms > 13000) {
       m_flywheelTalon.selectProfileSlot(1, 0);
     } else if (flywheelTicksPer100ms > 8500) {
       m_flywheelTalon.selectProfileSlot(0, 0);
@@ -246,7 +253,7 @@ public class Flywheel extends SubsystemBase {
 
   public boolean isFlyWheelUpToSpeed(){
 
-    if(Math.abs(m_adjustableVelocity - getVelocity()) <= 500.0){
+    if(Math.abs(m_adjustableVelocity - getVelocity()) <= 200.0){
       return true;
 
     }else{

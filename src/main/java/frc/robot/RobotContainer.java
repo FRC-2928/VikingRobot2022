@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.oi.DriverOI;
@@ -99,12 +100,27 @@ public class RobotContainer {
   public void onAutoInit(){
     new InstantCommand(m_drivetrain::zeroGyro);
     new InstantCommand(m_climber::tiltBack);
+    //new RunCommand(m_intake::startIntakeMotor);
+
+    //sets the drivetrain to 90% for auto
+    m_drivetrain.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(() -> m_drivetrain.driveAuto(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
+            m_drivetrain));
     
     // new InstantCommand(m_intake::startMotors, m_intake); 
   }
 
   public void onTeleopInit() {  
     new InstantCommand(m_climber::tiltBack);
+
+    //sets the drivetrain to 80% for teleop
+    m_drivetrain.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(() -> m_drivetrain.drive(m_driverOI.getMoveSupplier(), m_driverOI.getRotateSupplier()),
+            m_drivetrain));
   }
 
   // public void onDisabledInit(){
@@ -150,18 +166,30 @@ public class RobotContainer {
     m_driverOI.getShiftButton().whenPressed(new InstantCommand(m_transmission::toggle, m_transmission));
     
     // Configure Shuffleboard commands
-    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(new WaitCommand(1), 
+    m_autoChooser.setDefaultOption("1-Ball Auto", new SequentialCommandGroup(
                                             new ShootOnce(m_intake, m_flywheel, m_turret),
                                             new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                             ));
-    m_autoChooser.addOption("2-Ball Auto #1", new SequentialCommandGroup( new WaitCommand(1), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto1")), new ShootTwice(m_intake, m_flywheel, m_turret)             
+    m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup(
+                                              new ToggleIntakeMotor(m_intake),
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
+                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Red")), new WaitCommand(1),
+                                              new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)          
                                             ));
-    m_autoChooser.addOption("2-Ball Auto #2", new SequentialCommandGroup( new WaitCommand(1), 
-                                              new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallAuto2")), new ShootTwice(m_intake, m_flywheel, m_turret)             
+    m_autoChooser.addOption("2-Ball Auto Left Curve", new SequentialCommandGroup(
+                                            new ToggleIntakeMotor(m_intake),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP1")), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("2BallP2Blue")), new WaitCommand(1),
+                                            new ShootOnce(m_intake, m_flywheel, m_turret), new ShootOnce(m_intake, m_flywheel, m_turret)           
                                             ));
-    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup( new WaitCommand(2), new ShootOnce(m_intake, m_flywheel, m_turret),
-                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallAuto")), new ShootTwice(m_intake, m_flywheel, m_turret)
+    m_autoChooser.addOption("3-Ball Auto", new SequentialCommandGroup(new ToggleIntakeMotor(m_intake), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP1")), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP2")), 
+                                            new ShootOnce(m_intake, m_flywheel, m_turret), 
+                                            new ShootOnce(m_intake, m_flywheel, m_turret),
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP3")), 
+                                            new RunRamseteTrajectory(m_drivetrain, loadTrajectory("3BallP4")), 
+                                            new ShootOnce(m_intake, m_flywheel, m_turret)
                                             ));
   }
 
@@ -198,6 +226,7 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new RunCommand(m_intake::startMotors, m_intake));
 
     // Configure button commands
+
     m_driverOI.getToggleIntakeMotorButton().whenPressed(new ToggleIntakeMotor(m_intake));
     m_driverOI.getToggleFeederMotorButton().whenPressed(new ToggleFeederMotor(m_intake));
     m_driverOI.getIsAtHighSpeed().whileHeld(new setLowIntakePower(m_intake, m_drivetrain));
@@ -242,7 +271,7 @@ public class RobotContainer {
     // m_flywheel.getCommandsLayout().add(new ToggleFlywheel(m_flywheel));
     // m_flywheel.getCommandsLayout().add(new SetFlywheelVelocity(m_flywheel, m_turret));
     
-  }
+  } 
 
   /**
    * Configure Climber
@@ -261,20 +290,20 @@ public class RobotContainer {
   }
 
 
-  public Trajectory calibrateTrajectory() {
+  // public Trajectory calibrateTrajectory() {
     
-    // Note that all coordinates are in meters, and follow NWU conventions.
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(1.0, 0.0)
-        ),
-        new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
-        AutoConstants.kTrajectoryConfig);
+  //   // Note that all coordinates are in meters, and follow NWU conventions.
+  //   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+  //       // Start at the origin facing the +X direction
+  //       new Pose2d(0, 0, new Rotation2d(0)),
+  //       List.of(
+  //           new Translation2d(1.0, 0.0)
+  //       ),
+  //       new Pose2d(3.0, 0.0, new Rotation2d(0)), // left
+  //       AutoConstants.kTrajectoryConfig);
 
-    return trajectory;
-  }
+  //   return trajectory;
+  // }
 
   // public Trajectory navigateConesTrajectory() {
 
