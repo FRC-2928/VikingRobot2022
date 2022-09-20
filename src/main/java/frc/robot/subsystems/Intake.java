@@ -374,6 +374,8 @@ public class Intake extends SubsystemBase {
 
   // ------ Intake Stage 0 ------------------
 
+  //intake stage zero!!!
+
   public void setIntakeOut(){
     m_intakeSolenoid.set(true);
   }
