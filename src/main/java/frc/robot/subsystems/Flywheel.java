@@ -48,7 +48,7 @@ public class Flywheel extends SubsystemBase {
     resetEncoders();
     setFlywheelPIDF();
     m_velocityChange = .8;
-    m_upperVelocityChange = 1;
+    m_upperVelocityChange = .7;
     DistanceMap.getInstance().loadMaps();
     m_adjustableVelocity = FlywheelConstants.kIdealVelocity;
     m_shootTimer.reset();
@@ -171,7 +171,7 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {   
     publishTelemetry();
-    System.out.println(getVelocity());
+    //System.out.println(getVelocity());
     if(m_shootTimer.hasElapsed(2)){
     m_shootTimer.reset();
     m_shootTimer.start();

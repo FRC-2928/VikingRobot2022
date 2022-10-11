@@ -32,8 +32,10 @@ public class HoldIntakeUp extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setIntakeUp();
+    // 10/10 reversed these two lines
     m_intake.allowIntakeUp();
+    m_intake.setIntakeUp();
+    
   }
 
   // Returns true when the command should end.
