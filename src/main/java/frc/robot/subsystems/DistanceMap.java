@@ -31,13 +31,13 @@ public class DistanceMap {
         m_ticksPer100ms.put(18, 11000);
         m_ticksPer100ms.put(19, 10000); 
         m_ticksPer100ms.put(20, 9800); 
-        m_ticksPer100ms.put(21, 9600);
-        m_ticksPer100ms.put(22, 9000);
-        m_ticksPer100ms.put(23, 8800);
-        m_ticksPer100ms.put(24, 8700); 
-        m_ticksPer100ms.put(25, 8500); 
-        m_ticksPer100ms.put(26, 8300);
-        m_ticksPer100ms.put(27, 8200);
+        m_ticksPer100ms.put(21, 9000);
+        m_ticksPer100ms.put(22, 8800);
+        m_ticksPer100ms.put(23, 8600);
+        m_ticksPer100ms.put(24, 8400); 
+        m_ticksPer100ms.put(25, 8200); 
+        m_ticksPer100ms.put(26, 8100);
+        m_ticksPer100ms.put(27, 8100);
         m_ticksPer100ms.put(28, 7800);
         m_ticksPer100ms.put(29, 7400);
         m_ticksPer100ms.put(30, 7400);
@@ -55,14 +55,14 @@ public class DistanceMap {
         m_ticksPer100ms.put(42, 5800);
         m_ticksPer100ms.put(43, 5600);
         m_ticksPer100ms.put(44, 5600);
-        m_ticksPer100ms.put(45, 5400);
-        m_ticksPer100ms.put(46, 5600);
-        m_ticksPer100ms.put(47, 5600);
-        m_ticksPer100ms.put(48, 5400);
+        m_ticksPer100ms.put(45, 5500);
+        m_ticksPer100ms.put(46, 5500);
+        m_ticksPer100ms.put(47, 5500);
+        m_ticksPer100ms.put(48, 5500);
         m_ticksPer100ms.put(49, 5400);
         m_ticksPer100ms.put(50, 5400);
         //5000 for low goal with 60% ratio good
-        m_ticksPer100ms.put(0, 5000);
+        m_ticksPer100ms.put(0, 3000);
 
     }
 
