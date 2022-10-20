@@ -43,6 +43,8 @@ import frc.robot.commands.IntakeCommands.setLowIntakePower;
 import frc.robot.commands.TurretCommands.MoveTurret;
 import frc.robot.commands.TurretCommands.TurnTurretToTarget;
 
+import frc.robot.commands.IntakeCommands.ShootAuto;
+
 public class RobotContainer {
 
   // The Robot's Subsystems
@@ -130,7 +132,7 @@ public class RobotContainer {
 
     m_autoChooser.setDefaultOption("Do Nothing", new SequentialCommandGroup(new WaitCommand(0.1)));
     m_autoChooser.addOption("1-Ball Auto", new SequentialCommandGroup(new WaitCommand(1.0),
-                                                                      new ShootOnce(m_intake, m_flywheel, m_turret), 
+                                                                      new ShootAuto(m_intake, m_flywheel, m_turret), 
                                                                       new RunRamseteTrajectory(m_drivetrain, loadTrajectory("1BallAuto"))
                                                                       ));
     m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup(new ToggleIntakeMotor(m_intake), 
@@ -141,7 +143,9 @@ public class RobotContainer {
                                                                       new WaitCommand(1.0), 
                                                                       new ShootOnce(m_intake, m_flywheel, m_turret), 
                                                                       new WaitCommand(0.5),  
-                                                                      new ShootOnce(m_intake, m_flywheel, m_turret)
+                                                                      new ShootOnce(m_intake, m_flywheel, m_turret),
+                                                                      new InstantCommand(m_intake::allowIntakeUp, m_intake),
+                                                                      new InstantCommand(m_intake::setIntakeUp, m_intake)
                                                                       ));
     m_autoChooser.addOption("2-Ball Auto Right Curve", new SequentialCommandGroup(new ToggleIntakeMotor(m_intake), 
                                                                       new InstantCommand(m_intake::dontAllowIntakeUp, m_intake), 
@@ -151,7 +155,9 @@ public class RobotContainer {
                                                                       new WaitCommand(1.0), 
                                                                       new ShootOnce(m_intake, m_flywheel, m_turret), 
                                                                       new WaitCommand(0.5),  
-                                                                      new ShootOnce(m_intake, m_flywheel, m_turret)
+                                                                      new ShootOnce(m_intake, m_flywheel, m_turret),
+                                                                      new InstantCommand(m_intake::allowIntakeUp, m_intake),
+                                                                      new InstantCommand(m_intake::setIntakeUp, m_intake)
                                                                       ));
     
   }
