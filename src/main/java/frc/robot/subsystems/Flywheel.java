@@ -47,6 +47,7 @@ public class Flywheel extends SubsystemBase {
     configMotors();
     resetEncoders();
     setFlywheelPIDF();
+    //TODO: find right adjustment
     m_velocityChange = .8;
     m_upperVelocityChange = 1;
     DistanceMap.getInstance().loadMaps();
