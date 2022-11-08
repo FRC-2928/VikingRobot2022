@@ -170,13 +170,16 @@ public class Flywheel extends SubsystemBase {
   // Control Input
   // -----------------------------------------------------------
   @Override
-  public void periodic() {   
+  public void periodic() {  
+   
     publishTelemetry();
     //System.out.println(getVelocity());
     if(m_shootTimer.hasElapsed(2)){
     m_shootTimer.reset();
     m_shootTimer.start();
     }
+
+    
   }
 
   public void publishTelemetry() {

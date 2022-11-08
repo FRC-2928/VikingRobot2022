@@ -205,8 +205,8 @@ public class RobotContainer {
   public void configureFlywheel() {
 
     // Configure default commands
-    // commented 11/7 m_flywheel.setDefaultCommand(new RunCommand(m_flywheel::setVelocity, m_flywheel));
-    m_flywheel.setDefaultCommand(new SetFlywheelVelocity(m_flywheel, m_turret));
+    m_flywheel.setDefaultCommand(new RunCommand(m_flywheel::setVelocity, m_flywheel));
+    
     
     // Configure button commands
     m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));

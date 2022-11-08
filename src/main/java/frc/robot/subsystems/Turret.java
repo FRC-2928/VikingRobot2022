@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.subsystems.DistanceMap;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -61,7 +62,7 @@ public class Turret extends SubsystemBase {
   int camResolutionHeight = 480; // pixels
   double minTargetArea = 10; // square pixels
 
-  double offset;
+  double vOffset;
 
   SimVisionSystem simVision =
           new SimVisionSystem(
@@ -91,7 +92,7 @@ public class Turret extends SubsystemBase {
     resetEncoders();
     m_turretPose = new Pose2d(0,0,getTargetToHeadingOffset());
 
-    offset = 45;
+    vOffset = 45;
   }
 
   public void configMotors(){
@@ -166,6 +167,13 @@ public class Turret extends SubsystemBase {
     m_estimatedTargetRotation = m_targetHeadingOffset
                                   .plus(m_lastHeading)
                                   .minus(currentHeading);
+
+    
+    int flywheelTicksPer100ms = DistanceMap.getInstance().getFlywheelTicksPer100ms(getTargetVerticalOffset());                              
+    m_flywheel.setPidGains(flywheelTicksPer100ms);
+    m_flywheel.setAdjustableVelocity(flywheelTicksPer100ms);
+
+    
 
     //publishTelemetry();
   }
@@ -300,10 +308,10 @@ public class Turret extends SubsystemBase {
   }
 
   public int getTargetVerticalOffset(){
-    if(m_turretLimelight.getVerticalOffset() != 0){
-      offset = m_turretLimelight.getVerticalOffset();
+    if(m_turretLimelight.getVerticalOffset() >= 10){
+      vOffset = m_turretLimelight.getVerticalOffset();
     }
-    return (int)(m_verticalFilter.calculate(offset));
+    return (int)(m_verticalFilter.calculate(vOffset));
   }
 
   /**
