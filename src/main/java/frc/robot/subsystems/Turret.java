@@ -61,6 +61,8 @@ public class Turret extends SubsystemBase {
   int camResolutionHeight = 480; // pixels
   double minTargetArea = 10; // square pixels
 
+  double offset;
+
   SimVisionSystem simVision =
           new SimVisionSystem(
                   "photonvision",
@@ -88,6 +90,8 @@ public class Turret extends SubsystemBase {
     setTurretPIDF();
     resetEncoders();
     m_turretPose = new Pose2d(0,0,getTargetToHeadingOffset());
+
+    offset = 45;
   }
 
   public void configMotors(){
@@ -296,7 +300,9 @@ public class Turret extends SubsystemBase {
   }
 
   public int getTargetVerticalOffset(){
-    double offset = m_turretLimelight.getVerticalOffset();
+    if(m_turretLimelight.getVerticalOffset() != 0){
+      offset = m_turretLimelight.getVerticalOffset();
+    }
     return (int)(m_verticalFilter.calculate(offset));
   }
 

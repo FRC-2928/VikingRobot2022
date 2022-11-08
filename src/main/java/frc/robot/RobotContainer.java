@@ -29,6 +29,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.commands.ClimberCommands.ExtendClimberBars;
 import frc.robot.commands.ClimberCommands.RetractClimberBars;
 import frc.robot.commands.DrivetrainCommands.RunRamseteTrajectory;
+import frc.robot.commands.FlywheelCommands.SetFlywheelVelocity;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheel;
 import frc.robot.commands.IntakeCommands.CloseRamp;
 import frc.robot.commands.IntakeCommands.EjectBall;
@@ -204,7 +205,8 @@ public class RobotContainer {
   public void configureFlywheel() {
 
     // Configure default commands
-    m_flywheel.setDefaultCommand(new RunCommand(m_flywheel::setVelocity, m_flywheel));
+    // commented 11/7 m_flywheel.setDefaultCommand(new RunCommand(m_flywheel::setVelocity, m_flywheel));
+    m_flywheel.setDefaultCommand(new SetFlywheelVelocity(m_flywheel, m_turret));
     
     // Configure button commands
     m_driverOI.getToggleFlywheelButton().whenPressed(new ToggleFlywheel(m_flywheel));
