@@ -29,39 +29,40 @@ public class DistanceMap {
         m_ticksPer100ms.put(16, 14000);
         m_ticksPer100ms.put(17, 12000);
         m_ticksPer100ms.put(18, 11000);
-        m_ticksPer100ms.put(19, 10000); //verified
-        m_ticksPer100ms.put(20, 9800); //verified <20 : OUT OF RANGE
-        m_ticksPer100ms.put(21, 9600);
-        m_ticksPer100ms.put(22, 9400);
-        m_ticksPer100ms.put(23, 9200);
-        m_ticksPer100ms.put(24, 9000); 
-        m_ticksPer100ms.put(25, 8900); //verified
-        m_ticksPer100ms.put(26, 8800);
-        m_ticksPer100ms.put(27, 8600);
-        m_ticksPer100ms.put(28, 8400);
-        m_ticksPer100ms.put(29, 8200);
-        m_ticksPer100ms.put(30, 8100); //verified
-        m_ticksPer100ms.put(31, 8000);
-        m_ticksPer100ms.put(32, 8000);//verified
-        m_ticksPer100ms.put(33, 8000); 
-        m_ticksPer100ms.put(34, 8000);
-        m_ticksPer100ms.put(35, 8000); //verified
-        m_ticksPer100ms.put(36, 8000);
-        m_ticksPer100ms.put(37, 8000);
-        m_ticksPer100ms.put(38, 8000);
-        m_ticksPer100ms.put(39, 8000);
-        m_ticksPer100ms.put(40, 8000); //verified 40< : OUT OF RANGE
-        m_ticksPer100ms.put(41, 8000);
-        m_ticksPer100ms.put(42, 8000);
-        m_ticksPer100ms.put(43, 8000);
-        m_ticksPer100ms.put(44, 8000);
-        m_ticksPer100ms.put(45, 8000);
-        m_ticksPer100ms.put(46, 8000);
-        m_ticksPer100ms.put(47, 8000);
-        m_ticksPer100ms.put(48, 8000);
-        m_ticksPer100ms.put(49, 8000);
-        m_ticksPer100ms.put(50, 8000);
-        m_ticksPer100ms.put(0, 15000);
+        m_ticksPer100ms.put(19, 10000); 
+        m_ticksPer100ms.put(20, 9800); 
+        m_ticksPer100ms.put(21, 9000);
+        m_ticksPer100ms.put(22, 8800);
+        m_ticksPer100ms.put(23, 8600);
+        m_ticksPer100ms.put(24, 8400); 
+        m_ticksPer100ms.put(25, 8200); 
+        m_ticksPer100ms.put(26, 8100);
+        m_ticksPer100ms.put(27, 8100);
+        m_ticksPer100ms.put(28, 7800);
+        m_ticksPer100ms.put(29, 7400);
+        m_ticksPer100ms.put(30, 7400);
+        m_ticksPer100ms.put(31, 6800);
+        m_ticksPer100ms.put(32, 6400);
+        m_ticksPer100ms.put(33, 6300); 
+        m_ticksPer100ms.put(34, 6100);
+        m_ticksPer100ms.put(35, 6100); 
+        m_ticksPer100ms.put(36, 6100);
+        m_ticksPer100ms.put(37, 6000);
+        m_ticksPer100ms.put(38, 6000);
+        m_ticksPer100ms.put(39, 6000);
+        m_ticksPer100ms.put(40, 5800); 
+        m_ticksPer100ms.put(41, 5800);
+        m_ticksPer100ms.put(42, 5800);
+        m_ticksPer100ms.put(43, 5600);
+        m_ticksPer100ms.put(44, 5600);
+        m_ticksPer100ms.put(45, 5500);
+        m_ticksPer100ms.put(46, 5500);
+        m_ticksPer100ms.put(47, 5500);
+        m_ticksPer100ms.put(48, 5500);
+        m_ticksPer100ms.put(49, 5400);
+        m_ticksPer100ms.put(50, 5400);
+        //5000 for low goal with 60% ratio good
+        m_ticksPer100ms.put(0, 3000);
 
     }
 

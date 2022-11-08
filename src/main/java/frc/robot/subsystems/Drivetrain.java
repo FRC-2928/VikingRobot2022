@@ -308,6 +308,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void setOutputMetersPerSecond(double leftMetersPerSecond, double rightMetersPerSecond) {
         
+        System.out.println("right m/s" + rightMetersPerSecond);
         // Calculate feedforward for the left and right wheels.
         double leftFeedForward = m_feedForward.calculate(leftMetersPerSecond);
         double rightFeedForward = m_feedForward.calculate(rightMetersPerSecond);
@@ -315,8 +316,11 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("left meters per sec", leftMetersPerSecond);
         SmartDashboard.putNumber("right meters per sec", rightMetersPerSecond);
 
-        m_rightFFEntry.setDouble(rightFeedForward);
-        m_leftFFEntry.setDouble(leftFeedForward);
+        //test comment 10/16 for auto crash
+        // System.out.println("right" + rightFeedForward); 
+        // System.out.println("left" + leftFeedForward);
+        // m_rightFFEntry.setDouble(rightFeedForward);
+        // m_leftFFEntry.setDouble(leftFeedForward);
         
         // Convert meters per second to encoder ticks per second
         var gearState = m_gearStateSupplier.get();
