@@ -120,6 +120,6 @@ public class DriverOI {
 
 
     public DoubleSupplier getRotateSupplier() {
-        return () -> m_controller.getRightX();
+        return () -> -m_controller.getRightX();
     }
 }

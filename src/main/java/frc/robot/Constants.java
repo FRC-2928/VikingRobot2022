@@ -53,12 +53,12 @@ public final class Constants {
 
     public static final class PneumaticIDs {
         //Solenoids
-        public static final int kDrivetrainShiftSolenoid = 0;
+        // public static final int kDrivetrainShiftSolenoid = 3;
         public static final int kRampSolenoid = 1;
         public static final int kClimberSolenoid = 2;
 
-        // public static final int kDrivetrainShiftSolenoidLow = 0;
-        // public static final int kDrivetrainShiftSolenoidHigh = 1;
+        public static final int kDrivetrainShiftSolenoidLow = 2;
+        public static final int kDrivetrainShiftSolenoidHigh = 3;
         // public static final int kRampSolenoidOpen = 2;
         // public static final int kRampSolenoidClosed = 3;
        
