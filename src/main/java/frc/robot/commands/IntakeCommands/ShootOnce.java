@@ -25,6 +25,6 @@ public class ShootOnce extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SetFlywheelVelocity(flywheel, turret), new WaitCommand (0.5),
-                new ShootBall(intake, flywheel));
+                new ShootBall(intake, flywheel), new WaitCommand(.2));
   }
 }

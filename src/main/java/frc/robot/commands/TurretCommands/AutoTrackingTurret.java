@@ -40,14 +40,7 @@ public class AutoTrackingTurret extends CommandBase {
       m_turret.setTurretDegrees(-newAngle);
     } 
     else 
-    {  
-      // TODO add this in after testing first part
-      // if (m_estimatedTargetRotation.getDegrees() > 200){
-      //   m_turret.setTurretDegrees(-120);
-      // } else {
-      //   m_turret.setTurretDegrees(120);
-      // }
-    }
+    {}
 
   }
 

@@ -5,7 +5,6 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.oi.DriverOI;
 
 public class OperatorOI {
     private XboxController m_controller;
@@ -27,6 +26,10 @@ public class OperatorOI {
     private JoystickButton m_reverseFeederButton;
     private Button m_reverseIntakeButton;
     private Button m_timeToClimb;
+    private Button m_incrementUpperFlywheel;
+    private Button m_decrementUpperFlywheel;
+
+    
 
     public OperatorOI(XboxController controller) {
         m_controller = controller;
@@ -55,6 +58,9 @@ public class OperatorOI {
         m_adjustFlywheelButton = new Button(() -> m_controller.getLeftBumperPressed());
 
         m_timeToClimb = new Button(() -> m_controller.getStartButtonPressed());
+
+        m_incrementUpperFlywheel = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+        m_decrementUpperFlywheel = new JoystickButton(m_controller, XboxController.Button.kBack.value);
         
     }
 
@@ -99,11 +105,7 @@ public class OperatorOI {
     public DoubleSupplier getExtendRetractSupplier() {
         return () -> m_controller.getLeftY();
     }
-
-    // public DoubleSupplier getRetractSupplier() {
-    //     return () -> m_controller.getRightTriggerAxis();
-    // }
-
+    
     public Button getTiltForward() {
         return m_tiltForward;
     }
@@ -119,6 +121,14 @@ public class OperatorOI {
 
     public Button getAdjustFlywheelButton(){
         return m_adjustFlywheelButton;
+    }
+
+    public Button getIncrementUpperFlywheelButton(){
+        return m_incrementUpperFlywheel;
+    }
+
+    public Button getDecrementUpperFlywheelButton(){
+        return m_decrementUpperFlywheel;
     }
  
     // ---------------- Turret ----------------------------

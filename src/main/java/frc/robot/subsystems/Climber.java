@@ -7,24 +7,18 @@ package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants;
@@ -38,10 +32,6 @@ public class Climber extends SubsystemBase {
 
   ShuffleboardTab m_climberTab;
   private NetworkTableEntry m_climberPowerEntry;
-
-  // ------ Simulation classes to help us simulate our robot ----------------
-  TalonSRXSimCollection m_climberMotorSim = m_climberMotor.getSimCollection();
-  // TurretSim m_turretSim = new TurretSim(TurretConstants.kTurretLinearSystem);
   
   // -----------------------------------------------------------
   // Initialization
@@ -50,7 +40,6 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     configMotors();
-    //setupShuffleboard();
     setClimberPIDF();
     tiltBack();
   }
@@ -93,7 +82,6 @@ public class Climber extends SubsystemBase {
       // m_climberMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); 
     }
 
-    //TODO...
     m_climberMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, 
                                                   LimitSwitchNormal.NormallyOpen, 0);
     
@@ -108,24 +96,12 @@ public class Climber extends SubsystemBase {
     m_climberMotor.config_kF(0, ClimberConstants.kGainsClimber.kF, 0);
   }
 
-  public void setupShuffleboard() {
-    m_climberTab = Shuffleboard.getTab("Climber");  
-    m_climberPowerEntry = m_climberTab.add("Motor Power", m_climberMotor.getMotorOutputPercent())
-      .withSize(2,1)
-      .withPosition(5, 0)
-      .getEntry();
-  }
-
   // -----------------------------------------------------------
   // Control Input
   // -----------------------------------------------------------
   
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    //m_climberPowerEntry.setNumber(m_climberMotor.getMotorOutputPercent());
-  }
-
+  public void periodic() {}
 
   /**
    * 
@@ -161,16 +137,5 @@ public class Climber extends SubsystemBase {
 
   public boolean isClimberForward(){
     return m_climberSolenoid.get();
-  }
-
-  // -----------------------------------------------------------
-  // Simulation
-  // -----------------------------------------------------------
-  public void simulationPeriodic() {
-    /* Pass the robot battery voltage to the simulated Talon FXs */
-    m_climberMotorSim.setBusVoltage(RobotController.getInputVoltage());
-    // SmartDashboard.putNumber("Sim Climber output voltage", m_climberMotorSim.getMotorOutputLeadVoltage());
-    // SmartDashboard.putNumber("Sim Climber output percent", m_climberMotor.getMotorOutputPercent());
-    
   }
 }

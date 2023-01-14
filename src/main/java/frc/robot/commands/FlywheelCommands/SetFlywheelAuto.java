@@ -15,12 +15,12 @@ import frc.robot.subsystems.Turret;
 /**
  * resets the flywheel velocity based on distance from the target using the limelight and flywheel, routed through distance map
  */
-public class SetFlywheelVelocity extends InstantCommand {
+public class SetFlywheelAuto extends InstantCommand {
   Flywheel m_flywheel;
   Turret m_turret;
 
   
-  public SetFlywheelVelocity(Flywheel flywheel, Turret turret) {
+  public SetFlywheelAuto(Flywheel flywheel, Turret turret) {
   
     //addRequirements(flywheel);
     m_flywheel = flywheel;
@@ -31,11 +31,8 @@ public class SetFlywheelVelocity extends InstantCommand {
   public void initialize() {
     super.initialize();  
 
-    int distance = m_turret.getTargetVerticalOffset();
-    int flywheelTicksPer100ms = DistanceMap.getInstance().getFlywheelTicksPer100ms(distance);
 
-    m_flywheel.setPidGains(flywheelTicksPer100ms);
-    m_flywheel.setAdjustableVelocity(flywheelTicksPer100ms);
+    m_flywheel.setAdjustableVelocity(6100);
   }
 
   public void end(boolean interrupted) {}

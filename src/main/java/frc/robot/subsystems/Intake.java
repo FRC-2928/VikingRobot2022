@@ -6,14 +6,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -41,6 +38,7 @@ public class Intake extends SubsystemBase {
 
 
   Solenoid m_rampSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kRampSolenoid);
+  Solenoid m_intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PneumaticIDs.kIntakeSolenoid);
   
   private final Drivetrain m_drivetrain;
  
@@ -57,10 +55,16 @@ public class Intake extends SubsystemBase {
   private double m_ejectDuration = 0;
   private double m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
 
+  private boolean m_intakeBrakeEnabled;
+  private boolean m_feederSensorActivated;
+
   private boolean m_startIntakeTimer = true;
   private boolean m_ejectInProgress = false;
   private boolean m_intakeMotorStop = false;
   private boolean m_rampStable = true;
+
+  private boolean m_letIntakeMove = true;
+
   
 
   // ------- Shuffleboard variables ----------------------------------------
@@ -95,6 +99,9 @@ public class Intake extends SubsystemBase {
     setIntakePIDF();
     resetEncoders();
     setupShuffleboard();
+
+    m_intakeBrakeEnabled = false;
+    m_feederSensorActivated = true;
 
     // m_colorMatcher.addColorMatch(kBlueTarget);
     // m_colorMatcher.addColorMatch(kRedTarget);
@@ -221,45 +228,28 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
 
-    // if (isIntakeSensorActivated() && feederHasBall()) {
-    //   stopIntakeMotor();
-    // } else {
-    //   // Check if we commanded a stop from Operator Input
-    //   if (intakeMotorStopRequired() == false) {      
-    //     startIntakeMotor(m_intakeMotorSpeed);
-    //   }     
-    // }
+    m_feederSensorActivated = !(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
 
-    //if feeder has a ball, set intake brake enabled, otherwise set disabled
-    if(feederHasBall()){
-      setIntakeBrakeEnabled();
-    } else {
-      setIntakeBrakeDisabled();
+    // if limit switch is not closed (intake stage 2 has ball) enable stage 1 intake brake
+    if(!(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed())){
+        setIntakeBrakeEnabled();
+
+      //  if feeder is empty, set intake brake disabled and start motor
+    } else if (m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed()) {
+        setIntakeBrakeDisabled();
+        startIntakeMotor();
     }
 
-    //if either the feeder or intake is empty..
-    // if(!(isIntakeSensorActivated() && feederHasBall())){
-    //   // Check if we commanded a stop from Operator Input
-    //   if (intakeMotorStopRequired() == false) {      
-    //     startIntakeMotor(m_intakeMotorSpeed);
-    //   }
-    // }
+  
 
-    // if(m_drivetrain.getMotorOutputPercent() > -0.2){
-    //     m_intakeMotorSpeed = 0;
-    // } else {
-    //     m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
-    // }
-    
-
-    // Intake motor will run at normal speed unless a low-speed timer has just been set
-    // if (m_motorLowSpeedTimer.hasElapsed(2)) {
-    //   m_intakeMotorSpeed = IntakeConstants.kIntakeSpeed;
-    // }
-
+    if(intakeHasBall()){
+      setIntakeOut();
+    } else if (m_letIntakeMove){
+      setIntakeUp();
+    }
 
     publishTelemetry();
-    m_intakeMotorSpeed = m_intakeMotorSpeedEntry.getNumber(IntakeConstants.kIntakeSpeed).doubleValue(); 
+
   }
 
   public void publishTelemetry() {
@@ -277,32 +267,6 @@ public class Intake extends SubsystemBase {
     m_rampEntry.setBoolean(isRampOpen());
   }
 
-  public void ejectBall() {
-    if (feederHasBall() && m_ejectInProgress == false) {
-      m_ejectInProgress = true;
-      openRamp();
-      // Set the timer to wait until the ramp is open
-      m_ejectDuration = 0.2;
-      m_ejectTimer.reset();
-      m_ejectTimer.start();
-    }
-  
-    if (m_ejectTimer.hasElapsed(m_ejectDuration) && m_ejectInProgress) {
-      if (isRampOpen() && isFeederBrakeEnabled()) {
-        setFeederBrakeDisabled();
-        startFeederMotor(IntakeConstants.kFeederSpeed);
-        // Reset the timer to wait for the ball to leave
-        m_ejectDuration = 1.0;
-        m_ejectTimer.reset();
-        m_ejectTimer.start();
-      } else {
-        closeRamp();
-        setFeederBrakeEnabled();
-        m_ejectInProgress = false;
-      }
-    }
-  }
-
   public ShuffleboardLayout getCommandsLayout() {
     return m_commandsLayout;
   }
@@ -312,32 +276,7 @@ public class Intake extends SubsystemBase {
   public void stopIntakeMotor(){
     System.out.println("intake motor stopping");
     m_intakeMotor.set(ControlMode.PercentOutput, 0);
-  }
-
-  // /**
-  //  * Delays the stopping of the intake motor for 0.1 seconds
-  //  * This must be run in a periodic loop.
-  //  */
-  // public void stopIntakeMotorDelayed(){
-  //   System.out.println("in stop intake motor delayed");
-
-  //   if (m_startIntakeTimer) {
-  //     m_intakeTimer.reset();
-  //     m_intakeTimer.start();  // Tested in else below
-  //     m_startIntakeTimer = false;
-  //   } 
-  //   else if (m_intakeTimer.hasElapsed(1)) {
-  //       stopIntakeMotor();
-  //       m_startIntakeTimer = true;
-        
-  //       // Now lower the intake speed for a short period in case the 
-  //       // intake sensor bounces.
-  //       m_intakeMotorSpeed = IntakeConstants.kIntakeLowSpeed;
-  //       m_motorLowSpeedTimer.reset();
-  //       m_motorLowSpeedTimer.start(); // Tested in periodic()
-  //     }  
-  //   }    
-  
+  }  
 
   /**
    * 
@@ -359,16 +298,15 @@ public class Intake extends SubsystemBase {
     return m_intakeMotorStop;
   }
 
-  public void setLowIntakePower(){
-    m_intakeMotor.set(ControlMode.PercentOutput, IntakeConstants.kIntakeLowSpeed);
-  }
 
   public void setIntakeBrakeEnabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(true);
+    m_intakeBrakeEnabled = true;
   }
 
   public void setIntakeBrakeDisabled(){
     m_intakeMotor.overrideLimitSwitchesEnable(false);
+    m_intakeBrakeEnabled = false;
   }
 
   // --------- Feeder Motor ------------------------------
@@ -439,18 +377,31 @@ public class Intake extends SubsystemBase {
     m_rampStable = false;
   }
 
+  // ------ Intake Stage 0 ------------------
+
+  //intake stage zero!!!
+
+  public void setIntakeOut(){
+    m_intakeSolenoid.set(true);
+  }
+
+  public void setIntakeUp(){
+    m_intakeSolenoid.set(false);
+  }
+
+  public void allowIntakeUp(){
+    m_letIntakeMove = true;
+  }
+
+  public void dontAllowIntakeUp(){
+    m_letIntakeMove = false;
+  }
+
   // -----------------------------------------------------------
   // System State
   // -----------------------------------------------------------
 
-  public boolean readyToShoot() {
-    if (isRampClosed()) {
-      return true;
-    } 
-    return false;
-  }
-
-  // --------- Intake ------------------------------  
+  // --------- Intake Stage 1 ------------------------------  
 
 
   public boolean intakeHasBall(){
@@ -467,37 +418,27 @@ public class Intake extends SubsystemBase {
     return (Math.abs(m_intakeMotor.getMotorOutputPercent()) > .1);
   }
 
-  // public boolean isLeftIntakeSensorTripped(){
-  //   return !m_leftIntakeSensor.get();
-  // }
-
-  // public boolean isRightIntakeSensorTripped(){
-  //   return !m_rightIntakeSensor.get();
-  // }
 
   public boolean isIntakeSensorActivated(){
     return m_intakeMotor.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
-  // public boolean isIntakeSensorTripped() {
-  //   return isLeftIntakeSensorTripped() || isRightIntakeSensorTripped();
-  // }
+  public boolean isIntakeBrakeEnabled(){
+    return m_intakeBrakeEnabled;
+  }
 
 
-  // --------- Feeder ------------------------------
+
+  // --------- Feeder (Stage 2) ------------------------------
 
   public boolean isFeederSwitchActivated() {
     // Simulate this return if not running on the real robot
-    if (RobotBase.isReal()) {
-      return !(m_rightFeederMotor.getSensorCollection().isFwdLimitSwitchClosed());
-    }
-    return m_intakeSim.isFeederSwitchClosed();
+    //if (RobotBase.isReal()) {
+      return m_feederSensorActivated;
+    //}
+    //return m_intakeSim.isFeederSwitchClosed();
   }
 
-  // public boolean isFeederBrakeDeactivated(){
-  //   return !(isFeederBrakeActivated());
-  // }
-   
   public boolean feederHasBall(){
     return isFeederSwitchActivated();  
   }

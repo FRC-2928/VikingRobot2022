@@ -8,7 +8,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.LimelightConstants;
 
 /**
@@ -72,7 +71,6 @@ public class Limelight{
   public double getHorizontalOffset(){
     NetworkTableEntry tx = m_limelightNI.getEntry("tx");
     m_horizontalOffset = tx.getDouble(0.0);
-    //System.out.println(m_horizontalOffset);
     return m_horizontalOffset;
   }
 

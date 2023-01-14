@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  * Class for storing LimelightData
  */
@@ -25,48 +23,46 @@ public class DistanceMap {
         m_ticksPer100ms.put(10, 20000);
         m_ticksPer100ms.put(11, 20000);
         m_ticksPer100ms.put(12, 20000);
-        m_ticksPer100ms.put(13, 20000);
-        m_ticksPer100ms.put(14, 20000);
-        m_ticksPer100ms.put(15, 20000);
-        m_ticksPer100ms.put(16, 20000);
-        m_ticksPer100ms.put(17, 20000);
-        m_ticksPer100ms.put(18, 20000);
-        m_ticksPer100ms.put(19, 20000); //verified
-        m_ticksPer100ms.put(21, 19300);
-        m_ticksPer100ms.put(22, 18600);
-        m_ticksPer100ms.put(23, 17900);//
-        m_ticksPer100ms.put(20, 17200); //verified <20 : OUT OF RANGE
-        m_ticksPer100ms.put(21, 17000);
-        m_ticksPer100ms.put(22, 16400);
-        m_ticksPer100ms.put(23, 16000);
-        m_ticksPer100ms.put(24, 15200); 
-        m_ticksPer100ms.put(25, 14400); //verified
-        m_ticksPer100ms.put(26, 13600);
-        m_ticksPer100ms.put(27, 12800);
-        m_ticksPer100ms.put(28, 12200);
-        m_ticksPer100ms.put(29, 11600);
-        m_ticksPer100ms.put(30, 11000); //verified
-        m_ticksPer100ms.put(31, 10500);
-        m_ticksPer100ms.put(32, 10000);//verified
-        m_ticksPer100ms.put(33, 9600); 
-        m_ticksPer100ms.put(34, 9400);
-        m_ticksPer100ms.put(35, 9200); //verified
-        m_ticksPer100ms.put(36, 9000);
-        m_ticksPer100ms.put(37, 8800);
-        m_ticksPer100ms.put(38, 8600);
-        m_ticksPer100ms.put(39, 8400);
-        m_ticksPer100ms.put(40, 8200); //verified 40< : OUT OF RANGE
-        m_ticksPer100ms.put(41, 8000);
-        m_ticksPer100ms.put(42, 8000);
-        m_ticksPer100ms.put(43, 8000);
-        m_ticksPer100ms.put(44, 8000);
-        m_ticksPer100ms.put(45, 8000);
-        m_ticksPer100ms.put(46, 8000);
-        m_ticksPer100ms.put(47, 8000);
-        m_ticksPer100ms.put(48, 8000);
-        m_ticksPer100ms.put(49, 8000);
-        m_ticksPer100ms.put(50, 8000);
-        m_ticksPer100ms.put(0, 4650);
+        m_ticksPer100ms.put(13, 18000);
+        m_ticksPer100ms.put(14, 18000);
+        m_ticksPer100ms.put(15, 18000);
+        m_ticksPer100ms.put(16, 14000);
+        m_ticksPer100ms.put(17, 12000);
+        m_ticksPer100ms.put(18, 11000);
+        m_ticksPer100ms.put(19, 10000); 
+        m_ticksPer100ms.put(20, 9800); 
+        m_ticksPer100ms.put(21, 9000);
+        m_ticksPer100ms.put(22, 8800);
+        m_ticksPer100ms.put(23, 8600);
+        m_ticksPer100ms.put(24, 8400); 
+        m_ticksPer100ms.put(25, 8200); 
+        m_ticksPer100ms.put(26, 8100);
+        m_ticksPer100ms.put(27, 8100);
+        m_ticksPer100ms.put(28, 7800);
+        m_ticksPer100ms.put(29, 7400);
+        m_ticksPer100ms.put(30, 7400);
+        m_ticksPer100ms.put(31, 6800);
+        m_ticksPer100ms.put(32, 6400);
+        m_ticksPer100ms.put(33, 6300); 
+        m_ticksPer100ms.put(34, 6100);
+        m_ticksPer100ms.put(35, 6100); 
+        m_ticksPer100ms.put(36, 6100);
+        m_ticksPer100ms.put(37, 6000);
+        m_ticksPer100ms.put(38, 6000);
+        m_ticksPer100ms.put(39, 6000);
+        m_ticksPer100ms.put(40, 5800); 
+        m_ticksPer100ms.put(41, 5800);
+        m_ticksPer100ms.put(42, 5800);
+        m_ticksPer100ms.put(43, 5600);
+        m_ticksPer100ms.put(44, 5600);
+        m_ticksPer100ms.put(45, 5500);
+        m_ticksPer100ms.put(46, 5500);
+        m_ticksPer100ms.put(47, 5500);
+        m_ticksPer100ms.put(48, 5500);
+        m_ticksPer100ms.put(49, 5400);
+        m_ticksPer100ms.put(50, 5400);
+        //5000 for low goal with 60% ratio good
+        m_ticksPer100ms.put(0, 3000);
 
     }
 

@@ -6,7 +6,7 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.FlywheelCommands.SetFlywheelVelocity;
+import frc.robot.commands.FlywheelCommands.SetFlywheelAuto;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Turret;
@@ -14,18 +14,17 @@ import frc.robot.subsystems.Turret;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootTwice extends SequentialCommandGroup {
+public class ShootAuto extends SequentialCommandGroup {
   
   Intake m_intake;
   Flywheel m_flywheel;
   Turret m_turret;
 
-  /** Creates a new ShootTwice. */
-  public ShootTwice(Intake intake, Flywheel flywheel, Turret turret) {
+  /** Creates a new ShootOnce. */
+  public ShootAuto(Intake intake, Flywheel flywheel, Turret turret) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetFlywheelVelocity(flywheel, turret),
-                new ShootBall(intake, flywheel), new WaitCommand(3),
-                new ShootBall(intake, flywheel));
+    addCommands(new SetFlywheelAuto(flywheel, turret), new WaitCommand (0.5),
+                new ShootBall(intake, flywheel), new WaitCommand(.2));
   }
 }

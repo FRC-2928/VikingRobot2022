@@ -21,9 +21,14 @@ public class EjectBall extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new OpenRamp(intake),  
                 new WaitCommand(.1),
-                new TriggerEjectBall(intake), 
-                new WaitCommand(1),
+                new TriggerEjectBall(intake),
+                new WaitCommand(.4),
                 new CloseRamp(intake),
-                new ResetIntakeSystem(intake));
+                
+                new DisableIntakeBrake(intake),
+                new StartIntakeMotor(intake),
+                new WaitCommand(.2));
+                
+                
   }
 }
